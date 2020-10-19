@@ -51,7 +51,7 @@ def get_nml_version():
         from nml import __version__
         version = __version__.version
     except ImportError:
-        version = 'unknown'
+        version = 'unknown (JGR)'
     return version
 
 def get_cli_version():
