@@ -1,5 +1,11 @@
 # NML NewGRF meta language
 
+This fork contains additional features outside of the NewGRF/NML specification which are available in [JGR's Patchpack](https://github.com/JGRennison/OpenTTD-patches).
+
+See [here](https://htmlpreview.github.io/?https://github.com/JGRennison/OpenTTD-patches/blob/jgrpp/docs/newgrf-additions-nml.html) for details of these features.
+
+* * *
+
 NML is a a python-based compiler, capable of compiling NML files (along
 with their associated language, sound and graphic files) into grf
 and / or nfo files.
