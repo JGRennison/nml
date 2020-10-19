@@ -1084,6 +1084,8 @@ properties[0x10] = {
     'requires_railtype_list'   : {'custom_function': lambda x: label_list(x, 0x18, "Railtype")},
     'introduces_railtype_list' : {'custom_function': lambda x: label_list(x, 0x19, "Railtype")},
     'alternative_railtype_list': {'custom_function': lambda x: label_list(x, 0x1D, "Railtype")},
+    'enable_programmable_pre_signals': {'size': 1, 'mapped_property': "railtype_enable_programmable_signals"},
+    'enable_restricted_signals':       {'size': 1, 'mapped_property': "railtype_enable_restricted_signals"},
 }
 
 #
@@ -1112,6 +1114,7 @@ properties[0x12] = {
     'requires_roadtype_list'   : {'custom_function': lambda x: label_list(x, 0x18, "Roadtype")},
     'introduces_roadtype_list' : {'custom_function': lambda x: label_list(x, 0x19, "Roadtype")},
     'alternative_roadtype_list': {'custom_function': lambda x: label_list(x, 0x1D, "Roadtype")},
+    'roadtype_extra_flags'     : {'size': 1, 'mapped_property': "roadtype_extra_flags"},
 }
 
 #
@@ -1126,4 +1129,5 @@ properties[0x13] = {
     'requires_tramtype_list'   : {'custom_function': lambda x: label_list(x, 0x18, "Tramtype")},
     'introduces_tramtype_list' : {'custom_function': lambda x: label_list(x, 0x19, "Tramtype")},
     'alternative_tramtype_list': {'custom_function': lambda x: label_list(x, 0x1D, "Tramtype")},
+    'tramtype_extra_flags'     : {'size': 1, 'mapped_property': "roadtype_extra_flags"},
 }

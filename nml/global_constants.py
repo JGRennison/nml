@@ -1032,6 +1032,16 @@ constant_numbers = {
     'TTD_STR_ERROR_CAN_T_CONSTRUCT_THIS_INDUSTRY'           : 0x4830,
     'TTD_STR_ERROR_FOREST_CAN_ONLY_BE_PLANTED'              : 0x4831,
     'TTD_STR_ERROR_CAN_ONLY_BE_POSITIONED'                  : 0x483B,
+
+    #extended property values
+
+    #road type extra flags
+    'ROADTYPE_EXTRA_FLAG_NO_SCRIPT_BUILD' : 0,
+    'ROADTYPE_EXTRA_FLAG_NO_TOWN_MODIFY'  : 1,
+
+    #tram type extra flags
+    'TRAMTYPE_EXTRA_FLAG_NO_SCRIPT_BUILD' : 0,
+    'TRAMTYPE_EXTRA_FLAG_NO_TOWN_MODIFY'  : 1,
 }
 
 def signextend(param, info):
