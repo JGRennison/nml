@@ -21,9 +21,12 @@ palette_node = None
 blitter_node = None
 
 feature_test_property_mapping = False
+feature_test_action5_mapping = False
 next_property_mapping_ids = 0x14 * [0xEF]
 property_mapping_ids = {}
 property_mapping_nodes = []
+action5_mapping_ids = {}
+next_action5_mapping_id = 0x6F
 
 """
 Statistics about registers used for parameters.
@@ -75,6 +78,19 @@ def get_property_mapping_id(feature, name):
         pm_action14_root.subnodes.append(action14.BinaryNode("PROP", 1, prop_id))
         property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return property_mapping_ids[key]
+
+def get_action5_mapping_id(name):
+    global next_action5_mapping_id, feature_test_action5_mapping
+    feature_test_action5_mapping = True
+    if name not in action5_mapping_ids:
+        type_id = next_action5_mapping_id
+        next_action5_mapping_id = type_id - 1
+        action5_mapping_ids[name] = type_id
+        pm_action14_root = action14.BranchNode("A5TM")
+        pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
+        pm_action14_root.subnodes.append(action14.BinaryNode("TYPE", 1, type_id))
+        property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
+    return action5_mapping_ids[name]
 
 class GRF(base_statement.BaseStatement):
     """
@@ -195,6 +211,11 @@ class GRF(base_statement.BaseStatement):
             pmt_action14_root = action14.BranchNode("FTST")
             pmt_action14_root.subnodes.append(action14.RawTextNode("NAME", "property_mapping"))
             pmt_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, 4))
+            ret.extend(action14.get_actions(pmt_action14_root))
+        if feature_test_action5_mapping:
+            pmt_action14_root = action14.BranchNode("FTST")
+            pmt_action14_root.subnodes.append(action14.RawTextNode("NAME", "action5_type_id_mapping"))
+            pmt_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, 5))
             ret.extend(action14.get_actions(pmt_action14_root))
         ret.extend(property_mapping_nodes)
         ret.append(action8.Action8(self.grfid, self.name, self.desc))

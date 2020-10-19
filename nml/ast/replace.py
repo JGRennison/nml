@@ -130,6 +130,10 @@ class ReplaceNewSprite(base_statement.BaseStatement, sprite_container.SpriteCont
         for sprite in self.sprite_list:
             sprite.debug_print(indentation + 4)
 
+
+    def pre_process(self):
+        return action5.pre_process_action5(self)
+
     def get_action_list(self):
         return action5.parse_action5(self)
 

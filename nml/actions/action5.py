@@ -14,7 +14,8 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import generic
-from nml.actions import base_action, real_sprite
+from nml.actions import base_action, real_sprite, action7
+from nml.ast import grf
 
 class Action5(base_action.BaseAction):
     def __init__(self, type, num_sprites, offset):
@@ -79,16 +80,27 @@ action5_table = {
     'AIRPORT_PREVIEW' : (0x16, 9, Action5BlockType.OFFSET),
     'RAILTYPE_TUNNELS': (0x17, 16, Action5BlockType.OFFSET),
     'OTTD_RECOLOUR' : (0x18, 1, Action5BlockType.OFFSET),
+    'PROGRAMMABLE_PRE_SIGNAL' : ("programmable_signals", 32, Action5BlockType.OFFSET),
 }
+
+def pre_process_action5(replaces):
+    if replaces.type.value not in action5_table:
+        raise generic.ScriptError(replaces.type.value + " is not a valid sprite replacement type", replaces.type.pos)
+    type_id, _, _ = action5_table[replaces.type.value]
+    if isinstance(type_id, str):
+        grf.get_action5_mapping_id(type_id)
 
 def parse_action5(replaces):
     real_sprite_list = real_sprite.parse_sprite_data(replaces)
     num_sprites = len(real_sprite_list)
 
-    if replaces.type.value not in action5_table:
-        raise generic.ScriptError(replaces.type.value + " is not a valid sprite replacement type", replaces.type.pos)
     type_id, num_required, block_type = action5_table[replaces.type.value]
     offset = None
+    feature_test = False
+
+    if isinstance(type_id, str):
+        type_id = grf.get_action5_mapping_id(type_id)
+        feature_test = True
 
     if block_type == Action5BlockType.FIXED:
         if num_sprites < num_required:
@@ -121,5 +133,10 @@ def parse_action5(replaces):
     else:
         assert 0
 
-    return [Action5(type_id, num_sprites, offset)] + real_sprite_list
+    ret = []
+    if feature_test:
+        ret.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 5, 1 + len(real_sprite_list), "action 5 mapping feature test"))
+    ret.append(Action5(type_id, num_sprites, offset))
+    ret.extend(real_sprite_list)
+    return ret
 
