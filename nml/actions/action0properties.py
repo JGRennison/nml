@@ -61,6 +61,7 @@ class Action0Property(BaseAction0Property):
         self.num = num
         self.values = value if isinstance(value, list) else [value]
         self.size = size
+        self.length_prefixed = False
 
         # Make sure the value fits in the size.
         # Strings have their own check in parse_property
@@ -75,11 +76,14 @@ class Action0Property(BaseAction0Property):
     def write(self, file):
         file.print_bytex(self.num)
         for val in self.values:
+            if self.length_prefixed: file.print_bytex(self.size)
             val.write(file, self.size)
         file.newline()
 
     def get_size(self):
-        return self.size * len(self.values) + 1
+        size = self.size
+        if self.length_prefixed: size = size + 1
+        return size * len(self.values) + 1
 
 # @var properties: A mapping of features to properties. This is a list
 # with one item per feature. Entries should be a dictionary of properties,

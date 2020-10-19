@@ -20,6 +20,11 @@ from nml.ast import base_statement
 palette_node = None
 blitter_node = None
 
+feature_test_property_mapping = False
+next_property_mapping_ids = 0x14 * [0xEF]
+property_mapping_ids = {}
+property_mapping_nodes = []
+
 """
 Statistics about registers used for parameters.
 The 1st field is the largest parameter register used.
@@ -33,6 +38,8 @@ def print_stats():
     """
     if param_stats[0] > 0:
         generic.print_info("GRF parameter registers: {}/{}".format(param_stats[0], param_stats[1]))
+    if len(property_mapping_nodes) > 0:
+        generic.print_info("Mapped properties: {}".format(len(property_mapping_nodes)))
 
 def set_palette_used(pal):
     """
@@ -53,6 +60,21 @@ def set_preferred_blitter(blitter):
     """
     if blitter_node:
         blitter_node.blitter = blitter
+
+def get_property_mapping_id(feature, name):
+    global feature_test_property_mapping
+    feature_test_property_mapping = True
+    key = (feature, name)
+    if key not in property_mapping_ids:
+        prop_id = next_property_mapping_ids[feature]
+        next_property_mapping_ids[feature] = prop_id - 1
+        property_mapping_ids[key] = prop_id
+        pm_action14_root = action14.BranchNode("A0PM")
+        pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
+        pm_action14_root.subnodes.append(action14.BinaryNode("FEAT", 1, feature))
+        pm_action14_root.subnodes.append(action14.BinaryNode("PROP", 1, prop_id))
+        property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
+    return property_mapping_ids[key]
 
 class GRF(base_statement.BaseStatement):
     """
@@ -168,7 +190,15 @@ class GRF(base_statement.BaseStatement):
         action14.param_desc_actions(action14_root, self.params)
         action14_root.subnodes.append(palette_node)
         action14_root.subnodes.append(blitter_node)
-        return action14.get_actions(action14_root) + [action8.Action8(self.grfid, self.name, self.desc)]
+        ret = action14.get_actions(action14_root)
+        if feature_test_property_mapping:
+            pmt_action14_root = action14.BranchNode("FTST")
+            pmt_action14_root.subnodes.append(action14.RawTextNode("NAME", "property_mapping"))
+            pmt_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, 4))
+            ret.extend(action14.get_actions(pmt_action14_root))
+        ret.extend(property_mapping_nodes)
+        ret.append(action8.Action8(self.grfid, self.name, self.desc))
+        return ret
 
     def __str__(self):
         ret = 'grf {\n'

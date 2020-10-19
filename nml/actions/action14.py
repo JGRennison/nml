@@ -129,6 +129,21 @@ class TextNode(Action14Node):
             file.print_string(grfstrings.get_translation(self.string, lang_id))
             file.newline()
 
+class RawTextNode(Action14Node):
+    def __init__(self, id, string, lang_id = 0):
+        Action14Node.__init__(self, "T", id)
+        self.string = string
+        self.lang_id = lang_id
+
+    def get_size(self):
+        return 6 + grfstrings.get_string_size(self.string)
+
+    def write(self, file):
+            self.write_type_id(file)
+            file.print_bytex(self.lang_id)
+            file.print_string(self.string)
+            file.newline()
+
 class BranchNode(Action14Node):
     def __init__(self, id):
         Action14Node.__init__(self, "C", id)

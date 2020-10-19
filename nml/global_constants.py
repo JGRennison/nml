@@ -1056,14 +1056,17 @@ def global_param_read(info, pos):
 def param_from_info(name, info, pos):
     return expression.SpecialParameter(name, info, global_param_write, global_param_read, False, pos)
 
+def lowest_4bits(param, info):
+    return nmlop.AND(param, expression.ConstantNumeric(0x0F))
+
 global_parameters = {
     'climate'                            : {'num': 0x83, 'size': 1},
     'loading_stage'                      : {'num': 0x84, 'size': 4},
     'ttdpatch_version'                   : {'num': 0x8B, 'size': 4},
-    'current_palette'                    : {'num': 0x8D, 'size': 1},
+    'current_palette'                    : {'num': 0x8D, 'size': 1, 'function': lowest_4bits},
     'traininfo_y_offset'                 : {'num': 0x8E, 'size': 1, 'writable': 1, 'function': signextend},
     'game_mode'                          : {'num': 0x92, 'size': 1},
-    'ttd_platform'                       : {'num': 0x9D, 'size': 4},
+    'ttd_platform'                       : {'num': 0x9D, 'size': 4, 'function': lowest_4bits},
     'openttd_version'                    : {'num': 0xA1, 'size': 4},
     'difficulty_level'                   : {'num': 0xA2, 'size': 4},
     'date_loaded'                        : {'num': 0xA3, 'size': 4},

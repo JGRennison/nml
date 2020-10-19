@@ -16,7 +16,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 from nml.actions.action0properties import BaseAction0Property, Action0Property, properties, two_byte_property
 from nml import generic, expression, nmlop, grfstrings
 from nml.actions import base_action, action4, action6, actionD, action7
-from nml.ast import general
+from nml.ast import general, grf
 
 class BlockAllocation:
     """
@@ -668,8 +668,13 @@ def parse_property_block(prop_list, feature, id, size):
 
     validate_prop_info_list(prop_info_list, pos_list, feature)
 
+    have_extended_properties = False
+
     for prop_info, value_list in zip(prop_info_list, value_list_list):
         if 'test_function' in prop_info and not prop_info['test_function'](*value_list): continue
+        if 'mapped_property' in prop_info:
+            have_extended_properties = True
+            continue
         properties, extra_actions, mods, extra_append_actions = parse_property(prop_info, value_list, feature, id)
         action_list.extend(extra_actions)
         action_list_append.extend(extra_append_actions)
@@ -686,6 +691,46 @@ def parse_property_block(prop_list, feature, id, size):
     action_list.extend(action_list_append)
 
     action6.free_parameters.restore()
+    if have_extended_properties:
+        action_list_append = []
+        act6 = action6.Action6()
+        action6.free_parameters.save()
+        action0, offset = create_action0(feature, id, act6, action_list)
+        if feature == 0x07:
+            size_bit = size.value if size is not None else 0
+            action0.num_ids = house_sizes[size_bit]
+        else:
+            size_bit = None
+            action0.num_ids = 1
+
+        ext_action_list = []
+        for prop_info, value_list in zip(prop_info_list, value_list_list):
+            if 'mapped_property' in prop_info:
+                prop_id = grf.get_property_mapping_id(feature, prop_info['mapped_property'])
+                prop_info['num'] = prop_id
+                properties, extra_actions, mods, extra_append_actions = parse_property(prop_info, value_list, feature, id)
+                for p in properties:
+                    p.num = prop_id
+                    p.length_prefixed = True
+                ext_action_list.extend(extra_actions)
+                action_list_append.extend(extra_append_actions)
+                for mod in mods:
+                    act6.modify_bytes(mod[0], mod[1], mod[2] + offset)
+                for p in properties:
+                    offset += p.get_size()
+                action0.prop_list.extend(properties)
+
+        if len(act6.modifications) > 0: ext_action_list.append(act6)
+        if len(action0.prop_list) != 0:
+            ext_action_list.append(action0)
+
+        ext_action_list.extend(action_list_append)
+
+        if len(ext_action_list):
+            action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 4, len(ext_action_list), "property_mapping feature test"))
+            action_list.extend(ext_action_list)
+
+        action6.free_parameters.restore()
     return action_list
 
 class IDListProp(BaseAction0Property):

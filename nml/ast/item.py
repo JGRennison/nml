@@ -14,7 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, generic, global_constants, unit
-from nml.ast import base_statement, general
+from nml.ast import base_statement, general, grf
 from nml.actions import action0, action2, action2var, action3
 
 item_feature = None
@@ -135,6 +135,9 @@ class Property:
 
     def pre_process(self):
         self.value = self.value.reduce(global_constants.const_list, unknown_id_fatal = False)
+        for prop_info in action0.get_property_info_list(item_feature, self.name):
+            if 'mapped_property' in prop_info:
+                grf.get_property_mapping_id(item_feature, prop_info['mapped_property'])
 
     def debug_print(self, indentation):
         generic.print_dbg(indentation, 'Property:', self.name.value)

@@ -26,7 +26,7 @@ def print_stats():
         generic.print_info("Concurrent Action10 labels: {}/{} ({})".format(free_labels.stats[0], free_labels.total_amount, str(free_labels.stats[1])))
 
 class SkipAction(base_action.BaseAction):
-    def __init__(self, action_type, var, varsize, condtype, value, label):
+    def __init__(self, action_type, var, varsize, condtype, value, label, comment = ""):
         self.action_type = action_type
         self.label = label
         self.var = var
@@ -34,10 +34,12 @@ class SkipAction(base_action.BaseAction):
         self.condtype = condtype
         self.value = value
         self.label = label
+        self.comment = comment
         if self.condtype[0] == 0 or self.condtype[0] == 1:
             assert self.varsize == 1
 
     def write(self, file):
+        if self.comment: file.comment(self.comment)
         size = 5 + self.varsize
         file.start_sprite(size)
         file.print_bytex(self.action_type)
