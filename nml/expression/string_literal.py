@@ -14,7 +14,9 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import generic
-from .base_expression import Type, Expression
+
+from .base_expression import Expression, Type
+
 
 class StringLiteral(Expression):
     """
@@ -23,6 +25,7 @@ class StringLiteral(Expression):
     @ivar value: Value of the string literal.
     @type value: C{str}
     """
+
     def __init__(self, value, pos):
         Expression.__init__(self, pos)
         self.value = value
@@ -35,9 +38,9 @@ class StringLiteral(Expression):
 
     def write(self, file, size):
         assert len(self.value) == size
-        file.print_string(self.value, final_zero = False, force_ascii = True)
+        file.print_string(self.value, final_zero=False, force_ascii=True)
 
-    def reduce(self, id_dicts = [], unknown_id_fatal = True):
+    def reduce(self, id_dicts=None, unknown_id_fatal=True):
         return self
 
     def type(self):

@@ -13,14 +13,16 @@ You should have received a copy of the GNU General Public License along
 with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
+from nml import generic
 from nml.actions import action7
 from nml.ast import base_statement
-from nml import generic
+
 
 class SkipAll(base_statement.BaseStatement):
     """
     Skip everything after this statement.
     """
+
     def __init__(self, pos):
         base_statement.BaseStatement.__init__(self, "exit-statement", pos)
 
@@ -28,7 +30,7 @@ class SkipAll(base_statement.BaseStatement):
         return [action7.UnconditionalSkipAction(9, 0)]
 
     def debug_print(self, indentation):
-        generic.print_dbg(indentation, 'Skip all')
+        generic.print_dbg(indentation, "Skip all")
 
     def __str__(self):
         return "exit;\n"

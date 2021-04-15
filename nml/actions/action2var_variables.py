@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
-from nml import expression, nmlop, generic
+from nml import expression, generic, nmlop
 
 # Use feature 0x14 for towns (accessible via station/house/industry parent scope)
 varact2vars = 0x15 * [{}]
@@ -148,6 +148,7 @@ varact2vars_vehicles = {
     'vehicle_is_offered'               : {'var': 0x48, 'start':  2, 'size':  1},
     'build_year'                       : {'var': 0x49, 'start':  0, 'size': 32},
     'vehicle_is_potentially_powered'   : {'var': 0x4A, 'start':  8, 'size':  1},
+    'tile_has_catenary'                : {'var': 0x4A, 'start':  9, 'size':  1},
     'date_of_last_service'             : {'var': 0x4B, 'start':  0, 'size': 32},
     'position_in_articulated_veh'          : {'var': 0x4D, 'start':  0, 'size':  8},
     'position_in_articulated_veh_from_end' : {'var': 0x4D, 'start':  8, 'size':  8},
@@ -177,6 +178,7 @@ varact2vars_vehicles = {
 # Vehicle-type-specific variables
 
 varact2vars_trains = {
+    **varact2vars_vehicles,
     #0x4786 / 0x10000 is an approximation of 3.5790976, the conversion factor
     #for train speed
     'max_speed'           : {'var': 0x98, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x4786, 0x10000)},
@@ -185,9 +187,9 @@ varact2vars_trains = {
     'current_max_speed'   : {'var': 0x4C, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x4786, 0x10000)},
     'vehicle_is_in_depot' : {'var': 0xE2, 'start': 7, 'size':  1},
 }
-varact2vars_trains.update(varact2vars_vehicles)
 
 varact2vars_roadvehs = {
+    **varact2vars_vehicles,
     #0x23C3 / 0x10000 is an approximation of 7.1581952, the conversion factor
     #for road vehicle speed
     'max_speed'           : {'var': 0x98, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x23C3, 0x10000)},
@@ -197,9 +199,9 @@ varact2vars_roadvehs = {
     'current_max_speed'   : {'var': 0x4C, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x23C3, 0x10000)},
     'vehicle_is_in_depot' : {'var': 0xE2, 'start': 0, 'size':  8, 'value_function': value_equals(0xFE)},
 }
-varact2vars_roadvehs.update(varact2vars_vehicles)
 
 varact2vars_ships = {
+    **varact2vars_vehicles,
     #0x23C3 / 0x10000 is an approximation of 7.1581952, the conversion factor
     #for ship speed
     'max_speed'           : {'var': 0x98, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x23C3, 0x10000)},
@@ -207,9 +209,9 @@ varact2vars_ships = {
     'current_max_speed'   : {'var': 0x4C, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x23C3, 0x10000)},
     'vehicle_is_in_depot' : {'var': 0xE2, 'start': 7, 'size':  1},
 }
-varact2vars_ships.update(varact2vars_vehicles)
 
 varact2vars_aircraft = {
+    **varact2vars_vehicles,
     #0x3939 / 0x1000 is an approximation of 0.279617, the conversion factor
     #Note that the denominator has one less zero here!
     #for aircraft speed
@@ -218,7 +220,6 @@ varact2vars_aircraft = {
     'current_max_speed'   : {'var': 0x4C, 'start': 0, 'size': 16, 'value_function': value_mul_div(0x3939, 0x1000)},
     'vehicle_is_in_depot' : {'var': 0xE6, 'start': 0, 'size':  8, 'value_function': value_equals(0)},
 }
-varact2vars_aircraft.update(varact2vars_vehicles)
 
 def signed_byte_parameter(name, args, pos, info):
     # Convert to a signed byte by AND-ing with 0xFF
@@ -230,6 +231,15 @@ def signed_byte_parameter(name, args, pos, info):
     ret = nmlop.AND(args[0], 0xFF, pos).reduce()
     return (ret, [])
 
+def vehicle_railtype(name, args, pos, info):
+    return (expression.functioncall.builtin_resolve_typelabel(name, args, pos, table_name="railtype"), [])
+
+def vehicle_roadtype(name, args, pos, info):
+    return (expression.functioncall.builtin_resolve_typelabel(name, args, pos, table_name="roadtype"), [])
+
+def vehicle_tramtype(name, args, pos, info):
+    return (expression.functioncall.builtin_resolve_typelabel(name, args, pos, table_name="tramtype"), [])
+
 varact2vars60x_vehicles = {
     'count_veh_id'        : {'var': 0x60, 'start':  0, 'size': 8},
     'other_veh_curv_info' : {'var': 0x62, 'start':  0, 'size': 4, 'param_function':signed_byte_parameter, 'value_function':value_sign_extend},
@@ -237,6 +247,25 @@ varact2vars60x_vehicles = {
     'other_veh_x_offset'  : {'var': 0x62, 'start':  8, 'size': 8, 'param_function':signed_byte_parameter, 'value_function':value_sign_extend},
     'other_veh_y_offset'  : {'var': 0x62, 'start': 16, 'size': 8, 'param_function':signed_byte_parameter, 'value_function':value_sign_extend},
     'other_veh_z_offset'  : {'var': 0x62, 'start': 24, 'size': 8, 'param_function':signed_byte_parameter, 'value_function':value_sign_extend},
+}
+
+varact2vars60x_trains = {
+    **varact2vars60x_vehicles,
+    # Var 0x63 bit 0 is only useful when testing multiple bits at once. On its own it is already covered by railtype_available().
+    'tile_supports_railtype' : {'var': 0x63, 'start':  1, 'size': 1, 'param_function':vehicle_railtype},
+    'tile_powers_railtype'   : {'var': 0x63, 'start':  2, 'size': 1, 'param_function':vehicle_railtype},
+    'tile_is_railtype'       : {'var': 0x63, 'start':  3, 'size': 1, 'param_function':vehicle_railtype},
+}
+
+varact2vars60x_roadvehs = {
+    **varact2vars60x_vehicles,
+    # Var 0x63 bit 0 is only useful when testing multiple bits at once. On its own it is already covered by road/tramtype_available().
+    'tile_supports_roadtype' : {'var': 0x63, 'start':  1, 'size': 1, 'param_function':vehicle_roadtype},
+    'tile_supports_tramtype' : {'var': 0x63, 'start':  1, 'size': 1, 'param_function':vehicle_tramtype},
+    'tile_powers_roadtype'   : {'var': 0x63, 'start':  2, 'size': 1, 'param_function':vehicle_roadtype},
+    'tile_powers_tramtype'   : {'var': 0x63, 'start':  2, 'size': 1, 'param_function':vehicle_tramtype},
+    'tile_is_roadtype'       : {'var': 0x63, 'start':  3, 'size': 1, 'param_function':vehicle_roadtype},
+    'tile_is_tramtype'       : {'var': 0x63, 'start':  3, 'size': 1, 'param_function':vehicle_tramtype},
 }
 
 #
@@ -271,6 +300,7 @@ varact2vars60x_base_stations = {
 }
 
 varact2vars_stations = {
+    **varact2vars_base_stations,
     # Vars 40, 41, 46, 47, 49 are implemented as 60+x vars,
     # except for the 'tile type' part which is always the same anyways
     'tile_type'                : {'var': 0x40, 'start': 24, 'size': 4},
@@ -287,7 +317,6 @@ varact2vars_stations = {
     'rail_present'             : {'var': 0x45, 'start':  8, 'size': 8},
     'animation_frame'          : {'var': 0x4A, 'start':  0, 'size': 8},
 }
-varact2vars_stations.update(varact2vars_base_stations)
 
 # Mapping of param values for platform_xx vars to variable numbers
 mapping_platform_param = {
@@ -318,6 +347,7 @@ def platform_info_fix_var(var, info):
     return var
 
 varact2vars60x_stations = {
+    **varact2vars60x_base_stations,
     'nearby_tile_animation_frame'   : {'var': 0x66, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
     'nearby_tile_slope'             : {'var': 0x67, 'start':  0, 'size':  5, 'param_function': signed_tile_offset},
     'nearby_tile_is_water'          : {'var': 0x67, 'start':  9, 'size':  1, 'param_function': signed_tile_offset},
@@ -346,7 +376,6 @@ varact2vars60x_stations = {
     'platform_number_from_middle'   : {'var': 0x00, 'start':  4, 'size':  4, 'param_function': platform_info_param, 'middle': True, # 'middle' is used by platform_info_param
                                             'value_function': lambda var, info: value_sign_extend(platform_info_fix_var(var, info), info)},
 }
-varact2vars60x_stations.update(varact2vars60x_base_stations)
 
 #
 # Canals (feature 0x05)
@@ -562,8 +591,7 @@ def industry_town_count(name, args, pos, info):
     return (args[0], extra_params)
 
 def industry_cargotype(name, args, pos, info):
-    from nml.expression.functioncall import builtin_cargotype
-    return (builtin_cargotype(name, args, pos), [])
+    return (expression.functioncall.builtin_resolve_typelabel(name, args, pos, table_name="cargotype"), [])
 
 varact2vars60x_industries = {
     'nearby_tile_industry_tile_id' : {'var': 0x60, 'start':  0, 'size': 16, 'param_function': unsigned_tile_offset},
@@ -604,10 +632,12 @@ varact2vars60x_industries = {
 #
 
 varact2vars_airports = {
+    **varact2vars_base_stations,
     'layout' : {'var': 0x40, 'start': 0, 'size': 32},
 }
-varact2vars_airports.update(varact2vars_base_stations)
-varact2vars60x_airports = varact2vars60x_base_stations
+varact2vars60x_airports = {
+    **varact2vars60x_base_stations,
+}
 
 #
 # New Signals (feature 0x0E) are not implemented in OpenTTD
@@ -750,9 +780,9 @@ varact2vars_towns = {
 
 
 varact2vars[0x00] = varact2vars_trains
-varact2vars60x[0x00] = varact2vars60x_vehicles
+varact2vars60x[0x00] = varact2vars60x_trains
 varact2vars[0x01] = varact2vars_roadvehs
-varact2vars60x[0x01] = varact2vars60x_vehicles
+varact2vars60x[0x01] = varact2vars60x_roadvehs
 varact2vars[0x02] = varact2vars_ships
 varact2vars60x[0x02] = varact2vars60x_vehicles
 varact2vars[0x03] = varact2vars_aircraft

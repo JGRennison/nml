@@ -14,10 +14,12 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import generic, global_constants
-from .base_expression import Expression, ConstantNumeric
+
+from .base_expression import ConstantNumeric, Expression
 from .string_literal import StringLiteral
 
 ignore_all_invalid_ids = False
+
 
 def default_id_func(name, x, pos):
     """
@@ -43,7 +45,7 @@ def default_id_func(name, x, pos):
 
 
 class Identifier(Expression):
-    def __init__(self, value, pos = None):
+    def __init__(self, value, pos=None):
         Expression.__init__(self, pos)
         self.value = value
         if value in global_constants.identifier_refcount:
@@ -52,13 +54,13 @@ class Identifier(Expression):
             global_constants.identifier_refcount[value] = 0
 
     def debug_print(self, indentation):
-        generic.print_dbg(indentation, 'ID:', self.value)
+        generic.print_dbg(indentation, "ID:", self.value)
 
     def __str__(self):
         return self.value
 
-    def reduce(self, id_dicts = [], unknown_id_fatal = True, search_func_ptr = False):
-        for id_dict in id_dicts:
+    def reduce(self, id_dicts=None, unknown_id_fatal=True, search_func_ptr=False):
+        for id_dict in id_dicts or []:
             if isinstance(id_dict, tuple):
                 id_d, func = id_dict
             else:

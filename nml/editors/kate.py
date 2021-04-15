@@ -15,7 +15,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 
 from nml.editors import extract_tables
 
-output_file="nml_kate.xml"
+output_file = "nml_kate.xml"
 
 header_text = """\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -96,12 +96,18 @@ tail_text = """\
 
       <!-- Preprocessor commands starting with a hash - Main switch for preprocessor -->
       <context attribute="Error" lineEndContext="#pop" name="AfterHash">
-        <!-- define, elif, else, endif, error, if, ifdef, ifndef, include, include_next, line, pragma, undef, warning -->
-        <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*if(?:def|ndef)?(?=\s+\S)" insensitive="true" beginRegion="PP" firstNonSpace="true" />
-        <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*endif" insensitive="true" endRegion="PP" firstNonSpace="true" />
-        <RegExpr attribute="Preprocessor" context="Define" String="#\s*define.*((?=\\))" insensitive="true" firstNonSpace="true" />
-        <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s*(?:el(?:se|if)|include(?:_next)?|define|undef|line|error|warning|pragma)" insensitive="true" firstNonSpace="true" />
-        <RegExpr attribute="Preprocessor" context="Preprocessor" String="#\s+[0-9]+" insensitive="true" firstNonSpace="true" />
+        <!-- define,elif,else,endif,error,if,ifdef,ifndef,include,include_next,line,pragma,undef,warning -->
+        <RegExpr attribute="Preprocessor" context="Preprocessor"
+                 String="#\\s*if(?:def|ndef)?(?=\\s+\\S)" insensitive="true" beginRegion="PP" firstNonSpace="true" />
+        <RegExpr attribute="Preprocessor" context="Preprocessor"
+                 String="#\\s*endif" insensitive="true" endRegion="PP" firstNonSpace="true" />
+        <RegExpr attribute="Preprocessor" context="Define"
+                 String="#\\s*define.*((?=\\))" insensitive="true" firstNonSpace="true" />
+        <RegExpr attribute="Preprocessor" context="Preprocessor"
+                 String="#\\s*(?:el(?:se|if)|include(?:_next)?|define|undef|line|error|warning|pragma)"
+                 insensitive="true" firstNonSpace="true" />
+        <RegExpr attribute="Preprocessor" context="Preprocessor"
+                 String="#\\s+[0-9]+" insensitive="true" firstNonSpace="true" />
       </context>
       <!-- Preprocessor instructions -->
       <context attribute="Preprocessor" lineEndContext="#pop" name="Preprocessor">
@@ -128,7 +134,8 @@ tail_text = """\
     <itemDatas>
       <itemData name="Normal Text"       defStyleNum="dsNormal" />
       <itemData name="Block"             defStyleNum="dsKeyword" />
-      <itemData name="Feature"           defStyleNum="dsKeyword" color="#0095ff" selColor="#ffffff" bold="1" italic="0" spellChecking="false"/>
+      <itemData name="Feature"           defStyleNum="dsKeyword" color="#0095ff"
+                                         selColor="#ffffff" bold="1" italic="0" spellChecking="false"/>
       <itemData name="Built-in Function" defStyleNum="dsDataType" spellChecking="false" />
       <itemData name="String"            defStyleNum="dsString"/>
       <itemData name="Preprocessor"      defStyleNum="dsOthers" spellChecking="false"/>
@@ -151,27 +158,27 @@ tail_text = """\
 -->
 """
 
+
 def write_file(fname):
-    handle = open(fname, "w")
+    with open(fname, "w") as file:
+        file.write(header_text)
+        for word in extract_tables.keywords:
+            file.write("      <item> {} </item>\n".format(word))
 
-    handle.write(header_text)
-    for word in extract_tables.keywords:
-        handle.write("      <item> {} </item>\n".format(word))
+        file.write(feature_text)
+        for word in extract_tables.features:
+            file.write("      <item> {} </item>\n".format(word))
 
-    handle.write(feature_text)
-    for word in extract_tables.features:
-        handle.write("      <item> {} </item>\n".format(word))
+        file.write(builtin_text)
+        for word in extract_tables.functions:
+            file.write("      <item> {} </item>\n".format(word))
 
-    handle.write(builtin_text)
-    for word in extract_tables.functions:
-        handle.write("      <item> {} </item>\n".format(word))
+        file.write(constant_text)
+        for word in extract_tables.callback_names_table:
+            file.write("      <item> {} </item>\n".format(word))
 
-    handle.write(constant_text)
-    for word in extract_tables.callback_names_table:
-        handle.write("      <item> {} </item>\n".format(word))
+        file.write(tail_text)
 
-    handle.write(tail_text)
-    handle.close()
 
 def run():
     write_file("nml_kate.xml")

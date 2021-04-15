@@ -15,6 +15,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 
 from nml import generic
 
+
 class SpriteContainer:
     """
     Base class for all AST Nodes that contain real sprites
@@ -28,8 +29,12 @@ class SpriteContainer:
     @type block_name: L{Identifier}, or C{None} if N/A
 
     @ivar sprite_data: Mapping of (zoom level, bit-depth) to (sprite list, default file)
-    @type sprite_data: C{dict} that maps (C{tuple} of (C{int}, C{int})) to (C{tuple} of (C{list} of (L{RealSprite}, L{RecolourSprite} or L{TemplateUsage}), L{StringLiteral} or C{None}, L{Position}))
+    @type sprite_data: C{dict} that maps (C{tuple} of (C{int}, C{int}))
+                       to (C{tuple} of (C{list} of (L{RealSprite}, L{RecolourSprite} or L{TemplateUsage}),
+                                        L{StringLiteral} or C{None},
+                                        L{Position}))
     """
+
     sprite_blocks = {}
 
     def __init__(self, block_type, block_name):
@@ -38,16 +43,20 @@ class SpriteContainer:
         self.sprite_data = {}
         if block_name is not None:
             if block_name.value in SpriteContainer.sprite_blocks:
-                raise generic.ScriptError("Block with name '{}' is already defined.".format(block_name.value), block_name.pos)
+                raise generic.ScriptError(
+                    "Block with name '{}' is already defined.".format(block_name.value), block_name.pos
+                )
             SpriteContainer.sprite_blocks[block_name.value] = self
 
-    def add_sprite_data(self, sprite_list, default_file, pos, zoom_level = 0, bit_depth = 8, default_mask_file = None):
+    def add_sprite_data(self, sprite_list, default_file, pos, zoom_level=0, bit_depth=8, default_mask_file=None):
         assert zoom_level in range(0, 6)
         assert bit_depth in (8, 32)
         key = (zoom_level, bit_depth)
         if key in self.sprite_data:
-            msg = ("Sprites are already defined for {} '{}' for this zoom " +
-                   "level / bit depth combination. This data will be overridden.")
+            msg = (
+                "Sprites are already defined for {} '{}' for this zoom "
+                + "level / bit depth combination. This data will be overridden."
+            )
             msg = msg.format(self.block_type, self.block_name.value)
             generic.print_warning(msg, pos)
         self.sprite_data[key] = (sprite_list, default_file, default_mask_file, pos)
@@ -58,7 +67,12 @@ class SpriteContainer:
         Sorting makes sure that the order is consistent, and that the normal zoom, 8bpp sprites appear first.
 
         @return: List of 6-tuples (sprite_list, default_file, default_mask_file, position, zoom_level, bit_depth).
-        @rtype:  C{list} of C{tuple} of (C{list} of (L{RealSprite}, L{RecolourSprite} or L{TemplateUsage}), L{StringLiteral} or C{None}, L{Position}, C{int}, C{int})
+        @rtype:  C{list} of C{tuple} of (C{list} of (L{RealSprite},
+                                         L{RecolourSprite} or L{TemplateUsage}),
+                                         L{StringLiteral} or C{None},
+                                         L{Position},
+                                         C{int},
+                                         C{int})
         """
         return [val + key for key, val in sorted(self.sprite_data.items())]
 
@@ -66,5 +80,6 @@ class SpriteContainer:
     def resolve_sprite_block(cls, block_name):
         if block_name.value in cls.sprite_blocks:
             return cls.sprite_blocks[block_name.value]
-        raise generic.ScriptError("Undeclared block identifier '{}' encountered".format(block_name.value), block_name.pos)
-
+        raise generic.ScriptError(
+            "Undeclared block identifier '{}' encountered".format(block_name.value), block_name.pos
+        )

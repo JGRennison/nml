@@ -14,7 +14,9 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import generic
+
 from .base_expression import Expression
+
 
 class PatchVariable(Expression):
     """
@@ -23,17 +25,18 @@ class PatchVariable(Expression):
     @ivar num: Variable number to read
     @type num: C{int}
     """
-    def __init__(self, num, pos = None):
+
+    def __init__(self, num, pos=None):
         Expression.__init__(self, pos)
         self.num = num
 
     def debug_print(self, indentation):
-        generic.print_dbg(indentation, 'PatchVariable:', self.num)
+        generic.print_dbg(indentation, "PatchVariable:", self.num)
 
     def __str__(self):
         return "PatchVariable({:d})".format(self.num)
 
-    def reduce(self, id_dicts = [], unknown_id_fatal = True):
+    def reduce(self, id_dicts=None, unknown_id_fatal=True):
         return self
 
     def supported_by_action2(self, raise_error):

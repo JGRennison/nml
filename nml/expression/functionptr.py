@@ -14,7 +14,9 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import generic
-from .base_expression import Type, Expression
+
+from .base_expression import Expression, Type
+
 
 class FunctionPtr(Expression):
     """
@@ -34,19 +36,24 @@ class FunctionPtr(Expression):
     @ivar extra_args List of arguments that should be passed to the function that is to be called.
     @type extra_args C{list}
     """
+
     def __init__(self, name, func, *extra_args):
+        super().__init__(pos=None)
         self.name = name
         self.func = func
         self.extra_args = extra_args
 
     def debug_print(self, indentation):
-        assert False, "Function pointers should not appear inside expressions."
+        raise AssertionError("Function pointers should not appear inside expressions.")
 
     def __str__(self):
-        assert False, "Function pointers should not appear inside expressions."
+        raise AssertionError("Function pointers should not appear inside expressions.")
 
-    def reduce(self, id_dicts = [], unknown_id_fatal = True):
-        raise generic.ScriptError("'{}' is a function and should be called using the function call syntax.".format(str(self.name)), self.name.pos)
+    def reduce(self, id_dicts=None, unknown_id_fatal=True):
+        raise generic.ScriptError(
+            "'{}' is a function and should be called using the function call syntax.".format(str(self.name)),
+            self.name.pos,
+        )
 
     def type(self):
         return Type.FUNCTION_PTR

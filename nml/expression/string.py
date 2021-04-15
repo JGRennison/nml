@@ -13,10 +13,13 @@ You should have received a copy of the GNU General Public License along
 with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
+from functools import reduce
+
+from nml import generic
+
 from .base_expression import Expression
 from .identifier import Identifier
-from nml import generic
-from functools import reduce
+
 
 class String(Expression):
     def __init__(self, params, pos):
@@ -29,25 +32,27 @@ class String(Expression):
         self.params = params[1:]
 
     def debug_print(self, indentation):
-        generic.print_dbg(indentation, 'String:')
+        generic.print_dbg(indentation, "String:")
         self.name.debug_print(indentation + 2)
         for param in self.params:
-            generic.print_dbg(indentation + 2, 'Parameter:')
+            generic.print_dbg(indentation + 2, "Parameter:")
             param.debug_print(indentation + 4)
 
     def __str__(self):
-        ret = 'string(' + self.name.value
+        ret = "string(" + self.name.value
         for p in self.params:
-            ret += ', ' + str(p)
-        ret += ')'
+            ret += ", " + str(p)
+        ret += ")"
         return ret
 
-    def reduce(self, id_dicts = [], unknown_id_fatal = True):
+    def reduce(self, id_dicts=None, unknown_id_fatal=True):
         params = [p.reduce(id_dicts) for p in self.params]
         return String([self.name] + params, self.pos)
 
     def __eq__(self, other):
-        return other is not None and isinstance(other, String) and self.name == other.name and self.params == other.params
+        return (
+            other is not None and isinstance(other, String) and self.name == other.name and self.params == other.params
+        )
 
     def __hash__(self):
         return hash(self.name) ^ reduce(lambda x, y: x ^ hash(y), self.params, 0)

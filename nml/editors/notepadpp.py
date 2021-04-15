@@ -15,7 +15,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 
 from nml.editors import extract_tables
 
-#Define parts of np++ xml file
+# Define parts of np++ xml file
 string1 = """\
 <NotepadPlus>
     <UserLang name="nml" ext="nml pnml">
@@ -48,7 +48,7 @@ string4 = """\
             <!-- callbacks and constants -->
             <Keywords name="Words4">"""
 
-string5="""\
+string5 = """\
 </Keywords>
         </KeywordLists>
         <Styles>
@@ -71,21 +71,20 @@ string5="""\
 </NotepadPlus>
 """
 
-#Build np++ xml file
-def write_file(fname):
-    handle = open(fname, "w")
 
-    handle.write(string1)
-    handle.write(" ".join(extract_tables.block_names_table))
-    handle.write(string2)
-    handle.write(" ".join(extract_tables.variables_names_table))
-    handle.write(string3)
-    handle.write(" ".join(extract_tables.feature_names_table))
-    handle.write(string4)
-    handle.write(" ".join(extract_tables.callback_names_table))
-    handle.write(string5)
-    handle.close()
+# Build np++ xml file
+def write_file(fname):
+    with open(fname, "w") as file:
+        file.write(string1)
+        file.write(" ".join(extract_tables.block_names_table))
+        file.write(string2)
+        file.write(" ".join(extract_tables.variables_names_table))
+        file.write(string3)
+        file.write(" ".join(extract_tables.feature_names_table))
+        file.write(string4)
+        file.write(" ".join(extract_tables.callback_names_table))
+        file.write(string5)
+
 
 def run():
     write_file("nml_notepadpp.xml")
-

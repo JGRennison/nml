@@ -13,9 +13,10 @@ You should have received a copy of the GNU General Public License along
 with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
+from nml import expression, generic
 from nml.actions import actionE
 from nml.ast import base_statement
-from nml import expression, generic
+
 
 class DeactivateBlock(base_statement.BaseStatement):
     def __init__(self, grfid_list, pos):
@@ -27,7 +28,7 @@ class DeactivateBlock(base_statement.BaseStatement):
         self.grfid_list = [expression.parse_string_to_dword(grfid.reduce()) for grfid in self.grfid_list]
 
     def debug_print(self, indentation):
-        generic.print_dbg(indentation, 'Deactivate other newgrfs:')
+        generic.print_dbg(indentation, "Deactivate other newgrfs:")
         for grfid in self.grfid_list:
             grfid.debug_print(indentation + 2)
 
@@ -35,4 +36,4 @@ class DeactivateBlock(base_statement.BaseStatement):
         return actionE.parse_deactivate_block(self)
 
     def __str__(self):
-        return 'deactivate({});\n'.format(', '.join(str(grfid) for grfid in self.grfid_list))
+        return "deactivate({});\n".format(", ".join(str(grfid) for grfid in self.grfid_list))
