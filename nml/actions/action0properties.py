@@ -1364,6 +1364,7 @@ properties[0x10] = {
     "alternative_railtype_list": {"custom_function": lambda x: label_list(x, 0x1D, "Railtype")},
     "enable_programmable_pre_signals": {"size": 1, "mapped_property": "railtype_enable_programmable_signals"},
     "enable_restricted_signals":       {"size": 1, "mapped_property": "railtype_enable_restricted_signals"},
+    "disable_realistic_braking":       {"size": 1, "mapped_property": "railtype_disable_realistic_braking"},
 }
 
 #
