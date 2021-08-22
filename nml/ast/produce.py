@@ -46,13 +46,21 @@ class ProduceOld(produce_base_class):
             self.param_list.append(expression.ConstantNumeric(0))
 
     def pre_process(self):
-        generic.print_warning("Consider using the new produce() syntax for '{}'".format(self.name), self.name.pos)
+        generic.print_warning(
+            generic.Warning.DEPRECATION,
+            "Consider using the new produce() syntax for '{}'".format(self.name),
+            self.name.pos,
+        )
+        var_scope = action2var.get_scope(0x0A)
         for i, param in enumerate(self.param_list):
-            self.param_list[i] = action2var.reduce_varaction2_expr(param, 0x0A)
+            self.param_list[i] = action2var.reduce_varaction2_expr(param, var_scope)
         produce_base_class.pre_process(self)
 
     def collect_references(self):
-        return []
+        all_refs = []
+        for expr in self.param_list:
+            all_refs += expr.collect_references()
+        return all_refs
 
     def __str__(self):
         return "produce({});\n".format(", ".join(str(x) for x in [self.name] + self.param_list))
@@ -105,15 +113,19 @@ class Produce(produce_base_class):
         self.again = again
 
     def pre_process(self):
+        var_scope = action2var.get_scope(0x0A)
         for i, param in enumerate(self.subtract_in):
-            self.subtract_in[i].value = action2var.reduce_varaction2_expr(param.value, 0x0A)
+            self.subtract_in[i].value = action2var.reduce_varaction2_expr(param.value, var_scope)
         for i, param in enumerate(self.add_out):
-            self.add_out[i].value = action2var.reduce_varaction2_expr(param.value, 0x0A)
-        self.again = action2var.reduce_varaction2_expr(self.again, 0x0A)
+            self.add_out[i].value = action2var.reduce_varaction2_expr(param.value, var_scope)
+        self.again = action2var.reduce_varaction2_expr(self.again, var_scope)
         produce_base_class.pre_process(self)
 
     def collect_references(self):
-        return []
+        all_refs = []
+        for cargopair in self.subtract_in + self.add_out:
+            all_refs += cargopair.value.collect_references()
+        return all_refs
 
     def __str__(self):
         return "produce({0}, [{1}], [{2}], {3})\n".format(

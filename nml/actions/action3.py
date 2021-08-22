@@ -142,7 +142,7 @@ def create_intermediate_varaction2(feature, varact2parser, mapping, default, pos
                     )
                 else:
                     extra_actions, result, comment = create_proc_call_varaction2(
-                        feature, return_value, ret_value_function, pos
+                        feature, return_value, ret_value_function, varaction2, pos
                     )
                     action_list.extend(extra_actions)
             else:
@@ -168,7 +168,7 @@ def create_intermediate_varaction2(feature, varact2parser, mapping, default, pos
     return (action_list, return_ref)
 
 
-def create_proc_call_varaction2(feature, proc, ret_value_function, pos):
+def create_proc_call_varaction2(feature, proc, ret_value_function, parent_action, pos):
     """
     Create a varaction2 that executes a procedure call and applies a function on the result
 
@@ -188,12 +188,13 @@ def create_proc_call_varaction2(feature, proc, ret_value_function, pos):
     @rtype: C{tuple} of (C{list} of L{BaseAction}, L{SpriteGroupRef}, C{str})
     """
     proc.is_procedure = True
-    varact2parser = action2var.Varaction2Parser(feature, feature)
+    varact2parser = action2var.Varaction2Parser(feature, action2var.get_scope(feature))
     varact2parser.parse_proc_call(proc)
 
     mapping = {0xFFFF: (expression.SpriteGroupRef(expression.Identifier("CB_FAILED"), [], None), None)}
     default = ret_value_function(expression.Variable(expression.ConstantNumeric(0x1C)))
     action_list, result = create_intermediate_varaction2(feature, varact2parser, mapping, default, pos)
+    action2.add_ref(result, parent_action)
     comment = result.name.value + ";"
     return (action_list, result, comment)
 
@@ -221,7 +222,7 @@ def create_cb_choice_varaction2(feature, expr, mapping, default, pos):
     @return: A tuple containing the action list and a reference to the created action2
     @rtype: C{tuple} of (C{list} of L{BaseAction}, L{SpriteGroupRef})
     """
-    varact2parser = action2var.Varaction2Parser(feature, feature)
+    varact2parser = action2var.Varaction2Parser(feature, action2var.get_scope(feature))
     varact2parser.parse_expr(expr)
     return create_intermediate_varaction2(feature, varact2parser, mapping, default, pos)
 
@@ -309,7 +310,7 @@ def parse_graphics_block_single_id(
 
                 for info in info_list:
                     if "deprecate_message" in info:
-                        generic.print_warning(info["deprecate_message"], cargo_id.pos)
+                        generic.print_warning(generic.Warning.DEPRECATION, info["deprecate_message"], cargo_id.pos)
                     if house_tile is not None and "tiles" in info and house_tile not in info["tiles"]:
                         continue
 
