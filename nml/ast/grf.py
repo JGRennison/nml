@@ -27,6 +27,8 @@ property_mapping_ids = {}
 property_mapping_nodes = []
 action5_mapping_ids = {}
 next_action5_mapping_id = 0x6F
+feature_tests = {}
+next_feature_test_bit = 6
 
 """
 Statistics about registers used for parameters.
@@ -96,6 +98,23 @@ def get_action5_mapping_id(name):
         pm_action14_root.subnodes.append(action14.BinaryNode("TYPE", 1, type_id))
         property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return action5_mapping_ids[name]
+
+
+def get_feature_test_bit(name, minv, maxv):
+    global next_feature_test_bit, feature_tests
+    if (name, minv, maxv) not in feature_tests:
+        bit = next_feature_test_bit
+        next_feature_test_bit = bit + 1
+        feature_tests[name, minv, maxv] = bit
+        pm_action14_root = action14.BranchNode("FTST")
+        pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
+        if minv != 1:
+            pm_action14_root.subnodes.append(action14.BinaryNode("MINV", 2, minv))
+        if maxv != 0xFFFF:
+            pm_action14_root.subnodes.append(action14.BinaryNode("MAXV", 2, maxv))
+        pm_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, bit))
+        property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
+    return feature_tests[name, minv, maxv]
 
 
 class GRF(base_statement.BaseStatement):

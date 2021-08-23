@@ -19,12 +19,13 @@ import math
 from functools import reduce
 
 from nml import generic, global_constants, nmlop
+from nml.ast import grf
 
 from . import identifier
 from .base_expression import ConstantFloat, ConstantNumeric, Expression, Type
 from .bitmask import BitMask
 from .cargo import AcceptCargo, ProduceCargo
-from .parameter import parse_string_to_dword
+from .parameter import parse_string_to_dword, Parameter
 from .storage_op import StorageOp
 from .string_literal import StringLiteral
 from .ternaryop import TernaryOp
@@ -768,5 +769,25 @@ def builtin_format_string(name, args, pos):
     except Exception as ex:
         raise generic.ScriptError("Invalid combination of format / arguments for {}: {}".format(name, str(ex)), pos)
 
+@builtin
+def builtin_extended_feature_test(name, args, pos):
+    """
+    format_string(format, ... args ..) builtin function
+
+    @return Formatted string
+    """
+    if len(args) < 1 or len(args) > 3:
+        raise generic.ScriptError(name + "() must have 1, 2, or 3 parameters", pos)
+
+    feature = args[0].reduce()
+    if not isinstance(feature, StringLiteral):
+        raise generic.ScriptError(name + "() parameter 1 'feature' must be a literal string", feature.pos)
+
+    minv = args[1].reduce_constant().value if len(args) >= 2 else 1
+    maxv = args[2].reduce_constant().value if len(args) >= 3 else 0xFFFF
+
+    bit = grf.get_feature_test_bit(feature.value, minv, maxv)
+
+    return nmlop.HASBIT(Parameter(ConstantNumeric(0x9D), pos), bit)
 
 # }
