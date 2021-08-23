@@ -1256,7 +1256,17 @@ properties[0x0D] = {
 }
 # fmt: on
 
-# Feature 0x0E (Signals) doesn't currently have any action0
+#
+# Feature 0x0E (Signals)
+#
+
+# fmt: off
+properties[0x0E] = {
+    "enable_programmable_pre_signals": {"size": 1, "mapped_property": "signals_enable_programmable_signals"},
+    "enable_restricted_signals":       {"size": 1, "mapped_property": "signals_enable_restricted_signals"},
+    "enable_signal_recolour":          {"size": 1, "mapped_property": "signals_enable_signal_recolour"},
+}
+# fmt: on
 
 #
 # Feature 0x0F (Objects)

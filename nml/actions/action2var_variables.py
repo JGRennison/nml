@@ -634,8 +634,12 @@ varact2vars60x_airports = {
 }
 
 #
-# New Signals (feature 0x0E) are not implemented in OpenTTD
+# New Signals (feature 0x0E)
 #
+
+varact2vars_signals = {
+    'terrain_type'          : {'var': 0x40, 'start': 0, 'size':  8},
+}
 
 #
 # Objects (feature 0x0F)
@@ -807,6 +811,7 @@ scope_industries = VarAct2Scope(
 scope_cargos = VarAct2Scope("Cargos", {}, {})
 scope_soundeffects = VarAct2Scope("SoundEffects", {}, {})
 scope_airports = VarAct2Scope("Airports", varact2vars_airports, varact2vars60x_airports, has_persistent_storage=True)
+scope_signals = VarAct2Scope("Signals", varact2vars_signals, {})
 scope_objects = VarAct2Scope("Objects", varact2vars_objects, varact2vars60x_objects)
 scope_railtypes = VarAct2Scope("RailTypes", varact2vars_railtype, {})
 scope_airporttiles = VarAct2Scope("AirportTiles", varact2vars_airporttiles, varact2vars60x_airporttiles)
@@ -828,7 +833,7 @@ varact2features = [
     VarAct2Feature(scope_cargos, None),
     VarAct2Feature(scope_soundeffects, None),
     VarAct2Feature(scope_airports, None),
-    None,  # signals
+    VarAct2Feature(scope_signals, None),
     VarAct2Feature(scope_objects, scope_towns),
     VarAct2Feature(scope_railtypes, None),
     VarAct2Feature(scope_airporttiles, None),

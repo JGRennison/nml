@@ -772,9 +772,9 @@ def builtin_format_string(name, args, pos):
 @builtin
 def builtin_extended_feature_test(name, args, pos):
     """
-    format_string(format, ... args ..) builtin function
+    extended_feature_test(name[, minv[, maxv]]) builtin function
 
-    @return Formatted string
+    @return True if named extended feature is present and has a version in the specified range
     """
     if len(args) < 1 or len(args) > 3:
         raise generic.ScriptError(name + "() must have 1, 2, or 3 parameters", pos)

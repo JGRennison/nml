@@ -235,7 +235,10 @@ callbacks[0x0D] = {
     'default'         : {'type': 'cargo', 'num': None},
 }
 
-# New signals (0x0E) have no item-specific action3
+# New signals (0x0E)
+callbacks[0x0E] = {
+    'default'         : {'type': 'cargo', 'num': None},
+}
 
 # Objects
 callbacks[0x0F] = {
