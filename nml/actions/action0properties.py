@@ -1265,6 +1265,7 @@ properties[0x0E] = {
     "enable_programmable_pre_signals": {"size": 1, "mapped_property": "signals_enable_programmable_signals"},
     "enable_restricted_signals":       {"size": 1, "mapped_property": "signals_enable_restricted_signals"},
     "enable_signal_recolour":          {"size": 1, "mapped_property": "signals_enable_signal_recolour"},
+    "extra_aspects":                   {"size": 1, "mapped_property": "signals_extra_aspects"},
 }
 # fmt: on
 
@@ -1377,6 +1378,7 @@ properties[0x10] = {
     "enable_restricted_signals":       {"size": 1, "mapped_property": "railtype_enable_restricted_signals"},
     "disable_realistic_braking":       {"size": 1, "mapped_property": "railtype_disable_realistic_braking"},
     "enable_signal_recolour":          {"size": 1, "mapped_property": "railtype_enable_signal_recolour"},
+    "extra_aspects":                   {"size": 1, "mapped_property": "railtype_extra_aspects"},
 }
 
 #
