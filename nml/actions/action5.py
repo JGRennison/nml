@@ -84,6 +84,7 @@ action5_table = {
     "RAILTYPE_TUNNELS": (0x17, 16, Action5BlockType.OFFSET),
     "OTTD_RECOLOUR": (0x18, 1, Action5BlockType.OFFSET),
     "PROGRAMMABLE_PRE_SIGNAL" : ("programmable_signals", 32, Action5BlockType.OFFSET),
+    "NO_ENTRY_SIGNAL" : ("no_entry_signals", 16, Action5BlockType.OFFSET),
 }
 
 def pre_process_action5(replaces):
