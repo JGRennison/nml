@@ -563,7 +563,7 @@ def parse_property_value(prop_info, value, unit=None, size_bit=None):
         return [value]
 
 
-def parse_property(prop_info, value_list, feature, id):
+def parse_property(prop_info, value_list, feature, id, length_prefixed=False):
     """
     Parse a single property
 
@@ -635,7 +635,10 @@ def parse_property(prop_info, value_list, feature, id):
 
             else:
                 tmp_param, tmp_param_actions = actionD.get_tmp_parameter(value)
-                mods.append((tmp_param, prop_info["size"], i * prop_info["size"] + 1))
+                value_offset = i * prop_info["size"] + 1
+                if length_prefixed:
+                    value_offset = value_offset + (i + 1)
+                mods.append((tmp_param, prop_info["size"], value_offset))
                 action_list.extend(tmp_param_actions)
                 value = expression.ConstantNumeric(0)
 
@@ -643,7 +646,9 @@ def parse_property(prop_info, value_list, feature, id):
 
         # Now, write a single Action0 Property with all of these values
         if prop_info["num"] != -1:
-            props = [Action0Property(prop_info["num"], final_values, prop_info["size"])]
+            prop = Action0Property(prop_info["num"], final_values, prop_info["size"])
+            prop.length_prefixed = length_prefixed
+            props = [prop]
         else:
             props = []
 
@@ -763,10 +768,9 @@ def parse_property_block(prop_list, feature, id, size):
             if 'mapped_property' in prop_info:
                 prop_id = grf.get_property_mapping_id(feature, prop_info['mapped_property'])
                 prop_info['num'] = prop_id
-                props, extra_actions, mods, extra_append_actions = parse_property(prop_info, value_list, feature, id)
+                props, extra_actions, mods, extra_append_actions = parse_property(prop_info, value_list, feature, id, True)
                 for p in props:
                     p.num = prop_id
-                    p.length_prefixed = True
                 ext_action_list.extend(extra_actions)
                 action_list_append.extend(extra_append_actions)
                 for mod in mods:
