@@ -1307,6 +1307,7 @@ properties[0x0F] = {
     "height":                 {"size": 1, "num": 0x16},
     "num_views":              {"size": 1, "num": 0x17},
     "count_per_map256":       {"size": 1, "num": 0x18},
+    "use_land_ground":        {"size": 1, "mapped_property": "object_use_land_ground"},
 }
 # fmt: on
 
