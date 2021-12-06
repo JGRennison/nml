@@ -1286,6 +1286,22 @@ def object_size(value):
         raise generic.ScriptError("The size of an object must be at least 1x1 and at most 15x15 tiles", value.pos)
     return [Action0Property(0x0C, ConstantNumeric(sizey.value << 4 | sizex.value), 1)]
 
+def edge_foundation_mode_value(value):
+    """
+    Convert edge foundation mode array of four elements to an edge foundation mode property.
+
+    @param value: Array of edge foundation modes (1 per view).
+    @type  value: C{Array}
+
+    @return: Value to use for the property.
+    @rtype:  L{Expression}
+    """
+    if not isinstance(value, Array) or len(value.values) != 4:
+        raise generic.ScriptError("edge_foundation_mode must be an array with exactly 4 constant values", value.pos)
+    result = 0
+    for i in range(0, 4):
+        result = result | (value.values[i].reduce_constant().value << (i * 8))
+    return ConstantNumeric(result)
 
 # fmt: off
 properties[0x0F] = {
@@ -1308,6 +1324,7 @@ properties[0x0F] = {
     "num_views":              {"size": 1, "num": 0x17},
     "count_per_map256":       {"size": 1, "num": 0x18},
     "use_land_ground":        {"size": 1, "mapped_property": "object_use_land_ground"},
+    "edge_foundation_mode":   {"size": 4, "mapped_property": "object_edge_foundation_mode", "value_function": edge_foundation_mode_value},
 }
 # fmt: on
 

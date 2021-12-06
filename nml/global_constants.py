@@ -1054,6 +1054,14 @@ constant_numbers = {
     #tram type extra flags
     "TRAMTYPE_EXTRA_FLAG_NO_SCRIPT_BUILD" : 0,
     "TRAMTYPE_EXTRA_FLAG_NO_TOWN_MODIFY"  : 1,
+
+    "DIAGDIR_NE"                          : 0,    # Northeast, upper right on your monitor
+    "DIAGDIR_SE"                          : 1,    # Southeast
+    "DIAGDIR_SW"                          : 2,    # Southwest
+    "DIAGDIR_NW"                          : 3,    # Northwest
+
+    "OBJECT_EF_FLAG_ADJUST_Z"             : 0x4,
+    "OBJECT_EF_FLAG_FOUNDATION_LOWER"     : 0x8,
 }
 # fmt: on
 
