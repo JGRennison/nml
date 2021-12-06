@@ -1325,6 +1325,7 @@ properties[0x0F] = {
     "count_per_map256":       {"size": 1, "num": 0x18},
     "use_land_ground":        {"size": 1, "mapped_property": "object_use_land_ground"},
     "edge_foundation_mode":   {"size": 4, "mapped_property": "object_edge_foundation_mode", "value_function": edge_foundation_mode_value},
+    "flood_resistant":        {"size": 1, "mapped_property": "object_flood_resistant"},
 }
 # fmt: on
 
