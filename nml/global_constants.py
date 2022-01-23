@@ -1062,6 +1062,7 @@ constant_numbers = {
 
     "OBJECT_EF_FLAG_ADJUST_Z"             : 0x4,
     "OBJECT_EF_FLAG_FOUNDATION_LOWER"     : 0x8,
+    "OBJECT_EF_FLAG_INCLINE_FOUNDATION"   : 0x10,
 }
 # fmt: on
 
