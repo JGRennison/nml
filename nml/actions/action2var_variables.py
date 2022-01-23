@@ -652,6 +652,8 @@ varact2vars_objects = {
 
     'terrain_type'           : {'var': 0x41, 'start':  0, 'size':  3},
     'tile_slope'             : {'var': 0x41, 'start':  8, 'size':  5},
+    'foundation_tile_slope'        : {'mapped_variable': "object_foundation_tile_slope",        'feature': 0x0F, 'start':  0, 'size':  5},
+    'foundation_change_tile_slope' : {'mapped_variable': "object_foundation_change_tile_slope", 'feature': 0x0F, 'start':  0, 'size':  5},
 
     'build_date'             : {'var': 0x42, 'start':  0, 'size': 32},
 
