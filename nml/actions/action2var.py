@@ -15,7 +15,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 
 from nml import expression, generic, global_constants, nmlop
 from nml.actions import action2, action2real, action2var_variables, action4, action6, actionD
-from nml.ast import switch
+from nml.ast import grf, switch
 
 
 class Action2Var(action2.Action2):
@@ -482,7 +482,7 @@ class Varaction2Parser:
         @param expr:
         @type  expr: L{expression.Variable}
         """
-        if not isinstance(expr.num, expression.ConstantNumeric):
+        if not isinstance(expr.num, expression.ConstantNumeric) and not isinstance(expr.num, expression.StringLiteral):
             raise generic.ScriptError("Variable number must be a constant number", expr.pos)
         if not (expr.param is None or isinstance(expr.param, expression.ConstantNumeric)):
             raise generic.ScriptError("Variable parameter must be a constant number", expr.pos)
@@ -521,9 +521,15 @@ class Varaction2Parser:
         else:
             offset = 3
             param = expr.param.value
-        mask = self.parse_expr_to_constant(expr.mask, offset)
 
-        var = VarAction2Var(expr.num.value, expr.shift.value, mask, param)
+        if expr.is_mapped_variable():
+            if not isinstance(expr.mask, expression.ConstantNumeric):
+                raise generic.ScriptError("cannot handle non-constant mask with mapped variable", expr.pos)
+            var_id = grf.get_variable_mapping_id(expr.feature, expr.num.value, expr.shift.value, expr.mask.value)
+            var = VarAction2Var(0x11, 0, var_id, param)
+        else:
+            mask = self.parse_expr_to_constant(expr.mask, offset)
+            var = VarAction2Var(expr.num.value, expr.shift.value, mask, param)
 
         if expr.add is not None:
             var.add = self.parse_expr_to_constant(expr.add, offset + 4)
@@ -715,13 +721,22 @@ def parse_var(name, info, pos):
             pos,
         )
     param = expression.ConstantNumeric(info["param"]) if "param" in info else None
+
+    if "mapped_variable" in info:
+        var_id = expression.StringLiteral(info["mapped_variable"], None)
+    else:
+        var_id = expression.ConstantNumeric(info["var"])
+
     res = expression.Variable(
-        expression.ConstantNumeric(info["var"]),
+        var_id,
         expression.ConstantNumeric(info["start"]),
         expression.ConstantNumeric((1 << info["size"]) - 1),
         param,
         pos,
     )
+    if "mapped_variable" in info:
+        res.feature = info["feature"]
+
     if "value_function" in info:
         return info["value_function"](res, info)
     return res

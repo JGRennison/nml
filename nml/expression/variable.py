@@ -14,6 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import generic
+from nml.ast import grf
 
 from .base_expression import ConstantNumeric, Expression, Type
 
@@ -64,7 +65,7 @@ class Variable(Expression):
         mask = self.mask.reduce(id_dicts)
         param = self.param.reduce(id_dicts) if self.param is not None else None
         if (
-            num.type() != Type.INTEGER
+            (num.type() != Type.INTEGER and num.type() != Type.STRING_LITERAL)
             or shift.type() != Type.INTEGER
             or mask.type() != Type.INTEGER
             or (param is not None and param.type() != Type.INTEGER)
@@ -75,6 +76,9 @@ class Variable(Expression):
         var.div = None if self.div is None else self.div.reduce(id_dicts)
         var.mod = None if self.mod is None else self.mod.reduce(id_dicts)
         var.extra_params = [(extra_param[0], extra_param[1].reduce(id_dicts)) for extra_param in self.extra_params]
+        if self.is_mapped_variable():
+            var.feature = self.feature
+            grf.get_variable_mapping_id(self.feature, num.value, shift.reduce_constant().value, mask.reduce_constant().value)
         return var
 
     def supported_by_action2(self, raise_error):
@@ -89,3 +93,9 @@ class Variable(Expression):
                     raise generic.ScriptError("LOAD_TEMP is only available in switch-blocks.", self.pos)
             raise generic.ScriptError("Variable accesses are not supported outside of switch-blocks.", self.pos)
         return False
+
+    def is_mapped_variable(self):
+        return self.num.type() == Type.STRING_LITERAL
+
+    def update_variable_mapping(self):
+        grf.get_variable_mapping_id(self.feature, self.num.value, self.shift.reduce_constant().value, self.mask.reduce_constant().value)

@@ -29,6 +29,10 @@ action5_mapping_ids = {}
 next_action5_mapping_id = 0x6F
 feature_tests = {}
 next_feature_test_bit = 6
+next_variable_mapping_id = 0
+variable_mapping_ids = {}
+variable_mapping_nodes = []
+variable_mapping_complete = False
 
 """
 Statistics about registers used for parameters.
@@ -46,6 +50,8 @@ def print_stats():
         generic.print_info("GRF parameter registers: {}/{}".format(param_stats[0], param_stats[1]))
     if len(property_mapping_nodes) > 0:
         generic.print_info("Mapped properties: {}".format(len(property_mapping_nodes)))
+    if len(variable_mapping_nodes) > 0:
+        generic.print_info("Mapped variables: {}".format(len(variable_mapping_nodes)))
 
 
 def set_palette_used(pal):
@@ -84,6 +90,24 @@ def get_property_mapping_id(feature, name):
         pm_action14_root.subnodes.append(action14.BinaryNode("PROP", 1, prop_id))
         property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return property_mapping_ids[key]
+
+def get_variable_mapping_id(feature, name, shift, mask):
+    global variable_mapping_ids, variable_mapping_complete, next_variable_mapping_id
+    key = (feature, name, shift, mask)
+    if key not in variable_mapping_ids:
+        if variable_mapping_complete:
+            raise generic.ScriptError("Cannot map variable after mapping complete")
+        var_id = next_variable_mapping_id
+        next_variable_mapping_id += 1
+        variable_mapping_ids[key] = var_id
+        pm_action14_root = action14.BranchNode("A2VM")
+        pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
+        pm_action14_root.subnodes.append(action14.BinaryNode("FEAT", 1, feature))
+        pm_action14_root.subnodes.append(action14.BinaryNode("RMSK", 4, var_id))
+        pm_action14_root.subnodes.append(action14.BinaryNode("VSFT", 1, shift))
+        pm_action14_root.subnodes.append(action14.BinaryNode("VMSK", 4, mask))
+        variable_mapping_nodes.extend(action14.get_actions(pm_action14_root))
+    return variable_mapping_ids[key]
 
 
 def get_action5_mapping_id(name):
@@ -262,7 +286,10 @@ class GRF(base_statement.BaseStatement):
             pmt_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, 5))
             ret.extend(action14.get_actions(pmt_action14_root))
         ret.extend(property_mapping_nodes)
+        ret.extend(variable_mapping_nodes)
         ret.append(action8.Action8(self.grfid, self.name, self.desc))
+        global variable_mapping_complete
+        variable_mapping_complete = True
         return ret
 
     def __str__(self):
