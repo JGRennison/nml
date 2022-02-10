@@ -868,6 +868,8 @@ properties[0x07] = {
 
 # fmt: off
 properties[0x08] = {
+    "lighthouse_generate_amount":  {"size": 1, "mapped_property": "global_lighthouse_generate_amount"},
+    "transmitter_generate_amount": {"size": 1, "mapped_property": "global_transmitter_generate_amount"},
 }
 # fmt: on
 
