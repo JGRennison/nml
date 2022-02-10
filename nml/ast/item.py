@@ -48,13 +48,19 @@ class Item(base_statement.BaseStatementList):
                 "Item block requires between 1 and 4 parameters, found {:d}.".format(len(params)), self.pos
             )
         self.feature = general.parse_feature(params[0])
-        if self.feature.value in (0x08, 0x0C):
+        if self.feature.value == 0x0C:
             raise generic.ScriptError("Defining item blocks for this feature is not allowed.", self.pos)
+
         self.name = params[1] if len(params) >= 2 else None
 
         self.id = params[2].reduce_constant(global_constants.const_list) if len(params) >= 3 else None
         if isinstance(self.id, expression.ConstantNumeric) and self.id.value == -1:
             self.id = None  # id == -1 means default
+
+        if self.feature.value == 0x08:
+            if len(params) >= 2:
+                raise generic.ScriptError("Setting the item name or ID for this feature is not allowed.", self.pos)
+            self.id = expression.ConstantNumeric(0)
 
         if len(params) >= 4:
             if self.feature.value != 0x07:

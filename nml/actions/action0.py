@@ -198,7 +198,7 @@ used_ids = [
     BlockAllocation(0, 8, "Canal", False),
     BlockAllocation(0, 15, "Bridge", False),
     BlockAllocation(0, 255, "House"),
-    BlockAllocation(0, -1, "Global", False),
+    BlockAllocation(0, 0, "Global", False),
     BlockAllocation(0, 255, "Industry Tile"),
     BlockAllocation(0, 127, "Industry"),
     BlockAllocation(0, 63, "Cargo"),

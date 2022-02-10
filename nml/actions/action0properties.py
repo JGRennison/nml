@@ -864,7 +864,12 @@ properties[0x07] = {
 }
 # fmt: on
 
-# Feature 0x08 (General Vars) is implemented elsewhere (e.g. basecost, snowline)
+# Feature 0x08 (General Vars) is implemented elsewhere (e.g. basecost, snowline), except for extended properties
+
+# fmt: off
+properties[0x08] = {
+}
+# fmt: on
 
 #
 # Feature 0x09 (Industry Tiles)
