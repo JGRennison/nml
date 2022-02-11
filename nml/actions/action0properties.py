@@ -16,6 +16,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 import itertools
 
 from nml import generic, nmlop
+from nml.actions import action4
 from nml.expression import (
     AcceptCargo,
     Array,
@@ -23,6 +24,7 @@ from nml.expression import (
     ConstantNumeric,
     Identifier,
     ProduceCargo,
+    String,
     StringLiteral,
     parse_string_to_dword,
 )
@@ -866,10 +868,21 @@ properties[0x07] = {
 
 # Feature 0x08 (General Vars) is implemented elsewhere (e.g. basecost, snowline), except for extended properties
 
+def extra_station_name_value(value):
+    if not isinstance(value, Array) or len(value.values) != 2:
+        raise generic.ScriptError("Extra station name must be an array with exactly two values", value.pos)
+    if not isinstance(value.values[0], String):
+        raise generic.ScriptError("Extra station name first value must be a string", value.pos)
+
+    stringid, string_actions = action4.get_string_action4s(0x08, 0xDC, value.values[0])
+
+    return (nmlop.OR(nmlop.SHIFT_LEFT(value.values[1], 16), ConstantNumeric(stringid)).reduce(), [], string_actions)
+
 # fmt: off
 properties[0x08] = {
     "lighthouse_generate_amount":  {"size": 1, "mapped_property": "global_lighthouse_generate_amount"},
     "transmitter_generate_amount": {"size": 1, "mapped_property": "global_transmitter_generate_amount"},
+    "extra_station_name":          {"size": 4, "mapped_property": "global_extra_station_names", "value_function_ex": extra_station_name_value},
 }
 # fmt: on
 
