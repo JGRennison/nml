@@ -506,6 +506,9 @@ def parse_property_value(prop_info, value, unit=None, size_bit=None):
     @return: List of values to actually use (in nfo) for the property
     @rtype: L{Expression}
     """
+    action_list = []
+    action_list_append = []
+
     # Change value to use, except when the 'nfo' unit is used
     if unit is None or unit.type != "nfo":
         # Save the original value to test conversion against it
@@ -552,15 +555,21 @@ def parse_property_value(prop_info, value, unit=None, size_bit=None):
     if "value_function" in prop_info:
         value = prop_info["value_function"](value)
 
+    # Apply value_function if it exists
+    if "value_function_ex" in prop_info:
+        value, extra_actions, extra_append_actions = prop_info["value_function_ex"](value)
+        action_list.extend(extra_actions)
+        action_list_append.extend(extra_append_actions)
+
     # Make multitile houses work
     if size_bit is not None:
         num_ids = house_sizes[size_bit]
         assert "multitile_function" in prop_info
         ret = prop_info["multitile_function"](value, num_ids, size_bit)
         assert len(ret) == num_ids
-        return ret
+        return (ret, action_list, action_list_append)
     else:
-        return [value]
+        return ([value], action_list, action_list_append)
 
 
 def parse_property(prop_info, value_list, feature, id, length_prefixed=False):
@@ -728,9 +737,11 @@ def parse_property_block(prop_list, feature, id, size):
     for prop in prop_list:
         new_prop_info_list = get_property_info_list(feature, prop.name)
         prop_info_list.extend(new_prop_info_list)
-        value_list_list.extend(
-            parse_property_value(prop_info, prop.value, prop.unit, size_bit) for prop_info in new_prop_info_list
-        )
+        for prop_info in new_prop_info_list:
+            value, extra_actions, extra_append_actions = parse_property_value(prop_info, prop.value, prop.unit, size_bit)
+            value_list_list.append(value)
+            action_list.extend(extra_actions)
+            action_list_append.extend(extra_append_actions)
         pos_list.extend(prop.name.pos for i in new_prop_info_list)
 
     validate_prop_info_list(prop_info_list, pos_list, feature)
@@ -1167,9 +1178,12 @@ def get_callback_flags_actions(feature, id, flags):
     if not isinstance(prop_info_list, list):
         prop_info_list = [prop_info_list]
     for prop_info in prop_info_list:
+        value, extra_actions, extra_append_actions = parse_property_value(prop_info, expression.ConstantNumeric(flags))
+        if len(extra_actions) > 0 or len(extra_append_actions) > 0:
+            raise generic.ScriptError("Unexpected extra actions", value.pos)
         act0.prop_list.append(
             Action0Property(
-                prop_info["num"], parse_property_value(prop_info, expression.ConstantNumeric(flags)), prop_info["size"]
+                prop_info["num"], value, prop_info["size"]
             )
         )
 
