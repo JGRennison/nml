@@ -14,7 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, generic, global_constants, nmlop
-from nml.actions import action2, action2real, action2var_variables, action4, action6, actionD
+from nml.actions import action2, action2real, action2var_variables, action4, action6, action7, actionD
 from nml.ast import grf, switch
 
 
