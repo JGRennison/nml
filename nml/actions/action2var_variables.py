@@ -808,6 +808,8 @@ varact2vars_roadstop = {
 
     'animation_frame'       : {'var': 0x49, 'start':  0, 'size':  8},
 
+    'one_way_info'          : {'var': 0x50, 'start':  0, 'size':  2},
+
     'waiting_triggers'      : {'var': 0x5F, 'start':  0, 'size':  8},
     'random_bits'           : {'var': 0x5F, 'start':  8, 'size': 24},
 }
@@ -833,6 +835,7 @@ varact2vars60x_roadstop = {
     'nearby_tile_view'                  : {'var': 0x68, 'start': 12, 'size':  4, 'param_function': signed_tile_offset},
     'nearby_tile_stop_type'             : {'var': 0x68, 'start': 16, 'size':  4, 'param_function': signed_tile_offset},
     'nearby_tile_same_stop_type'        : {'var': 0x68, 'start': 20, 'size':  1, 'param_function': signed_tile_offset},
+    'nearby_tile_one_way_info'          : {'var': 0x68, 'start': 21, 'size':  2, 'param_function': signed_tile_offset},
     'nearby_tile_grfid'                 : {'var': 0x6A, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
 }
 

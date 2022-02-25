@@ -1130,6 +1130,11 @@ constant_numbers = {
     "RST_BRIDGE_PILLAR_FLAG_EDGE_SE"            : 5,
     "RST_BRIDGE_PILLAR_FLAG_EDGE_SW"            : 6,
     "RST_BRIDGE_PILLAR_FLAG_EDGE_NW"            : 7,
+
+    "RST_OWI_TWO_WAY"                           : 0,
+    "RST_OWI_NORTH_BOUND"                       : 1,
+    "RST_OWI_SOUTH_BOUND"                       : 2,
+    "RST_OWI_NO_ENTRY"                          : 3,
 }
 # fmt: on
 
