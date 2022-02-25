@@ -833,6 +833,7 @@ varact2vars60x_roadstop = {
     'nearby_tile_same_station'          : {'var': 0x68, 'start': 10, 'size':  1, 'param_function': signed_tile_offset},
     'nearby_tile_different_view'        : {'var': 0x68, 'start': 11, 'size':  1, 'param_function': signed_tile_offset},
     'nearby_tile_view'                  : {'var': 0x68, 'start': 12, 'size':  4, 'param_function': signed_tile_offset},
+    'nearby_tile_is_drive_through'      : {'var': 0x68, 'start': 12, 'size':  4, 'param_function': signed_tile_offset, 'value_function': lambda var, info: nmlop.CMP_GE(var, 4)},
     'nearby_tile_stop_type'             : {'var': 0x68, 'start': 16, 'size':  4, 'param_function': signed_tile_offset},
     'nearby_tile_same_stop_type'        : {'var': 0x68, 'start': 20, 'size':  1, 'param_function': signed_tile_offset},
     'nearby_tile_one_way_info'          : {'var': 0x68, 'start': 21, 'size':  2, 'param_function': signed_tile_offset},
