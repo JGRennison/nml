@@ -1228,4 +1228,6 @@ def parse_varaction2(switch_block):
     switch_block.set_action2(varaction2, feature)
 
     action6.free_parameters.restore()
+    if feature >= 0xE0 and len(action_list) > 0:
+        action_list.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(action_list), "feature_id_mapping feature test (VarAction 2)"))
     return action_list

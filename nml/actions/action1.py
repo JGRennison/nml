@@ -148,6 +148,8 @@ class SpritesetCollection(base_action.BaseAction):
                 if idx == spriteset_offset:
                     actions.extend(real_sprite.parse_sprite_data(spriteset))
                     break
+        if self.feature >= 0xE0 and len(actions) > 0:
+            actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (Action 1)"))
         return actions
 
 
@@ -259,4 +261,6 @@ def make_cb_failure_action1(feature):
     else:
         last_spriteset_collection = None
         actions = [Action1(feature, 1, 0)]
+        if feature >= 0xE0:
+            actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (Action 1 CB failure)"))
     return (actions, 0)  # Index is currently always 0, but will change with ext. A1

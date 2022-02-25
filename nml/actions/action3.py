@@ -14,7 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, generic, global_constants, nmlop
-from nml.actions import action0, action2, action2real, action2var, action3_callbacks, action6, actionD, base_action
+from nml.actions import action0, action2, action2real, action2var, action3_callbacks, action6, action7, actionD, base_action
 
 
 class Action3(base_action.BaseAction):
@@ -277,6 +277,8 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
             )
     else:
         action_list.extend(parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override))
+    if feature >= 0xE0 and len(action_list) > 0:
+        action_list.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(action_list), "feature_id_mapping feature test (graphics block)"))
     return action_list
 
 

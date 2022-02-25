@@ -14,7 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, generic, grfstrings
-from nml.actions import action6, actionD, base_action
+from nml.actions import action6, action7, actionD, base_action
 
 
 class Action4(base_action.BaseAction):
@@ -131,6 +131,8 @@ def get_global_string_actions():
         str_lang, str_id, str_text, feature = text
         # If possible, append strings to the last action 4 instead of creating a new one
         if str_lang != last_lang or str_id - 1 != last_id or feature != last_feature or len(actions[-1].texts) == 0xFF:
+            if feature >= 0xE0:
+                actions.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, 1, "feature_id_mapping feature test (Action 4)"))
             actions.append(Action4(feature, str_lang, 2, str_id, [str_text]))
         else:
             actions[-1].texts.append(str_text)
@@ -220,5 +222,8 @@ def get_string_action4s(feature, string_range, string, id=None):
             actions.append(Action4(feature, lang_id, size, id_val, [text]))
 
     action6.free_parameters.restore()
+
+    if feature >= 0xE0 and len(actions) > 0:
+        actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (Action 4)"))
 
     return (id_val, actions)

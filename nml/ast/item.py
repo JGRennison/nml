@@ -101,6 +101,7 @@ class Item(base_statement.BaseStatementList):
         global item_feature, item_id, item_size
         item_id = self.id
         item_feature = self.feature.value
+        grf.use_feature_id(item_feature)
         item_size = self.size
         base_statement.BaseStatementList.pre_process(self)
 

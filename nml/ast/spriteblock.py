@@ -171,7 +171,8 @@ class SpriteGroup(spritegroup_base_class):
         action_list = []
         if self.prepare_act2_output():
             for feature in sorted(self.feature_set):
-                action_list.extend(action2real.get_real_action2s(self, feature))
+                actions = action2real.get_real_action2s(self, feature)
+                action_list.extend(actions)
         return action_list
 
     def __str__(self):

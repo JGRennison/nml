@@ -92,6 +92,8 @@ def get_real_action2s(spritegroup, feature):
         )
     )
     spritegroup.set_action2(actions[-1], feature)
+    if feature >= 0xE0 and len(actions) > 0:
+        actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (real Action 2)"))
     return actions
 
 

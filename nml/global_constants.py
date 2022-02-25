@@ -728,6 +728,14 @@ constant_numbers = {
     "ANIM_TRIGGER_APT_250_TICKS"            : 4,
     "ANIM_TRIGGER_APT_AIRPLANE_LANDS"       : 5,
 
+    "ANIM_TRIGGER_ROAD_STOP_BUILT"          : 0,
+    "ANIM_TRIGGER_ROAD_STOP_NEW_CARGO"      : 1,
+    "ANIM_TRIGGER_ROAD_STOP_CARGO_TAKEN"    : 2,
+    "ANIM_TRIGGER_ROAD_STOP_VEH_ENTER"      : 3,
+    "ANIM_TRIGGER_ROAD_STOP_VEH_LEAVE"      : 4,
+    "ANIM_TRIGGER_ROAD_STOP_VEH_LOAD"       : 5,
+    "ANIM_TRIGGER_ROAD_STOP_250_TICKS"      : 6,
+
     # Animation looping
     "ANIMATION_NON_LOOPING"                 : 0,
     "ANIMATION_LOOPING"                     : 1,
@@ -1092,6 +1100,36 @@ constant_numbers = {
     "EXTRA_STATION_NAME_FLAG_NOT_TOWN_CENTRE"   : 9,
     "EXTRA_STATION_NAME_FLAG_NEAR_WATER_ONLY"   : 10,
     "EXTRA_STATION_NAME_FLAG_NOT_NEAR_WATER"    : 11,
+
+    "RST_AVAILABILITY_TYPE_PASSENGER"           : 0,
+    "RST_AVAILABILITY_TYPE_FREIGHT"             : 1,
+    "RST_AVAILABILITY_TYPE_ALL"                 : 2,
+
+    "RST_TYPE_BUS"                              : 0,
+    "RST_TYPE_TRUCK"                            : 1,
+    "RST_TYPE_WAYPOINT"                         : 2,
+
+    "RST_DRAW_FLAG_BAY_ROAD"                    : 0,
+    "RST_DRAW_FLAG_DRIVE_THROUGH_ROAD_OVERLAY"  : 1,
+    "RST_DRAW_FLAG_WAYPOINT_GROUND"             : 2,
+
+    "RST_GENERAL_FLAG_RANDOM_ANIMATION"         : 0,
+
+    "RST_VIEW_BAY_NE"                           : 0,
+    "RST_VIEW_BAY_SE"                           : 1,
+    "RST_VIEW_BAY_SW"                           : 2,
+    "RST_VIEW_BAY_NW"                           : 3,
+    "RST_VIEW_DRIVE_THROUGH_X"                  : 4,
+    "RST_VIEW_DRIVE_THROUGH_Y"                  : 5,
+
+    "RST_BRIDGE_PILLAR_FLAG_CORNER_W"           : 0,
+    "RST_BRIDGE_PILLAR_FLAG_CORNER_S"           : 1,
+    "RST_BRIDGE_PILLAR_FLAG_CORNER_E"           : 2,
+    "RST_BRIDGE_PILLAR_FLAG_CORNER_N"           : 3,
+    "RST_BRIDGE_PILLAR_FLAG_EDGE_NE"            : 4,
+    "RST_BRIDGE_PILLAR_FLAG_EDGE_SE"            : 5,
+    "RST_BRIDGE_PILLAR_FLAG_EDGE_SW"            : 6,
+    "RST_BRIDGE_PILLAR_FLAG_EDGE_NW"            : 7,
 }
 # fmt: on
 

@@ -22,13 +22,16 @@ blitter_node = None
 
 feature_test_property_mapping = False
 feature_test_action5_mapping = False
-next_property_mapping_ids = 0x14 * [0xEF]
+feature_test_feature_id_mapping = False
+next_property_mapping_ids = {}
 property_mapping_ids = {}
 property_mapping_nodes = []
 action5_mapping_ids = {}
 next_action5_mapping_id = 0x6F
+feature_id_mappings = {}
+feature_id_mapping_nodes = []
 feature_tests = {}
-next_feature_test_bit = 6
+next_feature_test_bit = 7
 next_variable_mapping_id = 0
 variable_mapping_ids = {}
 variable_mapping_nodes = []
@@ -52,6 +55,8 @@ def print_stats():
         generic.print_info("Mapped properties: {}".format(len(property_mapping_nodes)))
     if len(variable_mapping_nodes) > 0:
         generic.print_info("Mapped variables: {}".format(len(variable_mapping_nodes)))
+    if len(feature_id_mapping_nodes) > 0:
+        generic.print_info("Mapped features: {}".format(len(feature_id_mapping_nodes)))
 
 
 def set_palette_used(pal):
@@ -81,7 +86,7 @@ def get_property_mapping_id(feature, name):
     feature_test_property_mapping = True
     key = (feature, name)
     if key not in property_mapping_ids:
-        prop_id = next_property_mapping_ids[feature]
+        prop_id = next_property_mapping_ids.get('feature', 0xEF)
         next_property_mapping_ids[feature] = prop_id - 1
         property_mapping_ids[key] = prop_id
         pm_action14_root = action14.BranchNode("A0PM")
@@ -109,6 +114,23 @@ def get_variable_mapping_id(feature, name, shift, mask):
         variable_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return variable_mapping_ids[key]
 
+def use_feature_id(feature):
+    if feature < 0xE0:
+        return
+
+    global feature_test_feature_id_mapping
+    feature_test_feature_id_mapping = True
+
+    if feature not in feature_id_mappings:
+        feature_id_mappings[feature] = True
+        pm_action14_root = action14.BranchNode("FIDM")
+        if feature == 0xE0:
+            name = "road_stops"
+        else:
+            raise generic.ScriptError("Unknown feature ID: " + feature)
+        pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
+        pm_action14_root.subnodes.append(action14.BinaryNode("FTID", 1, feature))
+        feature_id_mapping_nodes.extend(action14.get_actions(pm_action14_root))
 
 def get_action5_mapping_id(name):
     global next_action5_mapping_id, feature_test_action5_mapping
@@ -285,6 +307,12 @@ class GRF(base_statement.BaseStatement):
             pmt_action14_root.subnodes.append(action14.RawTextNode("NAME", "action5_type_id_mapping"))
             pmt_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, 5))
             ret.extend(action14.get_actions(pmt_action14_root))
+        if feature_test_feature_id_mapping:
+            pmt_action14_root = action14.BranchNode("FTST")
+            pmt_action14_root.subnodes.append(action14.RawTextNode("NAME", "feature_id_mapping"))
+            pmt_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, 6))
+            ret.extend(action14.get_actions(pmt_action14_root))
+        ret.extend(feature_id_mapping_nodes)
         ret.extend(property_mapping_nodes)
         ret.extend(variable_mapping_nodes)
         ret.append(action8.Action8(self.grfid, self.name, self.desc))

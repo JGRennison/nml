@@ -189,7 +189,7 @@ class BlockAllocation:
 
 # Available IDs for each feature.
 # Maximum allowed id (houses and indtiles in principle allow up to 511, but action3 does not accept extended bytes).
-used_ids = [
+used_ids = dict(enumerate([
     BlockAllocation(116, 0xFFFF, "Train"),
     BlockAllocation(88, 0xFFFF, "Road Vehicle"),
     BlockAllocation(11, 0xFFFF, "Ship"),
@@ -210,14 +210,15 @@ used_ids = [
     BlockAllocation(0, 255, "Airport Tile"),
     BlockAllocation(0, 62, "Roadtype"),
     BlockAllocation(0, 62, "Tramtype"),
-]
+]))
+used_ids[0xE0] = BlockAllocation(0, 255, "RoadStop")
 
 
 def print_stats():
     """
     Print statistics about used ids.
     """
-    for feature in used_ids:
+    for feature in used_ids.values():
         used = feature.get_num_allocated()
         if used > 0 and feature.dynamic_allocation:
             generic.print_info("{} items: {}/{}".format(feature.name, used, feature.get_max_allocated()))
@@ -445,7 +446,7 @@ def get_property_info_list(feature, name):
     @rtype: C{list} of C{dict}
     """
     # Validate feature
-    assert feature in range(0, len(properties))  # guaranteed by item
+    assert feature in properties  # guaranteed by item
     if properties[feature] is None:
         raise generic.ScriptError(
             "Setting properties for feature '{}' is not possible, no properties are defined.".format(
@@ -763,12 +764,17 @@ def parse_property_block(prop_list, feature, id, size):
             offset += p.get_size()
         action0.prop_list.extend(props)
 
+    total_action_list = []
     if len(act6.modifications) > 0:
-        action_list.append(act6)
+        total_action_list.append(act6)
     if len(action0.prop_list) != 0:
-        action_list.append(action0)
+        total_action_list.append(action0)
 
-    action_list.extend(action_list_append)
+    total_action_list.extend(action_list_append)
+
+    if feature >= 0xE0 and len(total_action_list) > 0:
+        action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(total_action_list), "feature_id_mapping feature test (properties)"))
+    action_list.extend(total_action_list)
 
     action6.free_parameters.restore()
     if have_extended_properties:
@@ -1150,6 +1156,7 @@ callback_flag_properties = {
     0x0B: {"size": 1, "num": 0x1A},
     0x0F: {"size": 2, "num": 0x15},
     0x11: {"size": 1, "num": 0x0E},
+    0xE0: {"size": 1, "num": 0x11},
 }
 
 

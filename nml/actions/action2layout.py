@@ -14,7 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, generic, nmlop
-from nml.actions import action1, action2, action2var, action6, actionD, real_sprite
+from nml.actions import action1, action2, action2var, action6, action7, actionD, real_sprite
 from nml.ast import general
 
 
@@ -530,6 +530,8 @@ def get_layout_action2s(spritelayout, feature, spr_pos):
         spritelayout.set_action2(layout_action, feature)
 
     action6.free_parameters.restore()
+    if feature >= 0xE0 and len(actions) > 0:
+        actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (layout Action 2)"))
     return actions
 
 
