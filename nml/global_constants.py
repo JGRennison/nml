@@ -1115,6 +1115,7 @@ constant_numbers = {
 
     "RST_GENERAL_FLAG_RANDOM_ANIMATION"         : 0,
     "RST_GENERAL_FLAG_NO_ONE_WAY_OVERLAY"       : 1,
+    "RST_GENERAL_FLAG_NO_CATENARY"              : 2,
 
     "RST_VIEW_BAY_NE"                           : 0,
     "RST_VIEW_BAY_SE"                           : 1,
