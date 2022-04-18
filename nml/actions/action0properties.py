@@ -883,6 +883,7 @@ properties[0x08] = {
     "lighthouse_generate_amount":  {"size": 1, "mapped_property": "global_lighthouse_generate_amount"},
     "transmitter_generate_amount": {"size": 1, "mapped_property": "global_transmitter_generate_amount"},
     "extra_station_name":          {"size": 4, "mapped_property": "global_extra_station_names", "value_function_ex": extra_station_name_value},
+    "extra_station_names_probability": {"size": 1, "mapped_property": "global_extra_station_names_probability"},
 }
 # fmt: on
 
