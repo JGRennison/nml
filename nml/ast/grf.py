@@ -86,7 +86,7 @@ def get_property_mapping_id(feature, name):
     feature_test_property_mapping = True
     key = (feature, name)
     if key not in property_mapping_ids:
-        prop_id = next_property_mapping_ids.get('feature', 0xEF)
+        prop_id = next_property_mapping_ids.get(feature, 0xEF)
         next_property_mapping_ids[feature] = prop_id - 1
         property_mapping_ids[key] = prop_id
         pm_action14_root = action14.BranchNode("A0PM")
