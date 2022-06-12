@@ -1197,6 +1197,9 @@ constant_numbers = {
     "RST_OWI_NORTH_BOUND"                       : 1,
     "RST_OWI_SOUTH_BOUND"                       : 2,
     "RST_OWI_NO_ENTRY"                          : 3,
+
+    "SIGNAL_RESTRICTION_INFO_RESTRICTED"        : 0,
+    "SIGNAL_RESTRICTION_INFO_RESERVE_THROUGH_ALWAYS" : 1,
 }
 # fmt: on
 

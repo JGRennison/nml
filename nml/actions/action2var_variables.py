@@ -642,6 +642,7 @@ varact2vars60x_airports = {
 
 varact2vars_signals = {
     'terrain_type'          : {'var': 0x40, 'start': 0, 'size':  8},
+    'signal_restriction_info': {'mapped_variable': "signals_signal_restriction_info", 'feature': 0x0E, 'start':  0, 'size':  32},
 }
 
 #
@@ -704,6 +705,7 @@ varact2vars_railtype = {
     'build_date'            : {'var': 0x43, 'start': 0, 'size': 32},
     'town_zone'             : {'var': 0x44, 'start': 0, 'size':  8},
     'random_bits'           : {'var': 0x5F, 'start': 8, 'size':  2},
+    'signal_restriction_info': {'mapped_variable': "railtype_signal_restriction_info", 'feature': 0x10, 'start':  0, 'size':  32},
 }
 # Railtypes have no 60+x variables
 
