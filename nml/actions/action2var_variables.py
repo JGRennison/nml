@@ -845,6 +845,29 @@ varact2vars60x_roadstop = {
     'nearby_tile_grfid'                 : {'var': 0x6A, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
 }
 
+#
+# New landscape (feature new_landscape)
+#
+
+varact2vars_newlandscape = {
+    'terrain_type'           : {'var': 0x40, 'start':  0, 'size':  8},
+    'tile_slope'             : {'var': 0x41, 'start':  0, 'size':  5},
+    'tile_height'            : {'var': 0x42, 'start':  0, 'size': 16},
+    'tile_hash'              : {'var': 0x43, 'start':  0, 'size': 32},
+    'landscape_type'         : {'var': 0x44, 'start':  0, 'size': 32},
+}
+
+varact2vars60x_newlandscape = {
+    'nearby_tile_info'                  : {'var': 0x60, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
+    'nearby_tile_slope'                 : {'var': 0x60, 'start':  0, 'size':  5, 'param_function': signed_tile_offset},
+    'nearby_tile_is_same_type'          : {'var': 0x60, 'start':  8, 'size':  1, 'param_function': signed_tile_offset},
+    'nearby_tile_is_water'              : {'var': 0x60, 'start':  9, 'size':  1, 'param_function': signed_tile_offset},
+    'nearby_tile_terrain_type'          : {'var': 0x60, 'start': 10, 'size':  3, 'param_function': signed_tile_offset},
+    'nearby_tile_water_class'           : {'var': 0x60, 'start': 13, 'size':  2, 'param_function': signed_tile_offset},
+    'nearby_tile_height'                : {'var': 0x60, 'start': 16, 'size':  8, 'param_function': signed_tile_offset},
+    'nearby_tile_class'                 : {'var': 0x60, 'start': 24, 'size':  4, 'param_function': signed_tile_offset},
+}
+
 class VarAct2Scope:
     def __init__(self, name, vars_normal, vars_60x, has_persistent_storage=False):
         self.name = name
@@ -885,6 +908,7 @@ scope_airporttiles = VarAct2Scope("AirportTiles", varact2vars_airporttiles, vara
 scope_roadtypes = VarAct2Scope("RoadTypes", varact2vars_roadtype, {})
 scope_tramtypes = VarAct2Scope("TramTypes", varact2vars_tramtype, {})
 scope_roadstops = VarAct2Scope("RoadStops", varact2vars_roadstop, varact2vars60x_roadstop)
+scope_newlandscape = VarAct2Scope("NewLandscape", varact2vars_newlandscape, varact2vars60x_newlandscape)
 
 varact2features = dict(enumerate([
     VarAct2Feature(scope_trains, scope_trains),
@@ -909,3 +933,4 @@ varact2features = dict(enumerate([
     VarAct2Feature(scope_tramtypes, None),
 ]))
 varact2features[0xE0] = VarAct2Feature(scope_roadstops, scope_towns)
+varact2features[0xE1] = VarAct2Feature(scope_newlandscape, None)

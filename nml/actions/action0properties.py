@@ -1526,3 +1526,13 @@ properties[0xE0] = {
     "disallowed_bridge_pillars": {"custom_function": lambda x: byte_sequence_list(x, 0x14, "Disallowed bridge pillars", 6)},
     "cost_multipliers":          {"custom_function": lambda x: byte_sequence_list(x, 0x15, "Cost multipliers", 2)},
 }
+
+#
+# Feature new_landscape (E1 is internal feature ID)
+#
+
+# fmt: off
+properties[0xE1] = {
+    "enable_recolour":                 {"size": 1, "mapped_property": "newlandscape_enable_recolour"},
+}
+# fmt: on

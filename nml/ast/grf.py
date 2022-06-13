@@ -126,6 +126,8 @@ def use_feature_id(feature):
         pm_action14_root = action14.BranchNode("FIDM")
         if feature == 0xE0:
             name = "road_stops"
+        elif feature == 0xE1:
+            name = "new_landscape"
         else:
             raise generic.ScriptError("Unknown feature ID: " + feature)
         pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))

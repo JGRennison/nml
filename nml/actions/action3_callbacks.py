@@ -303,3 +303,8 @@ callbacks[0xE0] = {
     'default'         : {'type': 'cargo', 'num': None},
     'purchase'        : {'type': 'cargo', 'num': 0xFF},
 }
+
+# New landscape
+callbacks[0xE1] = {
+    'default'         : {'type': 'cargo', 'num': None},
+}

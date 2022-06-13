@@ -212,6 +212,7 @@ used_ids = dict(enumerate([
     BlockAllocation(0, 62, "Tramtype"),
 ]))
 used_ids[0xE0] = BlockAllocation(0, 255, "RoadStop")
+used_ids[0xE1] = BlockAllocation(0, 255, "NewLandscape")
 
 
 def print_stats():

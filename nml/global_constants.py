@@ -1200,6 +1200,10 @@ constant_numbers = {
 
     "SIGNAL_RESTRICTION_INFO_RESTRICTED"        : 0,
     "SIGNAL_RESTRICTION_INFO_RESERVE_THROUGH_ALWAYS" : 1,
+
+    "NEW_LANDSCAPE_ID_ROCKS"                    : 0,
+
+    "NEW_LANDSCAPE_TYPE_ROCKS"                  : 0,
 }
 # fmt: on
 
