@@ -1202,6 +1202,12 @@ constant_numbers = {
     "SIGNAL_RESTRICTION_INFO_RESERVE_THROUGH_ALWAYS" : 1,
     "SIGNAL_RESTRICTION_INFO_MAY_REVERSE"       : 2,
 
+    "SIGNAL_CONTEXT_GUI"                        : 0,
+    "SIGNAL_CONTEXT_TRACK"                      : 1,
+    "SIGNAL_CONTEXT_TUNNEL_BRIDGE_ENTRANCE"     : 2,
+    "SIGNAL_CONTEXT_TUNNEL_BRIDGE_EXIT"         : 3,
+    "SIGNAL_CONTEXT_BRIDGE_MIDDLE"              : 4,
+
     "NEW_LANDSCAPE_ID_ROCKS"                    : 0,
 
     "NEW_LANDSCAPE_TYPE_ROCKS"                  : 0,
