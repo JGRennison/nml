@@ -1208,6 +1208,15 @@ constant_numbers = {
     "SIGNAL_CONTEXT_TUNNEL_BRIDGE_EXIT"         : 3,
     "SIGNAL_CONTEXT_BRIDGE_MIDDLE"              : 4,
 
+    "SIGNAL_TYPE_NORMAL"                        : 0,
+    "SIGNAL_TYPE_ENTRY"                         : 1,
+    "SIGNAL_TYPE_EXIT"                          : 2,
+    "SIGNAL_TYPE_COMBO"                         : 3,
+    "SIGNAL_TYPE_PBS"                           : 4,
+    "SIGNAL_TYPE_PBS_ONEWAY"                    : 5,
+    "SIGNAL_TYPE_PROG"                          : 6,
+    "SIGNAL_TYPE_NO_ENTRY"                      : 7,
+
     "NEW_LANDSCAPE_ID_ROCKS"                    : 0,
 
     "NEW_LANDSCAPE_TYPE_ROCKS"                  : 0,

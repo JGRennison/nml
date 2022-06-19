@@ -1296,6 +1296,8 @@ properties[0x0E] = {
     "style_no_aspect_increase":        {"size": 1, "mapped_property": "signals_style_no_aspect_increase"},
     "style_always_reserve_through":    {"size": 1, "mapped_property": "signals_style_always_reserve_through"},
     "style_lookahead_extra_aspects":   {"size": 1, "mapped_property": "signals_style_lookahead_extra_aspects"},
+    "style_semaphore_enabled":         {"size": 4, "mapped_property": "signals_style_semaphore_enabled"},
+    "style_electric_enabled":          {"size": 4, "mapped_property": "signals_style_electric_enabled"},
 }
 # fmt: on
 
