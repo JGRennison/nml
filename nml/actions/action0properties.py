@@ -1295,6 +1295,7 @@ properties[0x0E] = {
     "style_name":                      {"size": 2, "mapped_property": "signals_style_name", "string": 0xDC},
     "style_no_aspect_increase":        {"size": 1, "mapped_property": "signals_style_no_aspect_increase"},
     "style_always_reserve_through":    {"size": 1, "mapped_property": "signals_style_always_reserve_through"},
+    "style_lookahead_extra_aspects":   {"size": 1, "mapped_property": "signals_style_lookahead_extra_aspects"},
 }
 # fmt: on
 
