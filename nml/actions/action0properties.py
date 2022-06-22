@@ -1298,6 +1298,7 @@ properties[0x0E] = {
     "style_lookahead_extra_aspects":   {"size": 1, "mapped_property": "signals_style_lookahead_extra_aspects"},
     "style_semaphore_enabled":         {"size": 4, "mapped_property": "signals_style_semaphore_enabled"},
     "style_electric_enabled":          {"size": 4, "mapped_property": "signals_style_electric_enabled"},
+    "style_opposite_side":             {"size": 1, "mapped_property": "signals_style_opposite_side"},
 }
 # fmt: on
 
