@@ -1301,6 +1301,7 @@ properties[0x0E] = {
     "style_electric_enabled":          {"size": 4, "mapped_property": "signals_style_electric_enabled"},
     "style_opposite_side":             {"size": 1, "mapped_property": "signals_style_opposite_side"},
     "style_combined_normal_shunt":     {"size": 1, "mapped_property": "signals_style_combined_normal_shunt"},
+    "style_realistic_braking_only":    {"size": 1, "mapped_property": "signals_style_realistic_braking_only"},
 }
 # fmt: on
 
