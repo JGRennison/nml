@@ -1194,9 +1194,12 @@ constant_numbers = {
     "RST_BRIDGE_PILLAR_FLAG_EDGE_NW"            : 7,
 
     "RST_OWI_TWO_WAY"                           : 0,
-    "RST_OWI_NORTH_BOUND"                       : 1,
-    "RST_OWI_SOUTH_BOUND"                       : 2,
+    "RST_OWI_WEST_BOUND"                        : 1,
+    "RST_OWI_EAST_BOUND"                        : 2,
     "RST_OWI_NO_ENTRY"                          : 3,
+
+    "RST_OWI_NORTH_BOUND"                       : 1, # Deprecated
+    "RST_OWI_SOUTH_BOUND"                       : 2, # "
 
     "SIGNAL_RESTRICTION_INFO_RESTRICTED"        : 0,
     "SIGNAL_RESTRICTION_INFO_RESERVE_THROUGH_ALWAYS" : 1,
