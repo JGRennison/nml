@@ -1176,6 +1176,7 @@ constant_numbers = {
     "RST_GENERAL_FLAG_NO_ONE_WAY_OVERLAY"       : 1,
     "RST_GENERAL_FLAG_NO_CATENARY"              : 2,
     "RST_GENERAL_FLAG_DRIVE_THROUGH_ONLY"       : 3,
+    "RST_GENERAL_FLAG_NO_AUTO_ROAD_CONNECTION"  : 4,
 
     "RST_VIEW_BAY_NE"                           : 0,
     "RST_VIEW_BAY_SE"                           : 1,
