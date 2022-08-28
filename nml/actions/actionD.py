@@ -196,7 +196,9 @@ def parse_abs_op(assignment):
     assert isinstance(assignment.value, expression.AbsOp)
     actions = parse_actionD(ParameterAssignment(assignment.param, assignment.value.expr))
     cond_block = conditional.Conditional(
-        nmlop.CMP_LT(assignment.value.expr, 0), [ParameterAssignment(assignment.param, nmlop.SUB(0, assignment.value.expr))], None
+        nmlop.CMP_LT(assignment.value.expr, 0),
+        [ParameterAssignment(assignment.param, nmlop.SUB(0, assignment.value.expr))],
+        None,
     )
     actions.extend(conditional.ConditionalList([cond_block]).get_action_list())
     return actions

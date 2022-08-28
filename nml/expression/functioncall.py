@@ -28,7 +28,6 @@ from .cargo import AcceptCargo, ProduceCargo
 from .parameter import parse_string_to_dword, Parameter
 from .storage_op import StorageOp
 from .string_literal import StringLiteral
-from .ternaryop import TernaryOp
 from .abs_op import AbsOp
 
 

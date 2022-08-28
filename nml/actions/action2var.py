@@ -194,10 +194,13 @@ class VarAction2Var:
 # Class for var 7E procedure calls
 class VarAction2ProcCallVar(VarAction2Var):
     def __init__(self, sg_ref):
-        if not isinstance(action2.resolve_spritegroup(sg_ref.name), (switch.Switch, switch.RandomSwitch)):
-            raise generic.ScriptError("Block with name '{}' is not a valid procedure".format(sg_ref.name), sg_ref.pos)
-        if not sg_ref.is_procedure:
-            raise generic.ScriptError("Unexpected identifier encountered: '{}'".format(sg_ref.name), sg_ref.pos)
+        if not sg_ref.act2:
+            if not isinstance(action2.resolve_spritegroup(sg_ref.name), (switch.Switch, switch.RandomSwitch)):
+                raise generic.ScriptError(
+                    "Block with name '{}' is not a valid procedure".format(sg_ref.name), sg_ref.pos
+                )
+            if not sg_ref.is_procedure:
+                raise generic.ScriptError("Unexpected identifier encountered: '{}'".format(sg_ref.name), sg_ref.pos)
         VarAction2Var.__init__(self, 0x7E, 0, 0, comment=str(sg_ref))
         # Reference to the called action2
         self.sg_ref = sg_ref
@@ -338,9 +341,10 @@ class Modification:
 
 
 class Varaction2Parser:
-    def __init__(self, action_feature, var_scope):
+    def __init__(self, action_feature, var_range=0x89):
         self.action_feature = action_feature
-        self.var_scope = var_scope  # Depends on action_feature and var_range
+        self.var_range = var_range
+        self.var_scope = get_scope(action_feature, var_range)  # Depends on action_feature and var_range
         self.extra_actions = []
         self.mods = []
         self.var_list = []
@@ -405,6 +409,16 @@ class Varaction2Parser:
 
     def preprocess_ternaryop(self, expr):
         assert isinstance(expr, expression.TernaryOp)
+        if not expr.expr1.is_read_only() or not expr.expr2.is_read_only():
+            return create_ternary_action(
+                expr.guard,
+                expr.expr1,
+                expr.expr2,
+                self.extra_actions,
+                self.action_feature,
+                self.var_scope,
+                self.var_range,
+            )
         guard = expression.Boolean(expr.guard).reduce()
         self.parse(guard)
         if isinstance(expr.expr1, expression.ConstantNumeric) and isinstance(expr.expr2, expression.ConstantNumeric):
@@ -418,10 +432,6 @@ class Varaction2Parser:
             self.var_list_size += 2 + diff_var.get_size()
             return expr.expr2
         else:
-            if not expr.is_read_only() and guard.is_read_only():
-                generic.print_warning(
-                    generic.Warning.GENERIC, "Ternary operator may have unexpected side effects", expr.pos
-                )
             guard_var = VarAction2StoreTempVar()
             guard_var.comment = "guard"
             inverted_guard_var = VarAction2StoreTempVar()
@@ -620,8 +630,9 @@ class Varaction2Parser:
 
     def parse_proc_call(self, expr):
         assert isinstance(expr, expression.SpriteGroupRef)
+        assert not expr.param_list or not expr.act2
         var_access = VarAction2ProcCallVar(expr)
-        target = action2.resolve_spritegroup(expr.name)
+        target = action2.resolve_spritegroup(expr.name) if not expr.act2 else None
         refs = expr.collect_references()
 
         # Fill param registers for the call
@@ -834,6 +845,45 @@ def parse_minmax(value, unit_str, action_list, act6, offset):
 return_action_id = 0
 
 
+def create_ternary_action(guard, expr_true, expr_false, action_list, feature, var_scope, var_range):
+    act6 = action6.Action6()
+
+    global return_action_id
+    name = "@ternary_action_{:d}".format(return_action_id)
+    varaction2 = Action2Var(feature, name, guard.pos, var_range)
+    return_action_id += 1
+
+    expr = reduce_varaction2_expr(guard, var_scope)
+
+    offset = 4  # first var
+
+    parser = Varaction2Parser(feature, var_range)
+    parser.parse_expr(expr)
+    action_list.extend(parser.extra_actions)
+    for mod in parser.mods:
+        act6.modify_bytes(mod.param, mod.size, mod.offset + offset)
+    varaction2.var_list = parser.var_list
+    offset += parser.var_list_size + 1  # +1 for the byte num-ranges
+    for proc in parser.proc_call_list:
+        action2.add_ref(proc, varaction2, True)
+
+    result, result_comment = parse_result(expr_false, action_list, act6, offset, varaction2, None, var_range)
+    offset += 2  # size of result
+    varaction2.ranges.append(
+        VarAction2Range(expression.ConstantNumeric(0), expression.ConstantNumeric(0), result, result_comment)
+    )
+
+    default, default_comment = parse_result(expr_true, action_list, act6, offset, varaction2, None, var_range)
+    varaction2.default_result = default
+    varaction2.default_comment = default_comment
+
+    if len(act6.modifications) > 0:
+        action_list.append(act6)
+
+    action_list.append(varaction2)
+    return expression.SpriteGroupRef(expression.Identifier(name), [], None, varaction2)
+
+
 def create_return_action(expr, feature, name, var_range):
     """
     Create a varaction2 to return the computed value
@@ -852,7 +902,7 @@ def create_return_action(expr, feature, name, var_range):
                 - Reference to the created varaction2
     @rtype: C{tuple} of (C{list} of L{BaseAction}, L{SpriteGroupRef})
     """
-    varact2parser = Varaction2Parser(feature, get_scope(feature, var_range))
+    varact2parser = Varaction2Parser(feature, var_range)
     varact2parser.parse_expr(expr)
 
     action_list = varact2parser.extra_actions
@@ -921,7 +971,7 @@ def get_failed_cb_result(feature, action_list, parent_action, pos):
         action_list.append(act2)
 
         # Create varaction2, to choose between returning graphics and 0, depending on CB
-        varact2parser = Varaction2Parser(feature, get_scope(feature))
+        varact2parser = Varaction2Parser(feature)
         varact2parser.parse_expr(
             expression.Variable(expression.ConstantNumeric(0x0C), mask=expression.ConstantNumeric(0xFFFF))
         )
@@ -978,7 +1028,7 @@ def parse_sg_ref_result(result, action_list, parent_action, var_range):
     # Result is parametrized
     # Insert an intermediate varaction2 to store expressions in registers
     var_scope = get_scope(parent_action.feature, var_range)
-    varact2parser = Varaction2Parser(parent_action.feature, var_scope)
+    varact2parser = Varaction2Parser(parent_action.feature, var_range)
     layout = action2.resolve_spritegroup(result.name)
     for i, param in enumerate(result.param_list):
         if i > 0:
@@ -1141,7 +1191,7 @@ def parse_varaction2(switch_block):
 
     offset = 4  # first var
 
-    parser = Varaction2Parser(feature, var_scope)
+    parser = Varaction2Parser(feature, switch_block.var_range)
     parser.parse_expr(expr)
     action_list.extend(parser.extra_actions)
     for mod in parser.mods:
