@@ -258,7 +258,9 @@ class SpriteLayout(spritelayout_base_class):
         action_list = []
         if self.prepare_act2_output():
             for feature in sorted(self.feature_set):
-                action_list.extend(action2layout.get_layout_action2s(self, feature, self.pos))
+                if feature == 0x04:
+                    continue
+                action_list.extend(action2layout.get_layout_action2s(self, feature))
         return action_list
 
 
