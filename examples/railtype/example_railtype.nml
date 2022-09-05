@@ -12,7 +12,7 @@
  * graphics and snow support has been removed to keep this example within
  * reasonable size. Due to the large quantity of sprites required for a
  * railtype grf, the number of lines of code is still relatively high.
- * 
+ *
  * All real sprites have been templated, even if the template is used only
  * once. This allows adding e.g. snowed graphics fairly easily.
  *
@@ -39,8 +39,9 @@ grf {
     grfid : "NML\02";
     name : string(STR_GRF_NAME);
     desc : string(STR_GRF_DESCRIPTION);
-    version : 0; // must be numeric
-    min_compatible_version : 0;
+    /* This is the first version, start numbering at 1. */
+    version: 1;
+    min_compatible_version: 1;
 }
 
 /* Check for NuTracks and disable, if we're not active _after_ NuTracks */

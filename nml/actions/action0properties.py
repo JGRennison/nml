@@ -20,6 +20,7 @@ from nml.actions import action4
 from nml.expression import (
     AcceptCargo,
     Array,
+    BitMask,
     ConstantFloat,
     ConstantNumeric,
     Identifier,
@@ -661,6 +662,12 @@ properties[0x03] = {
 #
 
 
+def station_platforms_length(value):
+    # Writing bitmask(2) to disable platform/length 3 is not very intuitive.
+    # Instead we expect the user will write bitmask(3) and we shift the result.
+    return nmlop.SHIFT_RIGHT(value, 1, value.pos).reduce()
+
+
 def station_flags(value):
     # bit 4 (extended foundations) can't be set without bit 3 (custom foundations)
     cust_found = nmlop.SHIFT_RIGHT(value, 4, value.pos)
@@ -669,19 +676,25 @@ def station_flags(value):
     return nmlop.OR(value, cust_found).reduce()
 
 
+def cargo_bitmask(value):
+    if not isinstance(value, Array):
+        raise generic.ScriptError("Cargo list must be an array", value.pos)
+    return BitMask(value.values, value.pos).reduce()
+
+
 # fmt: off
 properties[0x04] = {
     "class":                 {"size": 4, "num": 0x08, "first": None, "string_literal": 4},
     # 09 (sprite layout) is implemented elsewhere
     # 0A (copy sprite layout) is implemented elsewhere
     # 0B (callback flags) is not set by user
-    "disabled_platforms":    {"size": 1, "num": 0x0B},
-    "disabled_length":       {"size": 1, "num": 0x0C},
+    "disabled_platforms":    {"size": 1, "num": 0x0C, "value_function": station_platforms_length},
+    "disabled_length":       {"size": 1, "num": 0x0D, "value_function": station_platforms_length},
     # 0E (station layout) callback 24 should be enough
     # 0F (copy station layout)
     "cargo_threshold":       {"size": 2, "num": 0x10},
     "draw_pylon_tiles":      {"size": 1, "num": 0x11},
-    "cargo_random_triggers": {"size": 4, "num": 0x12},
+    "cargo_random_triggers": {"size": 4, "num": 0x12, "value_function": cargo_bitmask},
     "general_flags":         {"size": 1, "num": 0x13, "value_function": station_flags},
     "hide_wire_tiles":       {"size": 1, "num": 0x14},
     "non_traversable_tiles": {"size": 1, "num": 0x15},
