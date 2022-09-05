@@ -828,6 +828,7 @@ varact2vars_roadstop = {
 
     'waiting_triggers'      : {'var': 0x5F, 'start':  0, 'size':  8},
     'random_bits'           : {'var': 0x5F, 'start':  8, 'size': 24},
+    'random_bits_tile'      : {'var': 0x5F, 'start': 24, 'size':  8},
 }
 
 varact2vars60x_roadstop = {
