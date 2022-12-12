@@ -865,6 +865,8 @@ varact2vars_newlandscape = {
     'tile_height'            : {'var': 0x42, 'start':  0, 'size': 16},
     'tile_hash'              : {'var': 0x43, 'start':  0, 'size': 32},
     'landscape_type'         : {'var': 0x44, 'start':  0, 'size': 32},
+    'ground_density'         : {'var': 0x45, 'start':  0, 'size':  4},
+    'snow_present'           : {'var': 0x45, 'start':  4, 'size':  1},
 }
 
 varact2vars60x_newlandscape = {
