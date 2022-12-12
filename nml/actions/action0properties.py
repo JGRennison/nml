@@ -1599,5 +1599,6 @@ properties[0xE0] = {
 # fmt: off
 properties[0xE1] = {
     "enable_recolour":                 {"size": 1, "mapped_property": "newlandscape_enable_recolour"},
+    "enable_draw_snowy_rocks":         {"size": 1, "mapped_property": "newlandscape_enable_draw_snowy_rocks"},
 }
 # fmt: on
