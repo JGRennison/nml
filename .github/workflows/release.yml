@@ -10,26 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     - name: Checkout tags
-      uses: openttd/actions/checkout@v1
+      uses: openttd/actions/checkout@v2
       with:
         with-tags: true
 
-    - uses: actions/cache@v1
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
+        cache: 'pip'
+        cache-dependency-path: setup.py
 
     - name: Install twine
       run: |
@@ -37,16 +32,17 @@ jobs:
         pip install twine
 
     - name: Build manylinux Python wheels
-      uses: RalfG/python-wheels-manylinux-build@v0.2.2-manylinux2014_x86_64
+      uses: RalfG/python-wheels-manylinux-build@v0.6.0-manylinux2014_x86_64
       with:
         python-versions: 'cp36-cp36m cp37-cp37m cp38-cp38'
-        build-requirements: '-e .'  # pip args
+        build-requirements: '-e . --verbose'  # pip args
+        pre-build-command: 'git config --global --add safe.directory ${GITHUB_WORKSPACE}'
 
     - name: Publish manylinux Python wheels
       env:
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        twine upload --username __token__ wheelhouse/*-manylinux*.whl
+        twine upload --username __token__ dist/*-manylinux*.whl
 
 
   release-osx:
@@ -54,26 +50,21 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     - name: Checkout tags
-      uses: openttd/actions/checkout@v1
+      uses: openttd/actions/checkout@v2
       with:
         with-tags: true
 
-    - uses: actions/cache@v1
-      with:
-        path: ~/Library/Caches/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
+        cache: 'pip'
+        cache-dependency-path: setup.py
 
     - name: Install dependencies
       run: |
@@ -93,7 +84,7 @@ jobs:
         twine upload --username __token__ dist/*.whl dist/*.tar.gz
         version=`python setup.py --version`
         archive=`echo "nml-$version.tar.gz"`
-        echo "::set-output name=archive::$archive"
+        echo "archive=$archive" >> $GITHUB_OUTPUT
       id: nml_source_archive
 
     - name: Publish source tarball
@@ -111,26 +102,21 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
     - name: Checkout tags
-      uses: openttd/actions/checkout@v1
+      uses: openttd/actions/checkout@v2
       with:
         with-tags: true
 
-    - uses: actions/cache@v1
-      with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
+        cache: 'pip'
+        cache-dependency-path: setup.py
 
     - name: Install dependencies
       run: |
@@ -151,7 +137,7 @@ jobs:
         $version = python setup.py --version
         $archive = echo "nml-standalone-$version-win64.zip"
         Compress-Archive -Path dist/nmlc.exe, LICENSE, README.md, docs/changelog.txt -DestinationPath $archive
-        echo "::set-output name=archive::$archive"
+        echo "archive=$archive" >> $GITHUB_OUTPUT
       id: nml_archive
 
     - name: Publish standalone executable
