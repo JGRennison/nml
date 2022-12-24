@@ -1144,6 +1144,11 @@ constant_numbers = {
     "DIAGDIR_SW"                          : 2,    # Southwest
     "DIAGDIR_NW"                          : 3,    # Northwest
 
+    "ROADBIT_NW"                          : 0,    # Northwest, upper left on your monitor
+    "ROADBIT_SW"                          : 1,    # Southwest
+    "ROADBIT_SE"                          : 2,    # Southeast
+    "ROADBIT_NE"                          : 3,    # Northeast
+
     "OBJECT_EF_FLAG_ADJUST_Z"             : 0x4,
     "OBJECT_EF_FLAG_FOUNDATION_LOWER"     : 0x8,
     "OBJECT_EF_FLAG_INCLINE_FOUNDATION"   : 0x10,

@@ -853,6 +853,12 @@ varact2vars60x_roadstop = {
     'nearby_tile_same_stop_type'        : {'var': 0x68, 'start': 20, 'size':  1, 'param_function': signed_tile_offset},
     'nearby_tile_one_way_info'          : {'var': 0x68, 'start': 21, 'size':  2, 'param_function': signed_tile_offset},
     'nearby_tile_grfid'                 : {'var': 0x6A, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
+    'nearby_tile_plain_road_info'       : {'var': 0x6B, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
+    'nearby_tile_is_plain_road'         : {'var': 0x6B, 'start':  0, 'size': 32, 'param_function': signed_tile_offset, 'value_function': lambda var, info: nmlop.CMP_NEQ(var, 0xFFFFFFFF)},
+    'nearby_tile_road_bits'             : {'var': 0x6B, 'start':  0, 'size':  4, 'param_function': signed_tile_offset},
+    'nearby_tile_tram_bits'             : {'var': 0x6B, 'start':  4, 'size':  4, 'param_function': signed_tile_offset},
+    'nearby_tile_road_piece'            : {'var': 0x6B, 'start':  8, 'size':  8, 'param_function': signed_tile_offset},
+    'nearby_tile_tram_piece'            : {'var': 0x6B, 'start': 16, 'size':  8, 'param_function': signed_tile_offset},
 }
 
 #
