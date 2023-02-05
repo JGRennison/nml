@@ -1176,10 +1176,10 @@ def parse_sort_block(feature, vehid_list):
 
 
 callback_flag_properties = {
-    0x00: {"size": 1, "num": 0x1E},
-    0x01: {"size": 1, "num": 0x17},
-    0x02: {"size": 1, "num": 0x12},
-    0x03: {"size": 1, "num": 0x14},
+    0x00: two_byte_property(0x1E, 0x31),
+    0x01: two_byte_property(0x17, 0x28),
+    0x02: two_byte_property(0x12, 0x22),
+    0x03: two_byte_property(0x14, 0x22),
     0x04: {"size": 1, "num": 0x0B},
     0x05: {"size": 1, "num": 0x08},
     0x07: two_byte_property(0x14, 0x1D),
@@ -1217,14 +1217,11 @@ def get_callback_flags_actions(feature, id, flags):
     if not isinstance(prop_info_list, list):
         prop_info_list = [prop_info_list]
     for prop_info in prop_info_list:
-        value, extra_actions, extra_append_actions = parse_property_value(prop_info, expression.ConstantNumeric(flags))
+        parsed_value, extra_actions, extra_append_actions = parse_property_value(prop_info, expression.ConstantNumeric(flags))
         if len(extra_actions) > 0 or len(extra_append_actions) > 0:
             raise generic.ScriptError("Unexpected extra actions", value.pos)
-        act0.prop_list.append(
-            Action0Property(
-                prop_info["num"], value, prop_info["size"]
-            )
-        )
+        if parsed_value[0].value != 0:
+            act0.prop_list.append(Action0Property(prop_info["num"], parsed_value, prop_info["size"]))
 
     return [act0]
 
