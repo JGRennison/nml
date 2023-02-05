@@ -1598,6 +1598,7 @@ properties[0xE0] = {
     "minimum_bridge_height":     {"custom_function": lambda x: byte_sequence_list(x, 0x13, "Minimum bridge heights", 6)},
     "disallowed_bridge_pillars": {"custom_function": lambda x: byte_sequence_list(x, 0x14, "Disallowed bridge pillars", 6)},
     "cost_multipliers":          {"custom_function": lambda x: byte_sequence_list(x, 0x15, "Cost multipliers", 2)},
+    "height":                    {"size": 1, "mapped_property": "roadstop_height", "feature_test": {"name": "road_stops", "minv": 6}},
 }
 
 #
