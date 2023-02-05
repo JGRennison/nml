@@ -159,6 +159,9 @@ class Property:
         for prop_info in action0.get_property_info_list(item_feature, self.name):
             if 'mapped_property' in prop_info:
                 grf.get_property_mapping_id(item_feature, prop_info['mapped_property'])
+            if 'feature_test' in prop_info:
+                ftest = prop_info['feature_test']
+                grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF)
 
     def debug_print(self, indentation):
         generic.print_dbg(indentation, "Property:", self.name.value)

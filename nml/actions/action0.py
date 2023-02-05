@@ -779,20 +779,51 @@ def parse_property_block(prop_list, feature, id, size):
 
     action6.free_parameters.restore()
     if have_extended_properties:
-        action_list_append = []
-        act6 = action6.Action6()
-        action6.free_parameters.save()
-        action0, offset = create_action0(feature, id, act6, action_list)
-        if feature == 0x07:
-            size_bit = size.value if size is not None else 0
-            action0.num_ids = house_sizes[size_bit]
-        else:
-            size_bit = None
-            action0.num_ids = 1
+        action_list_append = None
+        act6 = None
+        action0 = None
+        offset = None
+        ext_action_list = None
 
-        ext_action_list = []
+        def setup():
+            nonlocal action_list_append, act6, action0, offset, ext_action_list, size_bit
+            action_list_append = []
+            act6 = action6.Action6()
+            action6.free_parameters.save()
+            action0, offset = create_action0(feature, id, act6, action_list)
+            if feature == 0x07:
+                size_bit = size.value if size is not None else 0
+                action0.num_ids = house_sizes[size_bit]
+            else:
+                size_bit = None
+                action0.num_ids = 1
+
+            ext_action_list = []
+
+        def flush_to_ext_action_list():
+            nonlocal action_list_append, act6, action0, offset, ext_action_list
+            if len(act6.modifications) > 0: ext_action_list.append(act6)
+            if len(action0.prop_list) != 0:
+                ext_action_list.append(action0)
+
+            ext_action_list.extend(action_list_append)
+
+        def flush_to_action_list():
+            nonlocal action_list_append, act6, action0, offset, ext_action_list
+            if len(ext_action_list):
+                action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 4, len(ext_action_list), "property_mapping feature test"))
+                action_list.extend(ext_action_list)
+
+            action6.free_parameters.restore()
+
+        setup()
+
         for prop_info, value_list in zip(prop_info_list, value_list_list):
             if 'mapped_property' in prop_info:
+                if 'feature_test' in prop_info:
+                    flush_to_ext_action_list()
+                    flush_to_action_list()
+                    setup()
                 prop_id = grf.get_property_mapping_id(feature, prop_info['mapped_property'])
                 prop_info['num'] = prop_id
                 props, extra_actions, mods, extra_append_actions = parse_property(prop_info, value_list, feature, id, True)
@@ -805,18 +836,17 @@ def parse_property_block(prop_list, feature, id, size):
                 for p in props:
                     offset += p.get_size()
                 action0.prop_list.extend(props)
+                if 'feature_test' in prop_info:
+                    flush_to_ext_action_list()
+                    if len(ext_action_list):
+                        ftest = prop_info['feature_test']
+                        action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF), len(ext_action_list) + 1, "property custom feature test"))
+                    flush_to_action_list()
+                    setup()
 
-        if len(act6.modifications) > 0: ext_action_list.append(act6)
-        if len(action0.prop_list) != 0:
-            ext_action_list.append(action0)
+        flush_to_ext_action_list()
+        flush_to_action_list()
 
-        ext_action_list.extend(action_list_append)
-
-        if len(ext_action_list):
-            action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 4, len(ext_action_list), "property_mapping feature test"))
-            action_list.extend(ext_action_list)
-
-        action6.free_parameters.restore()
     return action_list
 
 
