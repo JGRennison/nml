@@ -148,8 +148,6 @@ class SpritesetCollection(base_action.BaseAction):
                 if idx == spriteset_offset:
                     actions.extend(real_sprite.parse_sprite_data(spriteset))
                     break
-        if self.feature >= 0xE0 and len(actions) > 0:
-            actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (Action 1)"))
         return actions
 
 

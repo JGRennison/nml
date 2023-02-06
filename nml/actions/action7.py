@@ -14,7 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, free_number_list, generic, nmlop
-from nml.actions import action6, action10, actionD, base_action
+from nml.actions import action6, action10, actionD, base_action, action1
 
 free_labels = free_number_list.FreeNumberList(
     list(range(0xFF, 0x0F, -1)),
@@ -340,3 +340,32 @@ def parse_loop_block(loop):
     recursive_cond_blocks -= 1
     action6.free_parameters.restore()
     return action_list
+
+def start_skip_block():
+    global recursive_cond_blocks
+    recursive_cond_blocks += 1
+    if recursive_cond_blocks == 1:
+        free_labels.save()
+
+def end_skip_block():
+    global recursive_cond_blocks
+    if recursive_cond_blocks == 1:
+        free_labels.restore()
+    recursive_cond_blocks -= 1
+
+def skip_action_array(actions, action_type, var, varsize, condtype, value, comment = ""):
+    count = len(actions)
+    label_mode = False
+    if count >= 0x10:
+        label_mode = True
+    else:
+        for action in actions:
+            if isinstance(action, action1.SpritesetCollection):
+                label_mode = True
+                break
+    if label_mode:
+        target = free_labels.pop(None)
+        actions.insert(0, SkipAction(action_type, var, varsize, condtype, value, target, comment))
+        actions.append(action10.Action10(target))
+    else:
+        actions.insert(0, SkipAction(action_type, var, varsize, condtype, value, count, comment))

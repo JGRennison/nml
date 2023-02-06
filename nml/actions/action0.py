@@ -720,6 +720,7 @@ def parse_property_block(prop_list, feature, id, size):
     @return: List of resulting actions
     @rtype: C{list} of L{BaseAction}
     """
+    action7.start_skip_block()
     action6.free_parameters.save()
     action_list = []
     action_list_append = []
@@ -774,7 +775,7 @@ def parse_property_block(prop_list, feature, id, size):
     total_action_list.extend(action_list_append)
 
     if feature >= 0xE0 and len(total_action_list) > 0:
-        action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(total_action_list), "feature_id_mapping feature test (properties)"))
+        action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (properties)")
     action_list.extend(total_action_list)
 
     action6.free_parameters.restore()
@@ -811,7 +812,7 @@ def parse_property_block(prop_list, feature, id, size):
         def flush_to_action_list():
             nonlocal action_list_append, act6, action0, offset, ext_action_list
             if len(ext_action_list):
-                action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 4, len(ext_action_list), "property_mapping feature test"))
+                action7.skip_action_array(ext_action_list, 9, 0x9D, 1, (1, r'\70'), 4, "property_mapping feature test")
                 action_list.extend(ext_action_list)
 
             action6.free_parameters.restore()
@@ -840,13 +841,14 @@ def parse_property_block(prop_list, feature, id, size):
                     flush_to_ext_action_list()
                     if len(ext_action_list):
                         ftest = prop_info['feature_test']
-                        action_list.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF), len(ext_action_list) + 1, "property custom feature test"))
+                        action7.skip_action_array(ext_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF), "property custom feature test")
                     flush_to_action_list()
                     setup()
 
         flush_to_ext_action_list()
         flush_to_action_list()
 
+    action7.end_skip_block()
     return action_list
 
 

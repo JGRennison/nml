@@ -277,6 +277,7 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
     @return: The resulting list of actions
     @rtype: L{BaseAction}
     """
+    action7.start_skip_block()
     action_list = action2real.create_spriteset_actions(graphics_block)
     if feature == 0x07:
         # Multi-tile houses need more work
@@ -289,7 +290,8 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
     else:
         action_list.extend(parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override))
     if feature >= 0xE0 and len(action_list) > 0:
-        action_list.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(action_list), "feature_id_mapping feature test (graphics block)"))
+        action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (graphics block)")
+    action7.end_skip_block()
     return action_list
 
 

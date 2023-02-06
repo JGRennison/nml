@@ -165,6 +165,7 @@ def get_string_action4s(feature, string_range, string, id=None):
                 - Resulting action list to be appended
     @rtype: C{tuple} of (C{int}, C{list} of L{BaseAction})
     """
+    action7.start_skip_block()
     grfstrings.validate_string(string)
     write_action4s = True
     action6.free_parameters.save()
@@ -224,6 +225,7 @@ def get_string_action4s(feature, string_range, string, id=None):
     action6.free_parameters.restore()
 
     if feature >= 0xE0 and len(actions) > 0:
-        actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (Action 4)"))
+        action7.skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (Action 4)")
 
+    action7.end_skip_block()
     return (id_val, actions)

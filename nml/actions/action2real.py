@@ -44,6 +44,8 @@ def get_real_action2s(spritegroup, feature):
     loading_list = []
     actions = []
 
+    action7.start_skip_block()
+
     if feature not in action2.features_sprite_group:
         raise generic.ScriptError(
             "Sprite groups that combine sprite sets are not supported for feature '{}'.".format(
@@ -100,7 +102,9 @@ def get_real_action2s(spritegroup, feature):
     )
     spritegroup.set_action2(actions[-1], feature)
     if feature >= 0xE0 and len(actions) > 0:
-        actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (real Action 2)"))
+        action7.skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (real Action 2)")
+
+    action7.end_skip_block()
     return actions
 
 

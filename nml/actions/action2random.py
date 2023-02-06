@@ -281,6 +281,7 @@ def parse_randomswitch(random_switch):
     @return: List of actions
     @rtype: C{list} of L{BaseAction}
     """
+    action7.start_skip_block()
     action_list = action2real.create_spriteset_actions(random_switch)
     feature = next(iter(random_switch.feature_set))
     type_byte, count, count_expr, start_bit, bits_available = parse_randomswitch_type(random_switch)
@@ -381,4 +382,7 @@ def parse_randomswitch(random_switch):
         action_list.append(varaction2)
 
     action6.free_parameters.restore()
+    action7.end_skip_block()
+    if feature >= 0xE0 and len(action_list) > 0:
+        action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (RandomAction 2)")
     return action_list

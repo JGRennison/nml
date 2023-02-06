@@ -531,6 +531,8 @@ def get_layout_action2s(spritelayout, feature):
             "Sprite layouts are not supported for feature '{}'.".format(general.feature_name(feature))
         )
 
+    action7.start_skip_block()
+
     # Allocate registers
     param_map = {}
     param_registers = []
@@ -599,7 +601,8 @@ def get_layout_action2s(spritelayout, feature):
 
     action6.free_parameters.restore()
     if feature >= 0xE0 and len(actions) > 0:
-        actions.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(actions), "feature_id_mapping feature test (layout Action 2)"))
+        action7.skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (layout Action 2)")
+    action7.end_skip_block()
     return actions
 
 

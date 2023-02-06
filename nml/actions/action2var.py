@@ -1172,6 +1172,7 @@ def reduce_varaction2_expr(expr, var_scope, extra_dicts=None):
 
 
 def parse_varaction2(switch_block):
+    action7.start_skip_block()
     global return_action_id
     return_action_id = 0
 
@@ -1302,5 +1303,6 @@ def parse_varaction2(switch_block):
 
     action6.free_parameters.restore()
     if feature >= 0xE0 and len(action_list) > 0:
-        action_list.insert(0, action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 6, len(action_list), "feature_id_mapping feature test (VarAction 2)"))
+        action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (VarAction 2)")
+    action7.end_skip_block()
     return action_list

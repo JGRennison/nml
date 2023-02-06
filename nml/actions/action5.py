@@ -97,6 +97,7 @@ def pre_process_action5(replaces):
         grf.get_action5_mapping_id(type_id)
 
 def parse_action5(replaces):
+    action7.start_skip_block()
     real_sprite_list = real_sprite.parse_sprite_data(replaces)
     num_sprites = len(real_sprite_list)
 
@@ -142,8 +143,9 @@ def parse_action5(replaces):
         assert 0
 
     ret = []
-    if feature_test:
-        ret.append(action7.SkipAction(9, 0x9D, 1, (1, r'\70'), 5, 1 + len(real_sprite_list), "action 5 mapping feature test"))
     ret.append(Action5(type_id, num_sprites, offset))
     ret.extend(real_sprite_list)
+    if feature_test:
+        action7.skip_action_array(ret, 9, 0x9D, 1, (1, r'\70'), 5, "action 5 mapping feature test")
+    action7.end_skip_block()
     return ret
