@@ -14,6 +14,7 @@ with NML; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA."""
 
 from nml import expression, generic, global_constants, nmlop
+from nml.ast import grf
 from nml.actions import (
     action0,
     action2,
@@ -74,14 +75,17 @@ class Action3(base_action.BaseAction):
             self.def_cid = map_cid(self.def_cid)
 
     def write(self, file):
-        size = 7 + 3 * len(self.cid_mappings)
+        varsize = 1
         if self.feature <= 3:
-            size += 2  # Vehicles use extended byte
+            varsize = 3 # Vehicles use extended byte
+        elif self.feature == 0x0F and self.id >= 0xFF:
+            varsize = 3 # Objects beyond 0xFF
+        size = 6 + (3 * len(self.cid_mappings)) + varsize
         file.start_sprite(size)
         file.print_bytex(3)
         file.print_bytex(self.feature)
         file.print_bytex(1 if not self.is_livery_override else 0x81)  # a single id
-        file.print_varx(self.id, 3 if self.feature <= 3 else 1)
+        file.print_varx(self.id, varsize)
         file.print_byte(len(self.cid_mappings))
         file.newline()
         for cargo, cid, comment in self.cid_mappings:
@@ -242,6 +246,7 @@ def create_action3(feature, id, action_list, act6, is_livery_override):
     # Vehicles use an extended byte
     size = 2 if feature <= 3 else 1
     offset = 4 if feature <= 3 else 3
+    # For objects, assume that ID will be less than 255 if an Action 6 adjustment is being used
 
     id, offset = actionD.write_action_value(id, action_list, act6, offset, size)
     return Action3(feature, id.value, is_livery_override)
@@ -284,11 +289,13 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
         size_bit = size.value if size is not None else 0
         for i, tile in enumerate(house_tiles[size_bit]):
             tile_id = id if i == 0 else nmlop.ADD(id, i).reduce()
-            action_list.extend(
-                parse_graphics_block_single_id(graphics_block, feature, tile_id, is_livery_override, tile, id)
-            )
+            gfx_actions, act3 = parse_graphics_block_single_id(graphics_block, feature, tile_id, is_livery_override, tile, id)
+            action_list.extend(actions)
     else:
-        action_list.extend(parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override))
+        gfx_actions, act3 = parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override)
+        action_list.extend(gfx_actions)
+        if feature == 0x0F and act3.id >= 0xFF:
+            action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (graphics block)")
     if feature >= 0xE0 and len(action_list) > 0:
         action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (graphics block)")
     action7.end_skip_block()
@@ -613,4 +620,4 @@ def parse_graphics_block_single_id(
         action_list.append(act3livery)  # lgtm[py/uninitialized-local-variable]
     action6.free_parameters.restore()
 
-    return prepend_action_list + action_list
+    return (prepend_action_list + action_list, act3)

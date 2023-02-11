@@ -260,6 +260,8 @@ class GraphicsBlock(graphics_base_class):
         # initialize base class and pre_process it as well (in that order)
         self.initialize(None, item_feature)
         graphics_base_class.pre_process(self)
+        if isinstance(item_id, expression.ConstantNumeric) and item_feature == 0x0F and item_id.value >= 0xFF:
+            grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF)
 
     def collect_references(self):
         all_refs = []

@@ -205,7 +205,7 @@ used_ids = dict(enumerate([
     BlockAllocation(0, -1, "Sound"),
     BlockAllocation(0, 127, "Airport"),
     BlockAllocation(0, 0, "Signal", False),
-    BlockAllocation(0, 255, "Object"),
+    BlockAllocation(0, 64000 - 1, "Object"),
     BlockAllocation(0, 63, "Railtype"),
     BlockAllocation(0, 255, "Airport Tile"),
     BlockAllocation(0, 62, "Roadtype"),
@@ -223,6 +223,11 @@ def print_stats():
         used = feature.get_num_allocated()
         if used > 0 and feature.dynamic_allocation:
             generic.print_info("{} items: {}/{}".format(feature.name, used, feature.get_max_allocated()))
+    if used_ids[0x0F].get_num_allocated() > 255:
+        generic.print_warning(
+            generic.Warning.GENERIC,
+            "More than 255 object specs defined. Only the first 255 will be available unless the OpenTTD version supports the 'more_objects_per_grf' extended feature."
+        )
 
 
 def mark_id_used(feature, id, num_ids):
@@ -776,6 +781,8 @@ def parse_property_block(prop_list, feature, id, size):
 
     if feature >= 0xE0 and len(total_action_list) > 0:
         action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (properties)")
+    if feature == 0x0F and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
+        action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
     action_list.extend(total_action_list)
 
     action6.free_parameters.restore()
