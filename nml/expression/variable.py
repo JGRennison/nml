@@ -78,7 +78,6 @@ class Variable(Expression):
         var.extra_params = [(extra_param[0], extra_param[1].reduce(id_dicts)) for extra_param in self.extra_params]
         if self.is_mapped_variable():
             var.feature = self.feature
-            grf.get_variable_mapping_id(self.feature, num.value, shift.reduce_constant().value, mask.reduce_constant().value)
         return var
 
     def supported_by_action2(self, raise_error):
@@ -96,6 +95,3 @@ class Variable(Expression):
 
     def is_mapped_variable(self):
         return self.num.type() == Type.STRING_LITERAL
-
-    def update_variable_mapping(self):
-        grf.get_variable_mapping_id(self.feature, self.num.value, self.shift.reduce_constant().value, self.mask.reduce_constant().value)

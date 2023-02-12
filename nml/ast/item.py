@@ -156,12 +156,6 @@ class Property:
 
     def pre_process(self):
         self.value = self.value.reduce(global_constants.const_list, unknown_id_fatal=False)
-        for prop_info in action0.get_property_info_list(item_feature, self.name):
-            if 'mapped_property' in prop_info:
-                grf.get_property_mapping_id(item_feature, prop_info['mapped_property'])
-            if 'feature_test' in prop_info:
-                ftest = prop_info['feature_test']
-                grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF)
 
     def debug_print(self, indentation):
         generic.print_dbg(indentation, "Property:", self.name.value)
@@ -260,8 +254,6 @@ class GraphicsBlock(graphics_base_class):
         # initialize base class and pre_process it as well (in that order)
         self.initialize(None, item_feature)
         graphics_base_class.pre_process(self)
-        if isinstance(item_id, expression.ConstantNumeric) and item_feature == 0x0F and item_id.value >= 0xFF:
-            grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF)
 
     def collect_references(self):
         all_refs = []

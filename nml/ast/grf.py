@@ -36,6 +36,7 @@ next_variable_mapping_id = 0
 variable_mapping_ids = {}
 variable_mapping_nodes = []
 variable_mapping_complete = False
+grf_action_generation_enabled = False
 
 """
 Statistics about registers used for parameters.
@@ -164,6 +165,9 @@ def get_feature_test_bit(name, minv, maxv):
         property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return feature_tests[name, minv, maxv]
 
+def enable_grf_action_generation():
+    global grf_action_generation_enabled
+    grf_action_generation_enabled = True
 
 class GRF(base_statement.BaseStatement):
     """
@@ -288,6 +292,8 @@ class GRF(base_statement.BaseStatement):
                 param.debug_print(indentation + 4)
 
     def get_action_list(self):
+        if not grf_action_generation_enabled:
+            return [self]
         global palette_node, blitter_node
         palette_node = action14.UsedPaletteNode("A")
         blitter_node = action14.BlitterNode("8")

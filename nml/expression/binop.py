@@ -134,8 +134,6 @@ class BinOp(Expression):
             # advanced varaction2 operator so we try to use them whenever we can.
             if op == nmlop.AND and expr1.add is None and ((not expr1.is_mapped_variable()) or isinstance(expr2, ConstantNumeric)):
                 expr1.mask = nmlop.AND(expr1.mask, expr2, self.pos).reduce(id_dicts)
-                if expr1.is_mapped_variable():
-                    expr1.update_variable_mapping()
                 return expr1
             if op == nmlop.ADD and expr1.div is None and expr1.mod is None:
                 if expr1.add is None:
@@ -171,8 +169,6 @@ class BinOp(Expression):
             ):
                 expr1.shift.value -= expr2.value
                 expr1.mask = nmlop.SHIFT_LEFT(expr1.mask, expr2).reduce()
-                if expr1.is_mapped_variable():
-                    expr1.update_variable_mapping()
                 return expr1
 
         # - Try to merge multiple additions/subtractions with constant numbers

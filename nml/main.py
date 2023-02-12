@@ -433,9 +433,18 @@ def nml(
 
     generic.print_progress("Generating actions ...")
 
-    actions = []
+    tmp_actions2 = []
     for action in tmp_actions:
         if isinstance(action, action1.SpritesetCollection):
+            tmp_actions2.extend(action.get_action_list())
+        else:
+            tmp_actions2.append(action)
+
+    grf.enable_grf_action_generation()
+
+    actions = []
+    for action in tmp_actions2:
+        if isinstance(action, grf.GRF):
             actions.extend(action.get_action_list())
         else:
             actions.append(action)

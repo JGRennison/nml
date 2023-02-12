@@ -93,8 +93,6 @@ def pre_process_action5(replaces):
     if replaces.type.value not in action5_table:
         raise generic.ScriptError(replaces.type.value + " is not a valid sprite replacement type", replaces.type.pos)
     type_id, _, _ = action5_table[replaces.type.value]
-    if isinstance(type_id, str):
-        grf.get_action5_mapping_id(type_id)
 
 def parse_action5(replaces):
     action7.start_skip_block()
