@@ -78,8 +78,8 @@ class Action3(base_action.BaseAction):
         varsize = 1
         if self.feature <= 3:
             varsize = 3 # Vehicles use extended byte
-        elif self.feature == 0x0F and self.id >= 0xFF:
-            varsize = 3 # Objects beyond 0xFF
+        elif (self.feature == 0x0F or self.feature == 0xE0) and self.id >= 0xFF:
+            varsize = 3 # Objects and road stops beyond 0xFF
         size = 6 + (3 * len(self.cid_mappings)) + varsize
         file.start_sprite(size)
         file.print_bytex(3)
@@ -246,7 +246,7 @@ def create_action3(feature, id, action_list, act6, is_livery_override):
     # Vehicles use an extended byte
     size = 2 if feature <= 3 else 1
     offset = 4 if feature <= 3 else 3
-    # For objects, assume that ID will be less than 255 if an Action 6 adjustment is being used
+    # For objects and road stops, assume that ID will be less than 255 if an Action 6 adjustment is being used
 
     id, offset = actionD.write_action_value(id, action_list, act6, offset, size)
     return Action3(feature, id.value, is_livery_override)
@@ -296,6 +296,8 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
         action_list.extend(gfx_actions)
         if feature == 0x0F and act3.id >= 0xFF:
             action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (graphics block)")
+        if feature == 0xE0 and act3.id >= 0xFF:
+            action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (graphics block)")
     if feature >= 0xE0 and len(action_list) > 0:
         action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (graphics block)")
     action7.end_skip_block()

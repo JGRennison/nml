@@ -211,7 +211,7 @@ used_ids = dict(enumerate([
     BlockAllocation(0, 62, "Roadtype"),
     BlockAllocation(0, 62, "Tramtype"),
 ]))
-used_ids[0xE0] = BlockAllocation(0, 255, "RoadStop")
+used_ids[0xE0] = BlockAllocation(0, 64000 - 1, "RoadStop")
 used_ids[0xE1] = BlockAllocation(0, 255, "NewLandscape")
 
 
@@ -227,6 +227,11 @@ def print_stats():
         generic.print_warning(
             generic.Warning.GENERIC,
             "More than 255 object specs defined. Only the first 255 will be available unless the OpenTTD version supports the 'more_objects_per_grf' extended feature."
+        )
+    if used_ids[0xE0].get_num_allocated() > 255:
+        generic.print_warning(
+            generic.Warning.GENERIC,
+            "More than 255 road stop specs defined. Only the first 255 will be available unless the OpenTTD version supports version 7 of the 'road_stops' extended feature."
         )
 
 
@@ -783,6 +788,8 @@ def parse_property_block(prop_list, feature, id, size):
         action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (properties)")
     if feature == 0x0F and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
         action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
+    if feature == 0xE0 and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
+        action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (properties)")
     action_list.extend(total_action_list)
 
     action6.free_parameters.restore()

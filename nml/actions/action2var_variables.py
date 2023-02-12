@@ -829,6 +829,11 @@ varact2vars_roadstop = {
     'random_bits_tile'      : {'var': 0x5F, 'start': 24, 'size':  8},
 }
 
+def nearby_tile_road_stop_id_fixup(var, info):
+    # Extend to 16 bits using upper bits at offset 24
+    var.mask = expression.ConstantNumeric(0xFF0000FF)
+    return nmlop.SHIFTU_RIGHT(nmlop.MUL(var, 0x10001), 16)
+
 varact2vars60x_roadstop = {
     **varact2vars60x_base_stations,
     'nearby_tile_animation_frame'       : {'var': 0x66, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
@@ -841,7 +846,7 @@ varact2vars60x_roadstop = {
     'nearby_tile_class'                 : {'var': 0x67, 'start': 24, 'size':  4, 'param_function': signed_tile_offset},
     'nearby_tile_road_stop_info'        : {'var': 0x68, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
     'nearby_tile_is_road_stop'          : {'var': 0x68, 'start':  0, 'size': 32, 'param_function': signed_tile_offset, 'value_function': lambda var, info: nmlop.CMP_NEQ(var, 0xFFFFFFFF)},
-    'nearby_tile_road_stop_id'          : {'var': 0x68, 'start':  0, 'size':  8, 'param_function': signed_tile_offset},
+    'nearby_tile_road_stop_id'          : {'var': 0x68, 'start':  0, 'size': 32, 'param_function': signed_tile_offset, 'value_function': nearby_tile_road_stop_id_fixup},
     'nearby_tile_same_grf'              : {'var': 0x68, 'start':  8, 'size':  2, 'param_function': signed_tile_offset, 'value_function': value_equals(0)},
     'nearby_tile_other_grf'             : {'var': 0x68, 'start':  8, 'size':  2, 'param_function': signed_tile_offset, 'value_function': value_equals(1)},
     'nearby_tile_original_gfx'          : {'var': 0x68, 'start':  8, 'size':  2, 'param_function': signed_tile_offset, 'value_function': value_equals(2)},
@@ -859,6 +864,7 @@ varact2vars60x_roadstop = {
     'nearby_tile_tram_bits'             : {'var': 0x6B, 'start':  4, 'size':  4, 'param_function': signed_tile_offset},
     'nearby_tile_road_piece'            : {'var': 0x6B, 'start':  8, 'size':  8, 'param_function': signed_tile_offset},
     'nearby_tile_tram_piece'            : {'var': 0x6B, 'start': 16, 'size':  8, 'param_function': signed_tile_offset},
+    'nearby_tile_road_stop_info_v2'     : {'mapped_variable': "roadstop_road_stop_info_nearby_tiles_v2", 'feature': 0xE0, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
 }
 
 #
