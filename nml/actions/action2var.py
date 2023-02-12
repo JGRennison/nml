@@ -555,8 +555,13 @@ class Varaction2Parser:
         if expr.is_mapped_variable():
             if not isinstance(expr.mask, expression.ConstantNumeric):
                 raise generic.ScriptError("cannot handle non-constant mask with mapped variable", expr.pos)
-            var_id = grf.get_variable_mapping_id(expr.feature, expr.num.value, expr.shift.value, expr.mask.value)
-            var = VarAction2Var(0x11, 0, var_id, param)
+            var_id = grf.get_variable_mapping_id(expr.feature, expr.num.value, expr.shift.value, expr.mask.value, param)
+            if expr.mapped_var7B:
+                var = VarAction2Var(0x7B, 0, var_id, 0x11)
+                offset = 3
+            else:
+                var = VarAction2Var(0x11, 0, var_id, None)
+                offset = 2
         else:
             mask = self.parse_expr_to_constant(expr.mask, offset)
             var = VarAction2Var(expr.num.value, expr.shift.value, mask, param)
@@ -784,7 +789,34 @@ def parse_60x_var(name, args, pos, info):
         # Default function to extract parameters
         param, extra_params = action2var_variables.default_60xvar(name, args, pos, info)
 
-    if isinstance(param, expression.ConstantNumeric) and (0 <= param.value <= 255):
+    if "mapped_variable" in info:
+        if isinstance(param, expression.ConstantNumeric):
+            res = expression.Variable(
+                expression.StringLiteral(info["mapped_variable"], None),
+                expression.ConstantNumeric(info["start"]),
+                expression.ConstantNumeric((1 << info["size"]) - 1),
+                param,
+                pos,
+            )
+            res.feature = info["feature"]
+
+            res.extra_params.extend(extra_params)
+        else:
+            # Make use of var 7B to pass non-constant parameters
+            var = expression.Variable(
+                expression.StringLiteral(info["mapped_variable"], None),
+                expression.ConstantNumeric(info["start"]),
+                expression.ConstantNumeric((1 << info["size"]) - 1),
+                None,
+                pos,
+                True
+            )
+            var.feature = info["feature"]
+
+            var.extra_params.extend(extra_params)
+            # Set the param in the accumulator beforehand
+            res = nmlop.VAL2(param, var, pos)
+    elif isinstance(param, expression.ConstantNumeric) and (0 <= param.value <= 255):
         res = expression.Variable(
             expression.ConstantNumeric(info["var"]),
             expression.ConstantNumeric(info["start"]),

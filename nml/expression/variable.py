@@ -20,7 +20,7 @@ from .base_expression import ConstantNumeric, Expression, Type
 
 
 class Variable(Expression):
-    def __init__(self, num, shift=None, mask=None, param=None, pos=None):
+    def __init__(self, num, shift=None, mask=None, param=None, pos=None, mapped_var7B=False):
         Expression.__init__(self, pos)
         self.num = num
         self.shift = shift if shift is not None else ConstantNumeric(0)
@@ -30,6 +30,7 @@ class Variable(Expression):
         self.div = None
         self.mod = None
         self.extra_params = []
+        self.mapped_var7B = mapped_var7B
 
     def debug_print(self, indentation):
         generic.print_dbg(indentation, "Action2 variable")
@@ -71,7 +72,7 @@ class Variable(Expression):
             or (param is not None and param.type() != Type.INTEGER)
         ):
             raise generic.ScriptError("All parts of a variable access must be integers.", self.pos)
-        var = Variable(num, shift, mask, param, self.pos)
+        var = Variable(num, shift, mask, param, self.pos, self.mapped_var7B)
         var.add = None if self.add is None else self.add.reduce(id_dicts)
         var.div = None if self.div is None else self.div.reduce(id_dicts)
         var.mod = None if self.mod is None else self.mod.reduce(id_dicts)

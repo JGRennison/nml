@@ -97,9 +97,11 @@ def get_property_mapping_id(feature, name):
         property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return property_mapping_ids[key]
 
-def get_variable_mapping_id(feature, name, shift, mask):
+def get_variable_mapping_id(feature, name, shift, mask, param):
     global variable_mapping_ids, variable_mapping_complete, next_variable_mapping_id
-    key = (feature, name, shift, mask)
+    if param is None:
+        param = 0
+    key = (feature, name, shift, mask, param)
     if key not in variable_mapping_ids:
         if variable_mapping_complete:
             raise generic.ScriptError("Cannot map variable after mapping complete")
@@ -112,6 +114,8 @@ def get_variable_mapping_id(feature, name, shift, mask):
         pm_action14_root.subnodes.append(action14.BinaryNode("RMSK", 4, var_id))
         pm_action14_root.subnodes.append(action14.BinaryNode("VSFT", 1, shift))
         pm_action14_root.subnodes.append(action14.BinaryNode("VMSK", 4, mask))
+        if param != 0:
+            pm_action14_root.subnodes.append(action14.BinaryNode("VPRM", 4, param))
         variable_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return variable_mapping_ids[key]
 
