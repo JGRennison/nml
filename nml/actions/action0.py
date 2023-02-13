@@ -776,21 +776,12 @@ def parse_property_block(prop_list, feature, id, size):
             offset += p.get_size()
         action0.prop_list.extend(props)
 
-    total_action_list = []
     if len(act6.modifications) > 0:
-        total_action_list.append(act6)
+        action_list.append(act6)
     if len(action0.prop_list) != 0:
-        total_action_list.append(action0)
+        action_list.append(action0)
 
-    total_action_list.extend(action_list_append)
-
-    if feature >= 0xE0 and len(total_action_list) > 0:
-        action7.skip_action_array_feature_test(total_action_list, 6, "feature_id_mapping feature test (properties)")
-    if feature == 0x0F and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
-        action7.skip_action_array_feature_test(total_action_list, grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
-    if feature == 0xE0 and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
-        action7.skip_action_array_feature_test(total_action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (properties)")
-    action_list.extend(total_action_list)
+    action_list.extend(action_list_append)
 
     action6.free_parameters.restore()
     if have_extended_properties:
@@ -861,6 +852,13 @@ def parse_property_block(prop_list, feature, id, size):
 
         flush_to_ext_action_list()
         flush_to_action_list()
+
+    if feature >= 0xE0 and len(action_list) > 0:
+        action7.skip_action_array_feature_test(action_list, 6, "feature_id_mapping feature test (properties)")
+    if feature == 0x0F and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(action_list) > 0:
+        action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
+    if feature == 0xE0 and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(action_list) > 0:
+        action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (properties)")
 
     action7.end_skip_block()
     return action_list
