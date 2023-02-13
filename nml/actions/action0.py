@@ -785,11 +785,11 @@ def parse_property_block(prop_list, feature, id, size):
     total_action_list.extend(action_list_append)
 
     if feature >= 0xE0 and len(total_action_list) > 0:
-        action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (properties)")
+        action7.skip_action_array_feature_test(total_action_list, 6, "feature_id_mapping feature test (properties)")
     if feature == 0x0F and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
-        action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
+        action7.skip_action_array_feature_test(total_action_list, grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
     if feature == 0xE0 and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(total_action_list) > 0:
-        action7.skip_action_array(total_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (properties)")
+        action7.skip_action_array_feature_test(total_action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (properties)")
     action_list.extend(total_action_list)
 
     action6.free_parameters.restore()
@@ -826,7 +826,7 @@ def parse_property_block(prop_list, feature, id, size):
         def flush_to_action_list():
             nonlocal action_list_append, act6, action0, offset, ext_action_list
             if len(ext_action_list):
-                action7.skip_action_array(ext_action_list, 9, 0x9D, 1, (1, r'\70'), 4, "property_mapping feature test")
+                action7.skip_action_array_feature_test(ext_action_list, 4, "property_mapping feature test")
                 action_list.extend(ext_action_list)
 
             action6.free_parameters.restore()
@@ -855,7 +855,7 @@ def parse_property_block(prop_list, feature, id, size):
                     flush_to_ext_action_list()
                     if len(ext_action_list):
                         ftest = prop_info['feature_test']
-                        action7.skip_action_array(ext_action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF), "property custom feature test")
+                        action7.skip_action_array_feature_test(ext_action_list, grf.get_feature_test_bit(ftest["name"], ftest["minv"], 0xFFFF), "property custom feature test")
                     flush_to_action_list()
                     setup()
 

@@ -225,7 +225,7 @@ def get_string_action4s(feature, string_range, string, id=None):
     action6.free_parameters.restore()
 
     if feature >= 0xE0 and len(actions) > 0:
-        action7.skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (Action 4)")
+        action7.skip_action_array_feature_test(actions, 6, "feature_id_mapping feature test (Action 4)")
 
     action7.end_skip_block()
     return (id_val, actions)

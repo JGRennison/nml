@@ -295,11 +295,11 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
         gfx_actions, act3 = parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override)
         action_list.extend(gfx_actions)
         if feature == 0x0F and act3.id >= 0xFF:
-            action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (graphics block)")
+            action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (graphics block)")
         if feature == 0xE0 and act3.id >= 0xFF:
-            action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (graphics block)")
+            action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (graphics block)")
     if feature >= 0xE0 and len(action_list) > 0:
-        action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (graphics block)")
+        action7.skip_action_array_feature_test(action_list, 4, "feature_id_mapping feature test (graphics block)")
     action7.end_skip_block()
     return action_list
 

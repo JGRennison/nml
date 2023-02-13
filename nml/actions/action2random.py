@@ -384,5 +384,5 @@ def parse_randomswitch(random_switch):
     action6.free_parameters.restore()
     action7.end_skip_block()
     if feature >= 0xE0 and len(action_list) > 0:
-        action7.skip_action_array(action_list, 9, 0x9D, 1, (1, r'\70'), 6, "feature_id_mapping feature test (RandomAction 2)")
+        action7.skip_action_array_feature_test(action_list, 6, "feature_id_mapping feature test (RandomAction 2)")
     return action_list

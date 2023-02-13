@@ -353,6 +353,9 @@ def end_skip_block():
         free_labels.restore()
     recursive_cond_blocks -= 1
 
+def skip_action_array_feature_test(actions, bit, comment):
+    skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), bit, comment)
+
 def skip_action_array(actions, action_type, var, varsize, condtype, value, comment = ""):
     count = len(actions)
     label_mode = False

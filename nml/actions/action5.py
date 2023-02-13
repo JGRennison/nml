@@ -144,6 +144,6 @@ def parse_action5(replaces):
     ret.append(Action5(type_id, num_sprites, offset))
     ret.extend(real_sprite_list)
     if feature_test:
-        action7.skip_action_array(ret, 9, 0x9D, 1, (1, r'\70'), 5, "action 5 mapping feature test")
+        action7.skip_action_array_feature_test(ret, 5, "action 5 mapping feature test")
     action7.end_skip_block()
     return ret
