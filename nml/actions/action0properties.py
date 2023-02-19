@@ -1533,6 +1533,7 @@ properties[0x12] = {
     "introduces_roadtype_list":  {"custom_function": lambda x: label_list(x, 0x19, "Roadtype")},
     "alternative_roadtype_list": {"custom_function": lambda x: label_list(x, 0x1D, "Roadtype")},
     "roadtype_extra_flags"     : {"size": 1, "mapped_property": "roadtype_extra_flags"},
+    "roadtype_collision_mode"  : {"size": 1, "mapped_property": "roadtype_collision_mode"},
 }
 
 #
@@ -1554,6 +1555,7 @@ properties[0x13] = {
     "introduces_tramtype_list":  {"custom_function": lambda x: label_list(x, 0x19, "Tramtype")},
     "alternative_tramtype_list": {"custom_function": lambda x: label_list(x, 0x1D, "Tramtype")},
     "tramtype_extra_flags"     : {"size": 1, "mapped_property": "roadtype_extra_flags"},
+    "tramtype_collision_mode"  : {"size": 1, "mapped_property": "roadtype_collision_mode"},
 }
 
 #

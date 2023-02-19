@@ -1141,9 +1141,17 @@ constant_numbers = {
     "ROADTYPE_EXTRA_FLAG_NO_SCRIPT_BUILD" : 0,
     "ROADTYPE_EXTRA_FLAG_NO_TOWN_MODIFY"  : 1,
 
+    "ROADTYPE_COLLISION_MODE_NORMAL"      : 0,
+    "ROADTYPE_COLLISION_MODE_NONE"        : 1,
+    "ROADTYPE_COLLISION_MODE_ELEVATED"    : 2,
+
     #tram type extra flags
     "TRAMTYPE_EXTRA_FLAG_NO_SCRIPT_BUILD" : 0,
     "TRAMTYPE_EXTRA_FLAG_NO_TOWN_MODIFY"  : 1,
+
+    "TRAMTYPE_COLLISION_MODE_NORMAL"      : 0,
+    "TRAMTYPE_COLLISION_MODE_NONE"        : 1,
+    "TRAMTYPE_COLLISION_MODE_ELEVATED"    : 2,
 
     "DIAGDIR_NE"                          : 0,    # Northeast, upper right on your monitor
     "DIAGDIR_SE"                          : 1,    # Southeast
