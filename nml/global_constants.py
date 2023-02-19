@@ -1263,6 +1263,9 @@ constant_numbers = {
     "SIGNAL_TYPE_PROG"                          : 6,
     "SIGNAL_TYPE_NO_ENTRY"                      : 7,
 
+    "SIGNAL_SIDE_LEFT"                          : 0,
+    "SIGNAL_SIDE_RIGHT"                         : 1,
+
     "NEW_LANDSCAPE_ID_ROCKS"                    : 0,
 
     "NEW_LANDSCAPE_TYPE_ROCKS"                  : 0,
