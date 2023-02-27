@@ -299,7 +299,7 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
         if feature == 0xE0 and act3.id >= 0xFF:
             action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (graphics block)")
     if feature >= 0xE0 and len(action_list) > 0:
-        action7.skip_action_array_feature_test(action_list, 4, "feature_id_mapping feature test (graphics block)")
+        action7.skip_action_array_feature_test(action_list, 6, "feature_id_mapping feature test (graphics block)")
     action7.end_skip_block()
     return action_list
 
