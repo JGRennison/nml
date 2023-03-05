@@ -290,7 +290,7 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
         for i, tile in enumerate(house_tiles[size_bit]):
             tile_id = id if i == 0 else nmlop.ADD(id, i).reduce()
             gfx_actions, act3 = parse_graphics_block_single_id(graphics_block, feature, tile_id, is_livery_override, tile, id)
-            action_list.extend(actions)
+            action_list.extend(gfx_actions)
     else:
         gfx_actions, act3 = parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override)
         action_list.extend(gfx_actions)
