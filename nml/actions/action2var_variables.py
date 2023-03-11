@@ -793,6 +793,14 @@ varact2vars_towns = {
     'num_houses'                     : {'var': 0xB6, 'start': 0, 'size': 16},
     'percent_transported_passengers' : {'var': 0xCA, 'start': 0, 'size': 8, 'value_function': value_mul_div(101, 256)},
     'percent_transported_mail'       : {'var': 0xCB, 'start': 0, 'size': 8, 'value_function': value_mul_div(101, 256)},
+
+    'num_houses_uncapped'            : {'mapped_variable': "town_house_count", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'population_uncapped'            : {'mapped_variable': "town_population", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'town_zone_0_radius_square_uncapped' : {'mapped_variable': "town_zone_0_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'town_zone_1_radius_square_uncapped' : {'mapped_variable': "town_zone_1_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'town_zone_2_radius_square_uncapped' : {'mapped_variable': "town_zone_2_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'town_zone_3_radius_square_uncapped' : {'mapped_variable': "town_zone_3_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'town_zone_4_radius_square_uncapped' : {'mapped_variable': "town_zone_4_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
 }
 
 #
@@ -960,3 +968,4 @@ varact2features = dict(enumerate([
 ]))
 varact2features[0xE0] = VarAct2Feature(scope_roadstops, scope_towns)
 varact2features[0xE1] = VarAct2Feature(scope_newlandscape, None)
+varact2features[0xE2] = VarAct2Feature(scope_towns, None)

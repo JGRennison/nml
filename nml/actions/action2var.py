@@ -775,6 +775,7 @@ def parse_var(name, info, pos):
     )
     if "mapped_variable" in info:
         res.feature = info["feature"]
+        grf.use_feature_id(res.feature)
 
     if "value_function" in info:
         return info["value_function"](res, info)
@@ -799,6 +800,7 @@ def parse_60x_var(name, args, pos, info):
                 pos,
             )
             res.feature = info["feature"]
+            grf.use_feature_id(res.feature)
 
             res.extra_params.extend(extra_params)
         else:
@@ -812,6 +814,7 @@ def parse_60x_var(name, args, pos, info):
                 True
             )
             var.feature = info["feature"]
+            grf.use_feature_id(var.feature)
 
             var.extra_params.extend(extra_params)
             # Set the param in the accumulator beforehand

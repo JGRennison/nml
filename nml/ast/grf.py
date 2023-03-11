@@ -133,6 +133,8 @@ def use_feature_id(feature):
             name = "road_stops"
         elif feature == 0xE1:
             name = "new_landscape"
+        elif feature == 0xE2:
+            name = "town"
         else:
             raise generic.ScriptError("Unknown feature ID: " + feature)
         pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))

@@ -39,6 +39,7 @@ feature_ids = {
     "FEAT_TRAMTYPES": 0x13,
     "FEAT_ROADSTOPS": 0xE0,
     "FEAT_NEWLANDSCAPE": 0xE1,
+    "FEAT_TOWN": 0xE2,
 }
 
 
