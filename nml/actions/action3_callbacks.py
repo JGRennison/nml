@@ -325,3 +325,8 @@ callbacks[0xE0] = {
 callbacks[0xE1] = {
     'default'         : {'type': 'cargo', 'num': None},
 }
+
+# Town
+callbacks[0xE2] = {
+    'town_zone'       : {'type': 'cb', 'num': 0xEC008001, 'feature_trigger': "town_zone_callback"},
+}

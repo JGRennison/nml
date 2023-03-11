@@ -1010,7 +1010,7 @@ def get_failed_cb_result(feature, action_list, parent_action, pos):
         # Create varaction2, to choose between returning graphics and 0, depending on CB
         varact2parser = Varaction2Parser(feature)
         varact2parser.parse_expr(
-            expression.Variable(expression.ConstantNumeric(0x0C), mask=expression.ConstantNumeric(0xFFFF))
+            expression.Variable(expression.ConstantNumeric(0x0C), mask=expression.ConstantNumeric(0xFFFFFFFF))
         )
 
         varaction2 = Action2Var(feature, "@CB_FAILED{:02X}".format(feature), pos, 0x89)

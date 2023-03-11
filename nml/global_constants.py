@@ -1269,6 +1269,8 @@ constant_numbers = {
     "NEW_LANDSCAPE_ID_ROCKS"                    : 0,
 
     "NEW_LANDSCAPE_TYPE_ROCKS"                  : 0,
+
+    "GENERIC_CALLBACK"                          : -2,
 }
 # fmt: on
 

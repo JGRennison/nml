@@ -80,6 +80,17 @@ class Action3(base_action.BaseAction):
             varsize = 3 # Vehicles use extended byte
         elif (self.feature == 0x0F or self.feature == 0xE0) and self.id >= 0xFF:
             varsize = 3 # Objects and road stops beyond 0xFF
+        if self.feature == 0xE2 and self.id == -2:
+            # Generic callback
+            file.start_sprite(6)
+            file.print_bytex(3)
+            file.print_bytex(self.feature)
+            file.print_bytex(0)  # Generic callback
+            file.print_byte(0)   # Unused cid mappings
+            file.print_wordx(self.def_cid)
+            file.newline(self.default_comment)
+            file.end_sprite()
+            return
         size = 6 + (3 * len(self.cid_mappings)) + varsize
         file.start_sprite(size)
         file.print_bytex(3)
@@ -495,6 +506,8 @@ def parse_graphics_block_single_id(
             if "flag_bit" in cb_info:
                 # Set a bit in the CB flags property
                 cb_flags |= 1 << cb_info["flag_bit"]
+            if "feature_trigger" in cb_info:
+                grf.get_feature_test_bit(cb_info["feature_trigger"], 1, 0xFFFF)
 
             value_function = cb_info.get("value_function", None)
             mapping_val = (gfx, value_function)
@@ -562,7 +575,7 @@ def parse_graphics_block_single_id(
                 mapping = mapping.copy()
                 mapping[0x00] = (cargo_gfx[cargo], None)
 
-            expr = expression.Variable(expression.ConstantNumeric(0x0C), mask=expression.ConstantNumeric(0xFFFF))
+            expr = expression.Variable(expression.ConstantNumeric(0x0C), mask=expression.ConstantNumeric(0xFFFFFFFF))
             if feature == 0x07:
                 # Store relative x/y, item id (of the north tile) and house tile (HOUSE_TILE_XX constant) in register FF
                 # Format: 0xIIHHYYXX: II: item ID, HH: house tile, YY: relative y, XX: relative x

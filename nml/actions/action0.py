@@ -53,11 +53,12 @@ class BlockAllocation:
     @type filled: C{dict} of C{int}
     """
 
-    def __init__(self, first, last, name, dynamic_allocation=True):
+    def __init__(self, first, last, name, dynamic_allocation=True, allow_generic=False):
         self.first = first
         self.last = last
         self.name = name
         self.dynamic_allocation = dynamic_allocation
+        self.allow_generic = allow_generic
         self.allocated = {}
         self.filled = {}
 
@@ -93,6 +94,8 @@ class BlockAllocation:
         @return: Whether the block fits enitrely in the available address space.
         @rtype:  C{bool}
         """
+        if self.allow_generic and addr == -2 and length == 1:
+            return True
         return addr >= 0 and addr + length - 1 <= self.last
 
     def get_size(self, addr):
@@ -213,7 +216,7 @@ used_ids = dict(enumerate([
 ]))
 used_ids[0xE0] = BlockAllocation(0, 64000 - 1, "RoadStop")
 used_ids[0xE1] = BlockAllocation(0, 255, "NewLandscape")
-used_ids[0xE2] = BlockAllocation(0, -1, "Town")
+used_ids[0xE2] = BlockAllocation(-1, -1, "Town", False, True)
 
 
 def print_stats():
