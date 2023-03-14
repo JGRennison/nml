@@ -19,6 +19,13 @@ from nml.ast import base_statement, general
 
 var_ranges = {"SELF": 0x89, "PARENT": 0x8A}
 
+var_relative_ranges = {
+    "BACKWARD_SELF": 0,
+    "FORWARD_SELF": 1,
+    "BACKWARD_ENGINE": 2,
+    "BACKWARD_SAMEID": 3,
+}
+
 # Used by Switch and RandomSwitch
 switch_base_class = action2.make_sprite_group_class(False, True, True)
 
@@ -30,12 +37,28 @@ class Switch(switch_base_class):
             raise generic.ScriptError(
                 "Switch-block requires at least 4 parameters, encountered " + str(len(param_list)), pos
             )
-        if not isinstance(param_list[1], expression.Identifier):
+        if not isinstance(param_list[1], expression.Identifier) and not (isinstance(param_list[1], expression.FunctionCall) and len(param_list[1].params) == 1):
             raise generic.ScriptError(
-                "Switch-block parameter 2 'variable range' must be an identifier.", param_list[1].pos
+                "Switch-block parameter 2 'variable range' must be an identifier, possibly with a parameter.", param_list[1].pos
             )
-        if param_list[1].value in var_ranges:
+
+        feature = general.parse_feature(param_list[0]).value
+
+        if isinstance(param_list[1], expression.Identifier) and param_list[1].value in var_ranges:
             self.var_range = var_ranges[param_list[1].value]
+        elif feature >= 0 and feature <= 3 and isinstance(param_list[1], expression.FunctionCall) and param_list[1].name.value in var_relative_ranges:
+            mode = var_relative_ranges[param_list[1].name.value]
+            offset_expr = action2var.reduce_varaction2_expr(param_list[1].params[0], action2var.get_scope(feature))
+            if not (isinstance(offset_expr, expression.ConstantNumeric) and 0 <= offset_expr.value <= 255):
+                raise generic.ScriptError(
+                    "Switch-block relative modes currently only support constant offsets.", param_list[1].pos
+                )
+            if offset_expr.value == 0 and mode <= 1:
+                self.var_range = 0x89 # SELF
+            elif offset_expr.value == 0 and mode == 2:
+                self.var_range = 0x8A # PARENT
+            else:
+                self.var_range = [ 0x87, 2, mode, offset_expr.value ]
         else:
             raise generic.ScriptError(
                 "Unrecognized value for switch parameter 2 'variable range': '{}'".format(param_list[1].value),
@@ -43,7 +66,7 @@ class Switch(switch_base_class):
             )
         if not isinstance(param_list[2], expression.Identifier):
             raise generic.ScriptError("Switch-block parameter 3 'name' must be an identifier.", param_list[2].pos)
-        self.initialize(param_list[2], general.parse_feature(param_list[0]).value, len(param_list) - 4)
+        self.initialize(param_list[2], feature, len(param_list) - 4)
         self.expr = param_list[-1]
         self.body = body
         self.param_list = param_list[3:-1]

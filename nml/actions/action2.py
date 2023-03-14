@@ -95,6 +95,7 @@ class Action2(base_action.BaseAction):
         # 0xFF: Used for some house variables
         # 0x100 - 0x10F: Special meaning (used for some CB results)
         self.tmp_locations = list(range(0x80, 0x80 + total_tmp_locations))
+        self.copy_id_from = None
 
     def prepare_output(self, sprite_num):
         free_references(self)
@@ -102,7 +103,9 @@ class Action2(base_action.BaseAction):
         global spritegroup_stats
 
         try:
-            if self.num_refs == 0:
+            if self.copy_id_from is not None:
+                self.id = self.copy_id_from.id
+            elif self.num_refs == 0:
                 self.id = free_action2_ids[0]
             else:
                 self.id = free_action2_ids.pop()

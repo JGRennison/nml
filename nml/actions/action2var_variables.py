@@ -916,8 +916,7 @@ class VarAct2Feature:
         self.parent_scope = parent_scope
 
     def get_scope(self, var_range):
-        assert var_range in (0x89, 0x8A)
-        return self.self_scope if var_range == 0x89 else self.parent_scope
+        return self.parent_scope if var_range == 0x8A else self.self_scope
 
 
 scope_towns = VarAct2Scope("Towns", varact2vars_towns, {}, has_persistent_storage=True)

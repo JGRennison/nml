@@ -29,7 +29,7 @@ class Action2Var(action2.Action2):
                      object or related object). 0x89 (own object, double word)
                      and 0x8A (related object, double word) and the only
                      supported values.
-    @type type_byte: C{int}
+    @type type_byte: C{int} or C{list} of C{int}
 
     @ivar ranges: List of return value ranges. Each range contains a minimum and
                   a maximum value and a return value. The list is checked in order,
@@ -42,7 +42,7 @@ class Action2Var(action2.Action2):
 
     def __init__(self, feature, name, pos, type_byte, param_registers=None):
         action2.Action2.__init__(self, feature, name, pos)
-        self.type_byte = type_byte
+        self.type_bytes = type_byte if isinstance(type_byte, list) else [type_byte]
         self.ranges = []
         self.param_registers = param_registers or []
 
@@ -90,7 +90,7 @@ class Action2Var(action2.Action2):
     def write(self, file):
         # type_byte, num_ranges, default_result = 4
         # 2 bytes for the result, 8 bytes for the min/max range.
-        size = 4 + (2 + 8) * len(self.ranges)
+        size = 3 + len(self.type_bytes) + (2 + 8) * len(self.ranges)
         for var in self.var_list:
             if isinstance(var, nmlop.Operator):
                 size += 1
@@ -99,7 +99,8 @@ class Action2Var(action2.Action2):
 
         regs = ["{} : register {:X}".format(reg.name, reg.register) for reg in self.param_registers]
         self.write_sprite_start(file, size, regs)
-        file.print_bytex(self.type_byte)
+        for t in self.type_bytes:
+            file.print_bytex(t)
         file.newline()
         for var in self.var_list:
             if isinstance(var, nmlop.Operator):
@@ -1228,6 +1229,8 @@ def parse_varaction2(switch_block):
     expr = reduce_varaction2_expr(switch_block.expr, var_scope)
 
     offset = 4  # first var
+    if isinstance(switch_block.var_range, list):
+        offset = 3 + len(switch_block.var_range)
 
     parser = Varaction2Parser(feature, switch_block.var_range)
     parser.parse_expr(expr)
@@ -1337,6 +1340,42 @@ def parse_varaction2(switch_block):
     switch_block.set_action2(varaction2, feature)
 
     action6.free_parameters.restore()
+
+    if len(varaction2.type_bytes) > 1:
+        bit = grf.get_feature_test_bit("more_varaction2_types", 1, 0xFFFF)
+        action7.skip_action_array_feature_test(action_list, bit, "more_varaction2_types test (VarAction 2)")
+
+        fallback_action_list = []
+        fallback_varaction2 = Action2Var(
+            feature,
+            switch_block.name.value + " (fallback)",
+            switch_block.pos,
+            0x89,
+            {},
+        )
+        fallback_varaction2.copy_id_from = varaction2
+
+        varact2parser = Varaction2Parser(varaction2.feature)
+        varact2parser.parse_expr(
+            expression.Variable(expression.ConstantNumeric(0x1A), mask=expression.ConstantNumeric(0))
+        )
+        fallback_varaction2.var_list = varact2parser.var_list
+
+        fallback_varaction2.ranges.append(
+            VarAction2Range(
+                expression.ConstantNumeric(1),
+                expression.ConstantNumeric(0),
+                expression.ConstantNumeric(0),
+                "Bogus range to avoid nvar == 0",
+            )
+        )
+        fallback_varaction2.default_result = get_failed_cb_result(varaction2.feature, fallback_action_list, fallback_varaction2, switch_block.pos)
+        fallback_varaction2.default_comment = "Fallback callback failure"
+        fallback_action_list.append(fallback_varaction2)
+
+        action7.skip_action_array_feature_test_inverse(fallback_action_list, bit, "more_varaction2_types test (VarAction 2) (fallback)")
+        action_list.extend(fallback_action_list)
+
     if feature >= 0xE0 and len(action_list) > 0:
         action7.skip_action_array_feature_test(action_list, 6, "feature_id_mapping feature test (VarAction 2)")
     action7.end_skip_block()
