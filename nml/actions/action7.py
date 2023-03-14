@@ -354,10 +354,16 @@ def end_skip_block():
     recursive_cond_blocks -= 1
 
 def skip_action_array_feature_test(actions, bit, comment):
-    skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), bit, comment)
+    if bit >= 0x80:
+        skip_action_array(actions, 9, 0x91, 4, (3, r"\7!"), bit, comment)
+    else:
+        skip_action_array(actions, 9, 0x9D, 1, (1, r'\70'), bit, comment)
 
 def skip_action_array_feature_test_inverse(actions, bit, comment):
-    skip_action_array(actions, 9, 0x9D, 1, (0, r'\71'), bit, comment)
+    if bit >= 0x80:
+        skip_action_array(actions, 9, 0x91, 4, (2, r"\7="), bit, comment)
+    else:
+        skip_action_array(actions, 9, 0x9D, 1, (0, r'\71'), bit, comment)
 
 def skip_action_array(actions, action_type, var, varsize, condtype, value, comment = ""):
     count = len(actions)

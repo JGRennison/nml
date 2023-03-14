@@ -32,6 +32,7 @@ feature_id_mappings = {}
 feature_id_mapping_nodes = []
 feature_tests = {}
 next_feature_test_bit = 7
+next_feature_test_bit_sval = 0x80
 next_variable_mapping_id = 0
 variable_mapping_ids = {}
 variable_mapping_nodes = []
@@ -155,11 +156,17 @@ def get_action5_mapping_id(name):
     return action5_mapping_ids[name]
 
 
-def get_feature_test_bit(name, minv, maxv):
-    global next_feature_test_bit, feature_tests
+def get_feature_test_bit(name, minv, maxv, use_sval=False):
+    global next_feature_test_bit, next_feature_test_bit_sval, feature_tests
     if (name, minv, maxv) not in feature_tests:
-        bit = next_feature_test_bit
-        next_feature_test_bit = bit + 1
+        if next_feature_test_bit > 31:
+            use_sval = True
+        if use_sval:
+            bit = next_feature_test_bit_sval
+            next_feature_test_bit_sval = bit + 1
+        else:
+            bit = next_feature_test_bit
+            next_feature_test_bit = bit + 1
         feature_tests[name, minv, maxv] = bit
         pm_action14_root = action14.BranchNode("FTST")
         pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
@@ -167,7 +174,10 @@ def get_feature_test_bit(name, minv, maxv):
             pm_action14_root.subnodes.append(action14.BinaryNode("MINV", 2, minv))
         if maxv != 0xFFFF:
             pm_action14_root.subnodes.append(action14.BinaryNode("MAXV", 2, maxv))
-        pm_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, bit))
+        if use_sval:
+            pm_action14_root.subnodes.append(action14.BinaryNode("SVAL", 4, bit))
+        else:
+            pm_action14_root.subnodes.append(action14.BinaryNode("SETP", 1, bit))
         property_mapping_nodes.extend(action14.get_actions(pm_action14_root))
     return feature_tests[name, minv, maxv]
 

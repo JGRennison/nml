@@ -1342,7 +1342,7 @@ def parse_varaction2(switch_block):
     action6.free_parameters.restore()
 
     if len(varaction2.type_bytes) > 1:
-        bit = grf.get_feature_test_bit("more_varaction2_types", 1, 0xFFFF)
+        bit = grf.get_feature_test_bit("more_varaction2_types", 1, 0xFFFF, True)
         action7.skip_action_array_feature_test(action_list, bit, "more_varaction2_types test (VarAction 2)")
 
         fallback_action_list = []
