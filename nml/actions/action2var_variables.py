@@ -833,6 +833,7 @@ varact2vars_roadstop = {
     'animation_frame'       : {'var': 0x49, 'start':  0, 'size':  8},
 
     'one_way_info'          : {'var': 0x50, 'start':  0, 'size':  2},
+    'one_way_info_inferred' : {'var': 0x50, 'start':  2, 'size':  2},
 
     'waiting_triggers'      : {'var': 0x5F, 'start':  0, 'size':  8},
     'random_bits'           : {'var': 0x5F, 'start':  8, 'size': 24},
