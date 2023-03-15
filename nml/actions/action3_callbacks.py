@@ -113,7 +113,8 @@ callbacks[0x02] = {
     'purchase_running_cost_factor' : {'type': 'cb', 'num': 0x36, 'var10': 0x0F, 'purchase': 2},
     'cargo_age_period'             : {'type': 'cb', 'num': 0x36, 'var10': 0x1D},
     'create_effect'                : {'type': 'cb', 'num': 0x160},
-    'articulated_part'             : {'type': 'cb', 'num': 0x16, 'flag_bit': 4, 'purchase': 1}
+    'articulated_part'             : {'type': 'cb', 'num': 0x16, 'flag_bit': 4, 'purchase': 1},
+    'refit_part_name'              : {'type': 'cb', 'num': 0xEC008002},
 }
 callbacks[0x02].update(general_vehicle_cbs)
 
