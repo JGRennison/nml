@@ -1219,6 +1219,7 @@ constant_numbers = {
     "RST_GENERAL_FLAG_NO_AUTO_ROAD_CONNECTION"  : 4,
     "RST_GENERAL_FLAG_BUILD_MENU_ROAD_ONLY"     : 5,
     "RST_GENERAL_FLAG_BUILD_MENU_TRAM_ONLY"     : 6,
+    "RST_GENERAL_FLAG_BUILD_MENU_DRAW_DISABLED_VIEWS" : 7,
 
     "RST_VIEW_BAY_NE"                           : 0,
     "RST_VIEW_BAY_SE"                           : 1,
