@@ -650,6 +650,7 @@ varact2vars_signals = {
     'signal_context_info'   : {'mapped_variable': "signals_signal_context", 'feature': 0x0E, 'start':  0, 'size':  32},
     'signal_style'          : {'mapped_variable': "signals_signal_style", 'feature': 0x0E, 'start':  0, 'size':  32},
     'signal_side'           : {'mapped_variable': "signals_signal_side", 'feature': 0x0E, 'start':  0, 'size':  1},
+    'signal_vertical_clearance': {'mapped_variable': "signals_signal_vertical_clearance", 'feature': 0x0E, 'start':  0, 'size':  8},
 }
 
 #
@@ -715,6 +716,7 @@ varact2vars_railtype = {
     'signal_context_is_tunnel': {'mapped_variable': "railtype_signal_context", 'feature': 0x10, 'start':  8, 'size':  1},
     'signal_context_info'   : {'mapped_variable': "railtype_signal_context", 'feature': 0x10, 'start':  0, 'size':  32},
     'signal_side'           : {'mapped_variable': "railtype_signal_side", 'feature': 0x10, 'start':  0, 'size':  1},
+    'signal_vertical_clearance': {'mapped_variable': "railtype_signal_vertical_clearance", 'feature': 0x10, 'start':  0, 'size':  8},
 }
 # Railtypes have no 60+x variables
 
