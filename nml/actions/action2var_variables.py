@@ -803,6 +803,8 @@ varact2vars_towns = {
     'town_zone_2_radius_square_uncapped' : {'mapped_variable': "town_zone_2_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
     'town_zone_3_radius_square_uncapped' : {'mapped_variable': "town_zone_3_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
     'town_zone_4_radius_square_uncapped' : {'mapped_variable': "town_zone_4_radius_square", 'feature': 0xE2, 'start':  0, 'size': 32},
+    'x_coordinate'                   : {'mapped_variable': "town_xy", 'feature': 0xE2, 'start':  0, 'size': 16},
+    'y_coordinate'                   : {'mapped_variable': "town_xy", 'feature': 0xE2, 'start': 16, 'size': 16},
 }
 
 #
