@@ -315,7 +315,7 @@ callbacks[0x13] = {
 
 # Roadstops
 callbacks[0xE0] = {
-    'availability'    : {'type': 'cb', 'num':  0x13, 'flag_bit': 0},
+    'availability'    : {'type': 'cb', 'num':  0x13, 'flag_bit': 0, 'purchase': 2},
     'anim_control'    : {'type': 'cb', 'num': 0x140},
     'anim_next_frame' : {'type': 'cb', 'num': 0x141, 'flag_bit': 1},
     'anim_speed'      : {'type': 'cb', 'num': 0x142, 'flag_bit': 2},
