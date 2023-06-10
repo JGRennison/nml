@@ -121,7 +121,7 @@ def get_variable_mapping_id(feature, name, shift, mask, param):
     return variable_mapping_ids[key]
 
 def use_feature_id(feature):
-    if feature < 0xE0:
+    if feature < 0xE0 and feature != 0x14:
         return
 
     global feature_test_feature_id_mapping
@@ -130,7 +130,7 @@ def use_feature_id(feature):
     if feature not in feature_id_mappings:
         feature_id_mappings[feature] = True
         pm_action14_root = action14.BranchNode("FIDM")
-        if feature == 0xE0:
+        if feature == 0x14:
             name = "road_stops"
         elif feature == 0xE1:
             name = "new_landscape"

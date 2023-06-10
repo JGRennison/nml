@@ -1559,16 +1559,20 @@ properties[0x13] = {
 }
 
 #
-# Feature road_stops (E0 is internal feature ID)
+# Feature 0x14 (Road stops)
 #
 
 class ByteSequenceProp(BaseAction0Property):
-    def __init__(self, prop_num, items):
-        self.prop_num = prop_num
+    def __init__(self, prop_num, items, length_prefixed):
+        # Note the property field must be 'num' for 'mapped_property' fixup
+        self.num = prop_num
         self.items = items
+        self.length_prefixed = length_prefixed
 
     def write(self, file):
-        file.print_bytex(self.prop_num)
+        file.print_bytex(self.num)
+        if self.length_prefixed:
+            file.print_bytex(len(self.items))
         for item in self.items:
             val = item.reduce_constant().value
             if val > 0xFF or val < 0:
@@ -1577,15 +1581,17 @@ class ByteSequenceProp(BaseAction0Property):
         file.newline()
 
     def get_size(self):
-        return 1 + len(self.items)
+        size = 1 + len(self.items)
+        if self.length_prefixed: size = size + 1
+        return size
 
 
-def byte_sequence_list(value, prop_num, description, expected_count):
+def byte_sequence_list(value, prop_num, description, expected_count, length_prefixed = False):
     if not isinstance(value, Array) or len(value.values) != expected_count:
         raise generic.ScriptError(description + " list must be an array of " + str(expected_count) + " bytes", value.pos)
-    return [ByteSequenceProp(prop_num, value.values)]
+    return [ByteSequenceProp(prop_num, value.values, length_prefixed)]
 
-properties[0xE0] = {
+properties[0x14] = {
     'class':                     {'size': 4, 'num': 0x08, "first": None, "string_literal": 4},
     'availability_type':         {'size': 1, 'num': 0x09},
     'name':                      {'size': 2, 'num': 0x0A, "string": 0xDC, "required": True},
@@ -1597,8 +1603,8 @@ properties[0xE0] = {
     "animation_triggers":        {"size": 2, "num": 0x10},
     # 11 (callback flags) is not set by user
     "general_flags":             {"size": 4, "num": 0x12},
-    "minimum_bridge_height":     {"custom_function": lambda x: byte_sequence_list(x, 0x13, "Minimum bridge heights", 6)},
-    "disallowed_bridge_pillars": {"custom_function": lambda x: byte_sequence_list(x, 0x14, "Disallowed bridge pillars", 6)},
+    "minimum_bridge_height":     {"custom_function": lambda x: byte_sequence_list(x, -1, "Minimum bridge heights", 6, True), "mapped_property": "roadstop_min_bridge_height"},
+    "disallowed_bridge_pillars": {"custom_function": lambda x: byte_sequence_list(x, -1, "Disallowed bridge pillars", 6, True), "mapped_property": "roadstop_disallowed_bridge_pillars"},
     "cost_multipliers":          {"custom_function": lambda x: byte_sequence_list(x, 0x15, "Cost multipliers", 2)},
     "height":                    {"size": 1, "mapped_property": "roadstop_height", "feature_test": {"name": "road_stops", "minv": 6}},
 }

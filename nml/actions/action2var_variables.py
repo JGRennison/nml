@@ -147,7 +147,7 @@ varact2vars_vehicles = {
     'position_in_articulated_veh'          : {'var': 0x4D, 'start':  0, 'size':  8},
     'position_in_articulated_veh_from_end' : {'var': 0x4D, 'start':  8, 'size':  8},
     'waiting_triggers'                 : {'var': 0x5F, 'start':  0, 'size':  8},
-    'random_bits'                      : {'var': 0x5F, 'start':  8, 'size':  8},
+    'random_bits'                      : {'var': 0x5F, 'start':  8, 'size': 16},
     'direction'                        : {'var': 0x9F, 'start':  0, 'size':  8},
     'vehicle_is_hidden'                : {'var': 0xB2, 'start':  0, 'size':  1},
     'vehicle_is_stopped'               : {'var': 0xB2, 'start':  1, 'size':  1},
@@ -880,7 +880,7 @@ varact2vars60x_roadstop = {
     'nearby_tile_tram_bits'             : {'var': 0x6B, 'start':  4, 'size':  4, 'param_function': signed_tile_offset},
     'nearby_tile_road_piece'            : {'var': 0x6B, 'start':  8, 'size':  8, 'param_function': signed_tile_offset},
     'nearby_tile_tram_piece'            : {'var': 0x6B, 'start': 16, 'size':  8, 'param_function': signed_tile_offset},
-    'nearby_tile_road_stop_info_v2'     : {'mapped_variable': "roadstop_road_stop_info_nearby_tiles_v2", 'feature': 0xE0, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
+    'nearby_tile_road_stop_info_v2'     : {'mapped_variable': "roadstop_road_stop_info_nearby_tiles_v2", 'feature': 0x14, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
 }
 
 #
@@ -970,7 +970,7 @@ varact2features = dict(enumerate([
     VarAct2Feature(scope_airporttiles, None),
     VarAct2Feature(scope_roadtypes, None),
     VarAct2Feature(scope_tramtypes, None),
+    VarAct2Feature(scope_roadstops, scope_towns)
 ]))
-varact2features[0xE0] = VarAct2Feature(scope_roadstops, scope_towns)
 varact2features[0xE1] = VarAct2Feature(scope_newlandscape, None)
 varact2features[0xE2] = VarAct2Feature(scope_towns, None)

@@ -76,10 +76,8 @@ class Action3(base_action.BaseAction):
 
     def write(self, file):
         varsize = 1
-        if self.feature <= 3:
-            varsize = 3 # Vehicles use extended byte
-        elif (self.feature == 0x0F or self.feature == 0xE0) and self.id >= 0xFF:
-            varsize = 3 # Objects and road stops beyond 0xFF
+        if self.feature <= 3 or self.id >= 0xFF:
+            varsize = 3  # Vehicles or IDs >= 255 use extended byte
         if self.feature == 0xE2 and self.id == -2:
             # Generic callback
             file.start_sprite(6)
@@ -306,9 +304,9 @@ def parse_graphics_block(graphics_block, feature, id, size, is_livery_override=F
         gfx_actions, act3 = parse_graphics_block_single_id(graphics_block, feature, id, is_livery_override)
         action_list.extend(gfx_actions)
         if feature == 0x0F and act3.id >= 0xFF:
-            action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (graphics block)")
-        if feature == 0xE0 and act3.id >= 0xFF:
-            action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (graphics block)")
+            action7.skip_action_array_feature_test_inverse(action_list, grf.get_feature_test_bit("more_objects_per_grf", 0, 0), "more_objects_per_grf feature test (graphics block)")
+        if feature == 0x14 and act3.id >= 0xFF:
+            action7.skip_action_array_feature_test_inverse(action_list, grf.get_feature_test_bit("road_stops", 0, 6), "road_stops v7 feature test (graphics block)")
     if feature >= 0xE0 and len(action_list) > 0:
         action7.skip_action_array_feature_test(action_list, 6, "feature_id_mapping feature test (graphics block)")
     action7.end_skip_block()

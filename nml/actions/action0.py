@@ -197,7 +197,7 @@ used_ids = dict(enumerate([
     BlockAllocation(88, 0xFFFF, "Road Vehicle"),
     BlockAllocation(11, 0xFFFF, "Ship"),
     BlockAllocation(41, 0xFFFF, "Aircraft"),
-    BlockAllocation(0, 255, "Station"),
+    BlockAllocation(0, 0xFFFE, "Station"),  # UINT16_MAX - 1
     BlockAllocation(0, 8, "Canal", False),
     BlockAllocation(0, 15, "Bridge", False),
     BlockAllocation(0, 255, "House"),
@@ -213,8 +213,8 @@ used_ids = dict(enumerate([
     BlockAllocation(0, 255, "Airport Tile"),
     BlockAllocation(0, 62, "Roadtype"),
     BlockAllocation(0, 62, "Tramtype"),
+    BlockAllocation(0, 0xFFFE, "RoadStop"),  # UINT16_MAX - 1
 ]))
-used_ids[0xE0] = BlockAllocation(0, 64000 - 1, "RoadStop")
 used_ids[0xE1] = BlockAllocation(0, 255, "NewLandscape")
 used_ids[0xE2] = BlockAllocation(-1, -1, "Town", False, True)
 
@@ -227,16 +227,6 @@ def print_stats():
         used = feature.get_num_allocated()
         if used > 0 and feature.dynamic_allocation:
             generic.print_info("{} items: {}/{}".format(feature.name, used, feature.get_max_allocated()))
-    if used_ids[0x0F].get_num_allocated() > 255:
-        generic.print_warning(
-            generic.Warning.GENERIC,
-            "More than 255 object specs defined. Only the first 255 will be available unless the OpenTTD version supports the 'more_objects_per_grf' extended feature."
-        )
-    if used_ids[0xE0].get_num_allocated() > 255:
-        generic.print_warning(
-            generic.Warning.GENERIC,
-            "More than 255 road stop specs defined. Only the first 255 will be available unless the OpenTTD version supports version 7 of the 'road_stops' extended feature."
-        )
 
 
 def mark_id_used(feature, id, num_ids):
@@ -860,9 +850,9 @@ def parse_property_block(prop_list, feature, id, size):
     if feature >= 0xE0 and len(action_list) > 0:
         action7.skip_action_array_feature_test(action_list, 6, "feature_id_mapping feature test (properties)")
     if feature == 0x0F and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(action_list) > 0:
-        action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("more_objects_per_grf", 1, 0xFFFF), "more_objects_per_grf feature test (properties)")
-    if feature == 0xE0 and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(action_list) > 0:
-        action7.skip_action_array_feature_test(action_list, grf.get_feature_test_bit("road_stops", 7, 0xFFFF), "road_stops v7 feature test (properties)")
+        action7.skip_action_array_feature_test_inverse(action_list, grf.get_feature_test_bit("more_objects_per_grf", 0, 0), "more_objects_per_grf feature test (properties)")
+    if feature == 0x14 and isinstance(id, expression.ConstantNumeric) and id.value >= 0xFF and len(action_list) > 0:
+        action7.skip_action_array_feature_test_inverse(action_list, grf.get_feature_test_bit("road_stops", 0, 6), "road_stops v7 feature test (properties)")
 
     action7.end_skip_block()
     return action_list
@@ -1206,7 +1196,7 @@ callback_flag_properties = {
     0x0B: {"size": 1, "num": 0x1A},
     0x0F: {"size": 2, "num": 0x15},
     0x11: {"size": 1, "num": 0x0E},
-    0xE0: {"size": 1, "num": 0x11},
+    0x14: {"size": 1, "num": 0x11},
 }
 
 

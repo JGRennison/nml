@@ -373,6 +373,9 @@ constant_numbers = {
     "STAT_FLAG_CUSTOM_FOUNDATIONS"    : 3,
     "STAT_FLAG_EXTENDED_FOUNDATIONS"  : 4,
 
+    # station tiles
+    "STAT_ALL_TILES"     : 0xFF,
+
     # station animation triggers
     "STAT_ANIM_IS_BUILT"              : 0,
     "STAT_ANIM_CARGO_ARRIVES"         : 1,
@@ -1200,6 +1203,7 @@ constant_numbers = {
     "EXTRA_STATION_NAME_FLAG_NEAR_WATER_ONLY"   : 10,
     "EXTRA_STATION_NAME_FLAG_NOT_NEAR_WATER"    : 11,
 
+    # Road stops
     "RST_AVAILABILITY_TYPE_PASSENGER"           : 0,
     "RST_AVAILABILITY_TYPE_FREIGHT"             : 1,
     "RST_AVAILABILITY_TYPE_ALL"                 : 2,
