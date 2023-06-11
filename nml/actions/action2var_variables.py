@@ -836,9 +836,9 @@ varact2vars_roadstop = {
 
     'animation_frame'       : {'var': 0x49, 'start':  0, 'size':  8},
 
-    'one_way_info'          : {'var': 0x50, 'start':  0, 'size':  2},
-    'one_way_info_inferred' : {'var': 0x50, 'start':  2, 'size':  2},
-    'drawn_in_gui'          : {'var': 0x50, 'start':  4, 'size':  1},
+    'one_way_info'          : {'mapped_variable': "roadstop_misc_info", 'feature': 0x14, 'start':  0, 'size':  2},
+    'one_way_info_inferred' : {'mapped_variable': "roadstop_misc_info", 'feature': 0x14, 'start':  2, 'size':  2},
+    'drawn_in_gui'          : {'mapped_variable': "roadstop_misc_info", 'feature': 0x14, 'start':  4, 'size':  1},
 
     'waiting_triggers'      : {'var': 0x5F, 'start':  0, 'size':  8},
     'random_bits'           : {'var': 0x5F, 'start':  8, 'size': 24},
@@ -874,12 +874,12 @@ varact2vars60x_roadstop = {
     'nearby_tile_same_stop_type'        : {'var': 0x68, 'start': 20, 'size':  1, 'param_function': signed_tile_offset},
     'nearby_tile_one_way_info'          : {'var': 0x68, 'start': 21, 'size':  2, 'param_function': signed_tile_offset},
     'nearby_tile_grfid'                 : {'var': 0x6A, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
-    'nearby_tile_plain_road_info'       : {'var': 0x6B, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
-    'nearby_tile_is_plain_road'         : {'var': 0x6B, 'start':  0, 'size': 32, 'param_function': signed_tile_offset, 'value_function': lambda var, info: nmlop.CMP_NEQ(var, 0xFFFFFFFF)},
-    'nearby_tile_road_bits'             : {'var': 0x6B, 'start':  0, 'size':  4, 'param_function': signed_tile_offset},
-    'nearby_tile_tram_bits'             : {'var': 0x6B, 'start':  4, 'size':  4, 'param_function': signed_tile_offset},
-    'nearby_tile_road_piece'            : {'var': 0x6B, 'start':  8, 'size':  8, 'param_function': signed_tile_offset},
-    'nearby_tile_tram_piece'            : {'var': 0x6B, 'start': 16, 'size':  8, 'param_function': signed_tile_offset},
+    'nearby_tile_plain_road_info'       : {'mapped_variable': "roadstop_road_info_nearby_tiles", 'feature': 0x14, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
+    'nearby_tile_is_plain_road'         : {'mapped_variable': "roadstop_road_info_nearby_tiles", 'feature': 0x14, 'start':  0, 'size': 32, 'param_function': signed_tile_offset, 'value_function': lambda var, info: nmlop.CMP_NEQ(var, 0xFFFFFFFF)},
+    'nearby_tile_road_bits'             : {'mapped_variable': "roadstop_road_info_nearby_tiles", 'feature': 0x14, 'start':  0, 'size':  4, 'param_function': signed_tile_offset},
+    'nearby_tile_tram_bits'             : {'mapped_variable': "roadstop_road_info_nearby_tiles", 'feature': 0x14, 'start':  4, 'size':  4, 'param_function': signed_tile_offset},
+    'nearby_tile_road_piece'            : {'mapped_variable': "roadstop_road_info_nearby_tiles", 'feature': 0x14, 'start':  8, 'size':  8, 'param_function': signed_tile_offset},
+    'nearby_tile_tram_piece'            : {'mapped_variable': "roadstop_road_info_nearby_tiles", 'feature': 0x14, 'start': 16, 'size':  8, 'param_function': signed_tile_offset},
     'nearby_tile_road_stop_info_v2'     : {'mapped_variable': "roadstop_road_stop_info_nearby_tiles_v2", 'feature': 0x14, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
 }
 
