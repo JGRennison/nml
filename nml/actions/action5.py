@@ -56,16 +56,17 @@ class Action5BlockType:
 
 
 action5_table = {
-    "PRE_SIGNAL": (0x04, 48, Action5BlockType.FIXED),
-    "PRE_SIGNAL_SEMAPHORE": (0x04, 112, Action5BlockType.FIXED),
-    "PRE_SIGNAL_SEMAPHORE_PBS": (0x04, 240, Action5BlockType.OFFSET),
+    "PRE_SIGNAL": (0x04, 48, Action5BlockType.OFFSET),  # deprecated, use "SIGNALS" in all cases
+    "PRE_SIGNAL_SEMAPHORE": (0x04, 112, Action5BlockType.OFFSET),  # deprecated, use "SIGNALS" in all cases
+    "PRE_SIGNAL_SEMAPHORE_PBS": (0x04, 240, Action5BlockType.OFFSET),  # deprecated, use "SIGNALS" in all cases
+    "SIGNALS": (0x04, 240, Action5BlockType.OFFSET),
     "CATENARY": (0x05, 48, Action5BlockType.OFFSET),
     "FOUNDATIONS_SLOPES": (0x06, 74, Action5BlockType.FIXED),
     "FOUNDATIONS_SLOPES_HALFTILES": (0x06, 90, Action5BlockType.OFFSET),
     "TTDP_GUI_25": (0x07, 73, Action5BlockType.FIXED),
     "TTDP_GUI": (0x07, 93, Action5BlockType.FIXED),
     "CANALS": (0x08, 65, Action5BlockType.OFFSET),
-    "ONE_WAY_ROAD": (0x09, 6, Action5BlockType.OFFSET),
+    "ONE_WAY_ROAD": (0x09, 18, Action5BlockType.OFFSET),
     "COLOURMAP_2CC": (0x0A, 256, Action5BlockType.OFFSET),
     "TRAMWAY": (0x0B, 119, Action5BlockType.OFFSET),
     "SNOWY_TEMPERATE_TREES": (0x0C, 133, Action5BlockType.FIXED),
