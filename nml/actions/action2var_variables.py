@@ -733,6 +733,8 @@ varact2vars_airporttiles = {
     'animation_frame'     : {'var': 0x44, 'start':  0, 'size':  8},
     'random_bits_station' : {'var': 0x5F, 'start':  8, 'size': 16},
     'random_bits_tile'    : {'var': 0x5F, 'start': 24, 'size':  4},
+    'airport_id'          : {'mapped_variable': "airporttiles_airport_id", 'feature': 0x11, 'start': 0, 'size': 8},
+    'airport_layout'      : {'mapped_variable': "airporttiles_airport_layout", 'feature': 0x11, 'start': 0, 'size': 8},
 }
 
 varact2vars60x_airporttiles = {
