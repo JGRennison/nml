@@ -158,7 +158,7 @@ F2 20 \dx000000FF
 
 // Name: @CB_FAILED00
 56 * 23 02 00 FF 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FF // Non-graphics callback, return graphics result
@@ -425,7 +425,7 @@ F2 60 \dx000000FF \dx00000003 \dx00000001
 
 // Name: @action3_3
 96 * 93 02 00 F1 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b8
 \wx00F6 \dx00000010 \dx00000010 	// return ((((var[0x40, 0, 255] + 0) % 4) == 0) ? 186 : 200)
 \wx00F2 \dx00000015 \dx00000015 	// return (((var[0xF2, 0, 255] + 3) * 36) / 4)
@@ -439,7 +439,7 @@ F2 60 \dx000000FF \dx00000003 \dx00000001
 
 // Name: @action3_4
 97 * 63 02 00 FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b5
 \wx00F4 \dx00000000 \dx00000000 	// set_icm_purchase;
 \wx00FA \dx00000016 \dx00000016 	// sw_icm_articulated_part;

@@ -235,7 +235,7 @@ FF
 
 // Name: @action3_2
 108 * 33 02 01 F8 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
 \wx00F9 \dx00000036 \dx00000036 	// @action3_0;
@@ -243,7 +243,7 @@ FF
 
 // Name: @action3_3
 109 * 43 02 01 F7 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FF \dx00000000 \dx00000000 	// flatbed_truck_1_paper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -252,7 +252,7 @@ FF
 
 // Name: @action3_4
 110 * 43 02 01 F6 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FE \dx00000000 \dx00000000 	// flatbed_truck_1_steel;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -261,7 +261,7 @@ FF
 
 // Name: @action3_5
 111 * 43 02 01 F5 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FC \dx00000000 \dx00000000 	// flatbed_truck_1_copper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -270,7 +270,7 @@ FF
 
 // Name: @action3_6
 112 * 43 02 01 F9 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FD \dx00000000 \dx00000000 	// flatbed_truck_1_wood;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -334,7 +334,7 @@ FF
 
 // Name: @action3_9
 119 * 33 02 01 F9 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
 \wx00F8 \dx00000036 \dx00000036 	// @action3_7;
@@ -342,7 +342,7 @@ FF
 
 // Name: @action3_10
 120 * 43 02 01 F5 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FF \dx00000000 \dx00000000 	// flatbed_truck_1_paper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -351,7 +351,7 @@ FF
 
 // Name: @action3_11
 121 * 43 02 01 F6 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FE \dx00000000 \dx00000000 	// flatbed_truck_1_steel;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -360,7 +360,7 @@ FF
 
 // Name: @action3_12
 122 * 43 02 01 F7 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FC \dx00000000 \dx00000000 	// flatbed_truck_1_copper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -369,7 +369,7 @@ FF
 
 // Name: @action3_13
 123 * 43 02 01 F8 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FD \dx00000000 \dx00000000 	// flatbed_truck_1_wood;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -433,7 +433,7 @@ FF
 
 // Name: @action3_16
 130 * 33 02 01 F8 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
 \wx00F9 \dx00000036 \dx00000036 	// @action3_14;
@@ -441,7 +441,7 @@ FF
 
 // Name: @action3_17
 131 * 43 02 01 F7 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FF \dx00000000 \dx00000000 	// flatbed_truck_1_paper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -450,7 +450,7 @@ FF
 
 // Name: @action3_18
 132 * 43 02 01 F6 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FE \dx00000000 \dx00000000 	// flatbed_truck_1_steel;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -459,7 +459,7 @@ FF
 
 // Name: @action3_19
 133 * 43 02 01 F5 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FC \dx00000000 \dx00000000 	// flatbed_truck_1_copper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -468,7 +468,7 @@ FF
 
 // Name: @action3_20
 134 * 43 02 01 F9 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FD \dx00000000 \dx00000000 	// flatbed_truck_1_wood;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -532,7 +532,7 @@ FF
 
 // Name: @action3_23
 141 * 33 02 01 F9 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
 \wx00F8 \dx00000036 \dx00000036 	// @action3_21;
@@ -540,7 +540,7 @@ FF
 
 // Name: @action3_24
 142 * 43 02 01 FF 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FF \dx00000000 \dx00000000 	// flatbed_truck_1_paper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -549,7 +549,7 @@ FF
 
 // Name: @action3_25
 143 * 43 02 01 FE 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FE \dx00000000 \dx00000000 	// flatbed_truck_1_steel;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -558,7 +558,7 @@ FF
 
 // Name: @action3_26
 144 * 43 02 01 FC 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FC \dx00000000 \dx00000000 	// flatbed_truck_1_copper;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;
@@ -567,7 +567,7 @@ FF
 
 // Name: @action3_27
 145 * 43 02 01 FB 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FD \dx00000000 \dx00000000 	// flatbed_truck_1_wood;
 \wx00FA \dx00000015 \dx00000015 	// flatbed_truck_1_capacity_switch;

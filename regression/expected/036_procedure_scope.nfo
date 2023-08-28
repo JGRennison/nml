@@ -172,14 +172,14 @@ B3 20 \dx00000003
 
 // Name: @CB_FAILED0A
 16 * 23 02 0A FC 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FC // Non-graphics callback, return graphics result
 
 // Name: @action3_0
 17 * 43 02 0A FC 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FF \dx00000022 \dx00000022 	// ternary_optimisation;
 \wx00FD \dx0000003B \dx0000003B 	// caller2;

@@ -116,7 +116,7 @@ FF
 
 // Name: @CB_FAILED01
 23 * 23 02 01 FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FD // Non-graphics callback, return graphics result
@@ -146,7 +146,7 @@ FF
 
 // Name: @action3_2
 27 * 23 02 01 FE 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx00FC \dx00000036 \dx00000036 	// @action3_0;
 \wx00FE // foster_express_set;

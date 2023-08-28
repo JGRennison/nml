@@ -124,14 +124,14 @@
 \dx00000000 \b0 \b0 \b0 \b0 \b0
 // Name: @CB_FAILED09
 18 * 23 02 09 FF 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FF // Non-graphics callback, return graphics result
 
 // Name: @action3_0
 19 * 53 02 09 FF 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b4
 \wx00FB \dx00000025 \dx00000025 	// var2;
 \wx00FD \dx00000027 \dx00000027 	// var1;

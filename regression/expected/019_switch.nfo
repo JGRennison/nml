@@ -64,14 +64,14 @@
 
 // Name: @CB_FAILED0A
 11 * 23 02 0A FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FD // Non-graphics callback, return graphics result
 
 // Name: @action3_0
 12 * 43 02 0A FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FF \dx00000037 \dx00000037 	// @return_action_0;
 \wx8002 \dx0000003A \dx0000003A 	// return string(STR_COALMINE_EXTRA_TEXT);

@@ -126,7 +126,7 @@ FF
 
 // Name: @CB_FAILED00
 48 * 23 02 00 FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FD // Non-graphics callback, return graphics result
@@ -267,7 +267,7 @@ FF
 
 // Name: @action3_2
 73 * 33 02 00 FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FE \dx00000015 \dx00000015 	// bulk_wagon_cb_capacity_switch;
 \wx00FD \dx00000036 \dx00000036 	// @action3_0;
@@ -275,7 +275,7 @@ FF
 
 // Name: @action3_3
 74 * 23 02 00 FC 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx00FF \dx00000036 \dx00000036 	// @action3_1;
 \wx00FC // bulk_wagon_graphics_switch;

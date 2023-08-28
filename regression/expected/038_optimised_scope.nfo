@@ -108,7 +108,7 @@ BA 20 \dx0000FFFF
 
 // Name: @CB_FAILED00
 20 * 23 02 00 FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00FD // Non-graphics callback, return graphics result
@@ -129,7 +129,7 @@ BA 20 \dx0000FFFF
 
 // Name: @action3_2
 23 * 43 02 00 FC 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx00FE \dx00000015 \dx00000015 	// mixed_scope_capacity;
 \wx00FF \dx0000002D \dx0000002D 	// color_override;
@@ -138,7 +138,7 @@ BA 20 \dx0000FFFF
 
 // Name: @action3_3
 24 * 43 02 00 FD 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b3
 \wx8000 \dx00000023 \dx00000023 	// return string(STR_REGRESSION_DESC);
 \wx00FF \dx0000002D \dx0000002D 	// color_override;

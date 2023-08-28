@@ -140,7 +140,7 @@
 
 // Name: @action3_4
 23 * 23 02 04 F8 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx00F8 \dx00000142 \dx00000142 	// return (var[0x43, 24, 15] + var[0x43, 28, 15])
 \wx00FB // @action3_0;
@@ -154,7 +154,7 @@
 
 // Name: @action3_5
 25 * 33 02 04 F7 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FA \dx00000000 \dx00000000 	// @action3_1;
 \wx00F7 \dx00000142 \dx00000142 	// return (var[0x43, 24, 15] + var[0x43, 28, 15])
@@ -169,7 +169,7 @@
 
 // Name: @action3_6
 27 * 33 02 04 FB 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b2
 \wx00FC \dx00000000 \dx00000000 	// @action3_2;
 \wx00FA \dx00000142 \dx00000142 	// return (var[0x43, 24, 15] + var[0x43, 28, 15])
@@ -198,7 +198,7 @@ FF \wx00F9 	// @action3_3;
 
 // Name: @CB_FAILED04
 33 * 23 02 04 F8 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8000 \dx00000000 \dx00000000 	// graphics callback -> return 0
 \wx00F8 // Non-graphics callback, return graphics result

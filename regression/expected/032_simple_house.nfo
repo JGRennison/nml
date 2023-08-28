@@ -44,7 +44,7 @@
 9 * 37 02 07 FF 89
 1A 20 \dx00000000
 \2sto 1A 20 \dx000000FF
-\2r 0C 00 \dx0000FFFF
+\2r 0C 00 \dxFFFFFFFF
 \b1
 \wx00FF \dx00000000 \dx00000000 	// spritelayout_townhouse;
 \wx00FF // spritelayout_townhouse;

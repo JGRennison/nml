@@ -25,7 +25,7 @@
 
 // Name: @action3_0
 5 * 23 02 00 FF 89
-0C 00 \dx0000FFFF
+0C 00 \dxFFFFFFFF
 \b1
 \wx8005 \dx0000002D \dx0000002D 	// return 5;
 \wx00FF // trigger_only;

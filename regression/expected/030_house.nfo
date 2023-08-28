@@ -315,7 +315,7 @@ FF
 49 * 57 02 07 FD 89
 1A 20 \dx00000000
 \2sto 1A 20 \dx000000FF
-\2r 0C 00 \dx0000FFFF
+\2r 0C 00 \dxFFFFFFFF
 \b3
 \wx00FD \dx00000017 \dx00000017 	// brewery_check_location;
 \wx00FB \dx0000001A \dx0000001A 	// brewery_next_frame;
@@ -334,7 +334,7 @@ FF
 53 * 47 02 07 FD 89
 1A 20 \dx00010100
 \2sto 1A 20 \dx000000FF
-\2r 0C 00 \dx0000FFFF
+\2r 0C 00 \dxFFFFFFFF
 \b2
 \wx00FB \dx0000001A \dx0000001A 	// brewery_next_frame;
 \wx00FE \dx00000148 \dx00000148 	// brewery_cargo_accepted;
@@ -352,7 +352,7 @@ FF
 57 * 47 02 07 FD 89
 1A 20 \dx00020001
 \2sto 1A 20 \dx000000FF
-\2r 0C 00 \dx0000FFFF
+\2r 0C 00 \dxFFFFFFFF
 \b2
 \wx00FB \dx0000001A \dx0000001A 	// brewery_next_frame;
 \wx00FE \dx00000148 \dx00000148 	// brewery_cargo_accepted;
@@ -370,7 +370,7 @@ FF
 61 * 47 02 07 FF 89
 1A 20 \dx00030101
 \2sto 1A 20 \dx000000FF
-\2r 0C 00 \dx0000FFFF
+\2r 0C 00 \dxFFFFFFFF
 \b2
 \wx00FB \dx0000001A \dx0000001A 	// brewery_next_frame;
 \wx00FE \dx00000148 \dx00000148 	// brewery_cargo_accepted;
