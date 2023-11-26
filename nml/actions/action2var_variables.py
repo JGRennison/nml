@@ -717,6 +717,7 @@ varact2vars_railtype = {
     'signal_context_info'   : {'mapped_variable': "railtype_signal_context", 'feature': 0x10, 'start':  0, 'size':  32},
     'signal_side'           : {'mapped_variable': "railtype_signal_side", 'feature': 0x10, 'start':  0, 'size':  1},
     'signal_vertical_clearance': {'mapped_variable': "railtype_signal_vertical_clearance", 'feature': 0x10, 'start':  0, 'size':  8},
+    'adjacent_crossing'     : {'mapped_variable': "railtype_adjacent_crossing", 'feature': 0x10, 'start':  0, 'size':  2},
 }
 # Railtypes have no 60+x variables
 

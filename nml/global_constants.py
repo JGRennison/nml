@@ -1252,6 +1252,9 @@ constant_numbers = {
     "RST_OWI_NORTH_BOUND"                       : 1, # Deprecated
     "RST_OWI_SOUTH_BOUND"                       : 2, # "
 
+    "RAILTYPE_ADJACENT_CROSSING_SOUTH"          : 0,
+    "RAILTYPE_ADJACENT_CROSSING_NORTH"          : 1,
+
     "SIGNAL_RESTRICTION_INFO_RESTRICTED"        : 0,
     "SIGNAL_RESTRICTION_INFO_RESERVE_THROUGH_ALWAYS" : 1,
     "SIGNAL_RESTRICTION_INFO_MAY_REVERSE"       : 2,
