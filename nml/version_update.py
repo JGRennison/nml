@@ -64,12 +64,11 @@ def get_git_version():
 
     # Compose the actual version string following PEP440
     version = tag.replace("-", "").lower()
-    local_parts = []
-    version += ".jgr"
+    local_parts = ["jgr"]
 
     if modified or not release:
         version += ".post" + isodate.replace("-", "")
-        if branch != "master":
+        if branch != "master" and branch != "jgr":
             local_parts.append(branch.replace("-", "."))
 
     if not release:
