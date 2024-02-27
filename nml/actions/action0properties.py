@@ -550,19 +550,39 @@ def speed_fraction(value):
     return nmlop.SUB(255, value).reduce()
 
 
+def ship_speed_prop(prop_info):
+    # prop 0B value is min(value, 255)
+    def prop0B_value(value):
+        return nmlop.MIN(value, 0xFF).reduce()
+
+    # prop 23 value is min(value, 65535)
+    def prop23_value(value):
+        return nmlop.MIN(value, 0xFFFF).reduce()
+
+    # prop 23 should not be set if value(prop0B_value) <= 255.
+    def prop23_test(value):
+        return isinstance(value, ConstantNumeric) and value.value >= 0xFF
+
+    prop0B = {"size": 1, "num": 0x0B, "value_function": prop0B_value}
+    prop23 = {"size": 2, "num": 0x23, "value_function": prop23_value, "test_function": prop23_test}
+    for key in prop_info:
+        prop0B[key] = prop23[key] = prop_info[key]
+    return [prop0B, prop23]
+
+
 # fmt: off
 properties[0x02] = {
     **general_veh_props,
     "sprite_id":                    {"size": 1, "num": 0x08},
     "is_refittable":                {"size": 1, "num": 0x09},
     "cost_factor":                  {"size": 1, "num": 0x0A},
-    "speed": {
-        "size": 1,
-        "num": 0x0B,
-        "unit_type": "speed",
-        "unit_conversion": (10000, 1397),
-        "adjust_value": lambda val, unit: ottd_display_speed(val, 1, 2, unit),
-    },
+    "speed": ship_speed_prop(
+        {
+            "unit_type": "speed",
+            "unit_conversion": (10000, 1397),
+            "adjust_value": lambda val, unit: ottd_display_speed(val, 1, 2, unit),
+        }
+    ),
     "default_cargo_type":           {"size": 1, "num": 0x0C},
     "cargo_capacity":               {"size": 2, "num": 0x0D},
     # 0E does not exist
@@ -603,6 +623,7 @@ properties[0x02] = {
     ],
     "variant_group":                {"size": 2, "num": 0x20},
     "extra_flags":                  {"size": 4, "num": 0x21},
+    "acceleration":                 {"size": 1, "num": 0x24},
 }
 # fmt: on
 
@@ -1268,6 +1289,8 @@ properties[0x0B] = {
     "units_of_cargo":            {"num": 0x1B, "size": 2, "string": 0xDC},
     "items_of_cargo":            {"num": 0x1C, "size": 2, "string": 0xDC},
     "capacity_multiplier":       {"num": 0x1D, "size": 2, "unit_conversion": 0x100},
+    "town_production_effect":    {"num": 0x1E, "size": 1},
+    "town_production_multiplier": {"num": 0x1F, "size": 2, "unit_conversion": 0x100},
 }
 # fmt: on
 
