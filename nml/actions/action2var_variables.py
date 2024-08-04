@@ -424,6 +424,8 @@ varact2vars_houses = {
     'relative_pos'          : {'var': 0x7D, 'start':  0, 'size': 16, 'param': 0xFF},
     'house_tile'            : {'var': 0x7D, 'start': 16, 'size':  8, 'param': 0xFF},
     'house_type_id'         : {'var': 0x7D, 'start': 24, 'size':  8, 'param': 0xFF},
+    'same_house_count_town_uncapped' : {'mapped_variable': "house_same_id_town_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'same_house_count_map_uncapped' : {'mapped_variable': "house_same_id_map_count", 'feature': 0x07, 'start':  0, 'size': 32},
 }
 
 def cargo_accepted_nearby(name, args, pos, info):
