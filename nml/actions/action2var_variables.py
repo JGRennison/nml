@@ -403,6 +403,24 @@ def house_same_class(var, info):
                                      expression.ConstantNumeric((1 << info['size']) - 1), expression.ConstantNumeric(0x61), var.pos)
     return nmlop.VAL2(north_tile, var61, var.pos)
 
+def house_same_class_uncapped(var, info):
+    # Just using var 44 fails for non-north house tiles, as these have no class
+    # Therefore work around it using var 61
+    # Load ID of the north tile from register FF bits 24..31, and use that as param for house_other_class_town_count/house_other_class_map_count
+    north_tile = expression.Variable(expression.ConstantNumeric(0x7D), expression.ConstantNumeric(24),
+                                     expression.ConstantNumeric(0xFF), expression.ConstantNumeric(0xFF), var.pos)
+
+    var_other_class = expression.Variable(
+        expression.StringLiteral(info["mapped_variable"], None),
+        expression.ConstantNumeric(info["start"]),
+        expression.ConstantNumeric((1 << info["size"]) - 1),
+        None,
+        var.pos,
+        True
+    )
+    var_other_class.feature = info["feature"]
+
+    return nmlop.VAL2(north_tile, var_other_class, var.pos)
 
 varact2vars_houses = {
     'construction_state'    : {'var': 0x40, 'start':  0, 'size':  2},
@@ -426,6 +444,8 @@ varact2vars_houses = {
     'house_type_id'         : {'var': 0x7D, 'start': 24, 'size':  8, 'param': 0xFF},
     'same_house_count_town_uncapped' : {'mapped_variable': "house_same_id_town_count", 'feature': 0x07, 'start':  0, 'size': 32},
     'same_house_count_map_uncapped' : {'mapped_variable': "house_same_id_map_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'same_class_count_town_uncapped' : {'mapped_variable': "house_other_class_town_count", 'feature': 0x07, 'start':  0, 'size': 32, 'value_function': house_same_class_uncapped},
+    'same_class_count_map_uncapped' : {'mapped_variable': "house_other_class_map_count", 'feature': 0x07, 'start':  0, 'size': 32, 'value_function': house_same_class_uncapped},
 }
 
 def cargo_accepted_nearby(name, args, pos, info):
@@ -485,6 +505,12 @@ varact2vars60x_houses = {
     'nearby_tile_house_id'               : {'var': 0x66, 'start':  0, 'size': 16, 'param_function': signed_tile_offset, 'value_function': value_sign_extend},
     'nearby_tile_house_class'            : {'var': 0x66, 'start': 16, 'size': 16, 'param_function': signed_tile_offset, 'value_function': value_sign_extend},
     'nearby_tile_house_grfid'            : {'var': 0x67, 'start':  0, 'size': 32, 'param_function': signed_tile_offset},
+    'old_house_count_town_uncapped'      : {'mapped_variable': "house_other_old_id_town_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'old_house_count_map_uncapped'       : {'mapped_variable': "house_other_old_id_map_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'other_house_count_town_uncapped'    : {'mapped_variable': "house_other_id_town_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'other_house_count_map_uncapped'     : {'mapped_variable': "house_other_id_map_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'other_class_count_town_uncapped'    : {'mapped_variable': "house_other_class_town_count", 'feature': 0x07, 'start':  0, 'size': 32},
+    'other_class_count_map_uncapped'     : {'mapped_variable': "house_other_class_map_count", 'feature': 0x07, 'start':  0, 'size': 32},
 }
 
 #

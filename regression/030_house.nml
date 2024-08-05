@@ -127,7 +127,7 @@ switch(FEAT_HOUSES, SELF, brewery_cargo_accepted, house_tile == ((random_bits & 
 }
 
 /* Only allow construction of a brewery if there isn't already one in the same town */
-switch(FEAT_HOUSES, SELF, brewery_check_location, same_house_count_town) {
+switch(FEAT_HOUSES, SELF, brewery_check_location, [STORE_TEMP(same_class_count_town_uncapped, 0x100), same_house_count_town]) {
     0 : 1;
     0;
 }
