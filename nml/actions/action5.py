@@ -84,10 +84,10 @@ action5_table = {
     "AIRPORT_PREVIEW": (0x16, 9, Action5BlockType.OFFSET),
     "RAILTYPE_TUNNELS": (0x17, 16, Action5BlockType.OFFSET),
     "OTTD_RECOLOUR": (0x18, 1, Action5BlockType.OFFSET),
+    "ROAD_WAYPOINTS" : ("road_waypoints", 4, Action5BlockType.OFFSET),
     "PROGRAMMABLE_PRE_SIGNAL" : ("programmable_signals", 32, Action5BlockType.OFFSET),
     "NO_ENTRY_SIGNAL" : ("no_entry_signals", 16, Action5BlockType.OFFSET),
     "MISC_GUI" : ("misc_gui", 1, Action5BlockType.OFFSET),
-    "ROAD_WAYPOINTS" : ("road_waypoints", 4, Action5BlockType.OFFSET),
 }
 
 def pre_process_action5(replaces):
@@ -104,7 +104,9 @@ def parse_action5(replaces):
     offset = None
     feature_test = False
 
-    if isinstance(type_id, str):
+    if type_id == "road_waypoints":
+        type_id = grf.get_action5_mapping_id(type_id, 0x19)
+    elif isinstance(type_id, str):
         type_id = grf.get_action5_mapping_id(type_id)
         feature_test = True
 

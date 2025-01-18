@@ -142,12 +142,13 @@ def use_feature_id(feature):
         pm_action14_root.subnodes.append(action14.BinaryNode("FTID", 1, feature))
         feature_id_mapping_nodes.extend(action14.get_actions(pm_action14_root))
 
-def get_action5_mapping_id(name):
+def get_action5_mapping_id(name, type_id=None):
     global next_action5_mapping_id, feature_test_action5_mapping
     feature_test_action5_mapping = True
     if name not in action5_mapping_ids:
-        type_id = next_action5_mapping_id
-        next_action5_mapping_id = type_id - 1
+        if type_id is None:
+            type_id = next_action5_mapping_id
+            next_action5_mapping_id = type_id - 1
         action5_mapping_ids[name] = type_id
         pm_action14_root = action14.BranchNode("A5TM")
         pm_action14_root.subnodes.append(action14.RawTextNode("NAME", name))
