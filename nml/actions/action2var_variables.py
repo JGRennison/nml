@@ -739,6 +739,9 @@ varact2vars_railtype = {
     'level_crossing_status' : {'var': 0x42, 'start': 0, 'size':  8},
     'build_date'            : {'var': 0x43, 'start': 0, 'size': 32},
     'town_zone'             : {'var': 0x44, 'start': 0, 'size':  8},
+    'roadtype'              : {'var': 0x45, 'start': 0, 'size':  8},
+    'tramtype'              : {'var': 0x45, 'start': 8, 'size':  8},
+    'railtype'              : {'var': 0x45, 'start': 16, 'size': 8},
     'random_bits'           : {'var': 0x5F, 'start': 8, 'size':  2},
     'signal_restriction_info': {'mapped_variable': "railtype_signal_restriction_info", 'feature': 0x10, 'start':  0, 'size':  32},
     'signal_context'        : {'mapped_variable': "railtype_signal_context", 'feature': 0x10, 'start':  0, 'size':  8},
@@ -789,6 +792,9 @@ varact2vars_roadtype = {
     'level_crossing_status' : {'var': 0x42, 'start': 0, 'size':  8},
     'build_date'            : {'var': 0x43, 'start': 0, 'size': 32},
     'town_zone'             : {'var': 0x44, 'start': 0, 'size':  8},
+    'roadtype'              : {'var': 0x45, 'start': 0, 'size':  8},
+    'tramtype'              : {'var': 0x45, 'start': 8, 'size':  8},
+    'railtype'              : {'var': 0x45, 'start': 16, 'size': 8},
     'random_bits'           : {'var': 0x5F, 'start': 8, 'size':  2},
 }
 # Roadtypes have no 60+x variables
@@ -803,6 +809,9 @@ varact2vars_tramtype = {
     'level_crossing_status' : {'var': 0x42, 'start': 0, 'size':  8},
     'build_date'            : {'var': 0x43, 'start': 0, 'size': 32},
     'town_zone'             : {'var': 0x44, 'start': 0, 'size':  8},
+    'roadtype'              : {'var': 0x45, 'start': 0, 'size':  8},
+    'tramtype'              : {'var': 0x45, 'start': 8, 'size':  8},
+    'railtype'              : {'var': 0x45, 'start': 16, 'size': 8},
     'random_bits'           : {'var': 0x5F, 'start': 8, 'size':  2},
 }
 # Tramtypes have no 60+x variables
@@ -989,11 +998,11 @@ varact2features = dict(enumerate([
     VarAct2Feature(scope_industries, scope_towns),
     VarAct2Feature(scope_cargos, None),
     VarAct2Feature(scope_soundeffects, None),
-    VarAct2Feature(scope_airports, None),
+    VarAct2Feature(scope_airports, scope_towns),
     VarAct2Feature(scope_signals, None),
     VarAct2Feature(scope_objects, scope_towns),
     VarAct2Feature(scope_railtypes, None),
-    VarAct2Feature(scope_airporttiles, None),
+    VarAct2Feature(scope_airporttiles, scope_airports),
     VarAct2Feature(scope_roadtypes, None),
     VarAct2Feature(scope_tramtypes, None),
     VarAct2Feature(scope_roadstops, scope_towns)
