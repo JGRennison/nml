@@ -142,7 +142,7 @@ class Action2(base_action.BaseAction):
     def remove_tmp_location(self, location, force_recursive):
         """
         Recursively remove a location from the list of available temporary
-        storage locations. It is not only removed from the the list of the
+        storage locations. It is not only removed from the list of the
         current Action2Var but also from all Action2Var it calls. If an
         Action2Var is referenced as a procedure call, the location is always
         removed recursively, otherwise only if force_recursive is True.
@@ -220,8 +220,9 @@ def free_references(source_action):
             free_action2_ids.append(act2.id)
 
 
-# Features using sprite groups directly: vehicles, stations, canals, cargos, signals, railtypes, airports, roadtypes, tramtypes, new landscape
-features_sprite_group = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0B, 0x0D, 0x0E, 0x10, 0x12, 0x13, 0xE1]
+# Features using sprite groups directly: vehicles, stations, canals, cargos, signals, railtypes, airports, roadtypes, tramtypes,
+# badges, new landscape
+features_sprite_group = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0B, 0x0D, 0x0E, 0x10, 0x12, 0x13, 0x15, 0xE1]
 # Features using sprite layouts: houses, industry tiles, objects, airport tiles, and road stops
 features_sprite_layout = [0x07, 0x09, 0x0F, 0x11, 0x14]
 # All features that need sprite sets
@@ -233,7 +234,7 @@ def make_sprite_group_class(cls_is_spriteset, cls_is_referenced, cls_has_explici
     Metaclass factory which makes base classes for all nodes 'Action 2 graph'
     This graph is made up of all blocks that are eventually compiled to Action2,
     which use the same name space. Spritesets do inherit from this class to make
-    referencing them possible, but they are not part of the refernce graph that
+    referencing them possible, but they are not part of the reference graph that
     is built.
 
     @param cls_is_spriteset: Whether this class represents a spriteset
@@ -247,7 +248,7 @@ def make_sprite_group_class(cls_is_spriteset, cls_is_referenced, cls_has_explici
     @type cls_has_explicit_feature: C{bool}
 
     @param cls_is_relocatable: Whether instances of this class can be freely moved around or whether they need
-                               to to be converted to nfo code at the same location as they are in the nml code.
+                               to be converted to nfo code at the same location as they are in the nml code.
     @type cls_is_relocatable: C{bool}
 
     @return: The constructed class
@@ -265,7 +266,7 @@ def make_sprite_group_class(cls_is_spriteset, cls_is_referenced, cls_has_explici
         Child classes should do the following:
             - Implement their own __init__ method
             - Call BaseStatement.__init__
-            - Call initialize, pre_process and perpare_output (in that order)
+            - Call initialize, pre_process and prepare_output (in that order)
             - Implement collect_references
             - Call set_action2 after generating the corresponding action2 (if applicable)
 
@@ -297,8 +298,8 @@ def make_sprite_group_class(cls_is_spriteset, cls_is_referenced, cls_has_explici
         def __init__(self):
             """
             Subclasses should implement their own __init__ method.
-            This method should not be called, because calling a method on a meta class can be troublesome.
-            Instead, call initialize(..).
+            This method should not be called, because calling a method on a metaclass can be troublesome.
+            Instead, call initialize(...).
             """
             raise NotImplementedError(
                 (

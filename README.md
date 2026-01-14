@@ -6,7 +6,7 @@ See [here](https://htmlpreview.github.io/?https://github.com/JGRennison/OpenTTD-
 
 * * *
 
-NML is a a python-based compiler, capable of compiling NML files (along
+NML is a Python-based compiler, capable of compiling NML files (along
 with their associated language, sound and graphic files) into grf
 and / or nfo files.
 
@@ -32,7 +32,8 @@ your option, any later version. For more information, see [LICENSE](https://gith
 ## 1) Contact
 
 - [issue tracker / source repository](https://github.com/OpenTTD/nml)
-- IRC chat using #openttd on irc.oftc.net [more info about our irc channel](https://wiki.openttd.org/Irc)
+- IRC chat using #openttd on irc.oftc.net [more info about our IRC channel](https://wiki.openttd.org/en/Development/IRC%20channel)
+- The Official OpenTTD [Discord](https://discord.gg/openttd)
 
 ## 2) Dependencies
 
@@ -41,12 +42,13 @@ your option, any later version. For more information, see [LICENSE](https://gith
 NML requires the following 3rd party packages to run:
 
 - `python`
-  Minimal version is 3.5. Python 2 is not supported.
+  Minimum version is 3.10*. Python 2 is not supported.
+  <sub><sup>Python versions before 3.10 might still work, but for developing NML, Python version 3.10 or newer is recommended.</sub></sup>
 - `python image library`
-  For install options see https://pillow.readthedocs.io/en/stable/installation.html
-  Minimal version is 3.4. Older versions are not supported.
+  For install options see [Pillow: Basic Installation](https://pillow.readthedocs.io/en/stable/installation/basic-installation.html)
+  <sub><sup>Minimum version is 3.4. Older versions are not supported.</sub></sup>
 - `ply`
-  Downloadable from http://www.dabeaz.com/ply/
+  NML comes bundled with ply version 2022.10.27, located in the `ply` folder inside the `nml` folder.
 
 ### 2.2) Optional dependencies
 
@@ -63,16 +65,26 @@ Running `make test` requires these code formatters and checkers. You don't need 
 
 ## 3) Installation
 
-The easiest way to install NML is by using pip:
+The easiest way to install NML is by using pip or [uv](https://docs.astral.sh/uv/):
 
 ```bash
-pip3 install nml
+python3 -m pip install nml
+```
+or
+```bash
+uv tool install nml
 ```
 
 In order to install NML from a source checkout run:
 
 ```bash
-python setup.py install
+python3 -m pip install .
+```
+
+If you want to install it in editable mode, so that changes to the code are instantly applied without reinstalling NML, run:
+
+```bash
+python3 -m pip install -e .
 ```
 
 If you want to install the package manually copy 'nmlc' to any directory

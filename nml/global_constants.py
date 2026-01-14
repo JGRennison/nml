@@ -149,6 +149,13 @@ constant_numbers = {
     "VEHICLE_FLAG_SYNC_VARIANT_EXCLUSIVE_PREVIEW" : 2,
     "VEHICLE_FLAG_SYNC_VARIANT_RELIABILITY"       : 3,
 
+    # badge flags
+    "BADGE_FLAG_COPY_TO_RELATED_ENTITY" : 0,
+    "BADGE_FLAG_NAME_LIST_STOP" : 1,
+    "BADGE_FLAG_NAME_LIST_FIRST_ONLY" : 2,
+    "BADGE_FLAG_USE_COMPANY_COLOUR" : 3,
+    "BADGE_FLAG_NAME_SKIP" : 4,
+
     # Graphic flags for waterfeatures
     "WATERFEATURE_ALTERNATIVE_SPRITES" : 0,
 
@@ -384,6 +391,16 @@ constant_numbers = {
 
     # station tiles
     "STAT_ALL_TILES"     : 0xFF,
+
+    # bridge pillar flags
+    "BRIDGE_PILLAR_CORNER_W" : 0,
+    "BRIDGE_PILLAR_CORNER_S" : 1,
+    "BRIDGE_PILLAR_CORNER_E" : 2,
+    "BRIDGE_PILLAR_CORNER_N" : 3,
+    "BRIDGE_PILLAR_EDGE_NE"  : 4,
+    "BRIDGE_PILLAR_EDGE_SE"  : 5,
+    "BRIDGE_PILLAR_EDGE_SW"  : 6,
+    "BRIDGE_PILLAR_EDGE_NW"  : 7,
 
     # house flags
     "HOUSE_FLAG_NOT_SLOPED"         : 1,
@@ -1411,7 +1428,7 @@ def add_1920(expr, info):
 
 def map_exponentiate(expr, info):
     """
-    Given a exponent, add an offset to it and compute the exponentiation with base 2.
+    Given an exponent, add an offset to it and compute the exponentiation with base 2.
 
     @param expr: The exponent.
     @type expr: L{Expression}
@@ -1544,6 +1561,7 @@ def create_spritegroup_ref(name, info, pos):
 
 
 cargo_numbers = {}
+badge_numbers = {}
 
 is_default_railtype_table = True
 # if no railtype_table is provided, OpenTTD assumes these 3 railtypes
@@ -1591,6 +1609,7 @@ const_list = [
     (patch_variables, patch_variable),
     (named_parameters, param_from_name),
     cargo_numbers,
+    badge_numbers,
     railtype_table,
     roadtype_table,
     tramtype_table,
@@ -1611,6 +1630,8 @@ def print_stats():
     if len(cargo_numbers) > 0:
         # Ids FE and FF have special meanings in Action3, so we do not consider them valid ids.
         generic.print_info("Cargo translation table: {}/{}".format(len(cargo_numbers), 0xFE))
+    if len(badge_numbers) > 0:
+        generic.print_info("Badge translation table: {}/{}".format(len(badge_numbers), 0xFFFF))
     if not is_default_railtype_table:
         generic.print_info("Railtype translation table: {}/{}".format(len(railtype_table), 0x100))
     if not is_default_roadtype_table:

@@ -93,7 +93,7 @@ class SpecialCheck(Expression):
     @ivar varsize: Varsize for the action7/9 check
     @type varsize: C{int}
 
-    @ivar mask: Mask to to test only certain bits of the value
+    @ivar mask: Mask to test only certain bits of the value
     @type mask: C{int}
 
     @ivar pos: Position information
@@ -184,7 +184,7 @@ def builtin_max(name, args, pos):
     """
     max(...) builtin function.
 
-    @return Heighest value of the given arguments.
+    @return Highest value of the given arguments.
     """
     if len(args) < 2:
         raise generic.ScriptError("max() requires at least 2 arguments", pos)
@@ -471,7 +471,7 @@ def builtin_str2number(name, args, pos):
     return ConstantNumeric(parse_string_to_dword(args[0]))
 
 
-@builtins("cargotype", "railtype", "roadtype", "tramtype")
+@builtins("badgetype", "cargotype", "railtype", "roadtype", "tramtype")
 def builtin_resolve_typelabel(name, args, pos, table_name=None):
     """
     {cargo,rail,road,tram}type(label) builtin functions.
@@ -479,6 +479,7 @@ def builtin_resolve_typelabel(name, args, pos, table_name=None):
     Also used from some Action2Var variables to resolve cargo labels.
     """
     tracktype_funcs = {
+        "badgetype": global_constants.badge_numbers,
         "cargotype": global_constants.cargo_numbers,
         "railtype": global_constants.railtype_table,
         "roadtype": global_constants.roadtype_table,
@@ -490,6 +491,8 @@ def builtin_resolve_typelabel(name, args, pos, table_name=None):
     table = tracktype_funcs[table_name]
     if table_name == "cargotype":
         table_name = "cargo"  # NML syntax uses "cargotable" and "railtypetable"
+    if table_name == "badgetype":
+        table_name = "badge"
 
     if len(args) != 1:
         raise generic.ScriptError(name + "() must have 1 parameter", pos)

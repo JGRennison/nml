@@ -48,7 +48,7 @@ class BlockAllocation:
     @ivar allocated: Mapping of allocated blocks.
     @type allocated: C{dict} of C{int} to allocation information.
 
-    @ivar filled: Mapping of block size to smallest address that may contain free space.
+    @ivar filled: Mapping of block size to the smallest address that may contain free space.
                   Serves as a cache to speed up searches.
     @type filled: C{dict} of C{int}
     """
@@ -73,7 +73,7 @@ class BlockAllocation:
 
     def get_max_allocated(self):
         """
-        Return maximum number of allocateable ids.
+        Return maximum number of allocatable ids.
         """
         if self.dynamic_allocation:
             return self.last - self.first + 1
@@ -91,7 +91,7 @@ class BlockAllocation:
         @param length: Number of addresses in the block.
         @type  length: C{int}
 
-        @return: Whether the block fits enitrely in the available address space.
+        @return: Whether the block fits entirely in the available address space.
         @rtype:  C{bool}
         """
         if self.allow_generic and addr == -2 and length == 1:
@@ -214,6 +214,7 @@ used_ids = dict(enumerate([
     BlockAllocation(0, 62, "Roadtype"),
     BlockAllocation(0, 62, "Tramtype"),
     BlockAllocation(0, 0xFFFE, "RoadStop"),  # UINT16_MAX - 1
+    BlockAllocation(0, 64000, "Badge"),
 ]))
 used_ids[0xE1] = BlockAllocation(0, 255, "NewLandscape")
 used_ids[0xE2] = BlockAllocation(-1, -1, "Town", False, True)
@@ -884,11 +885,47 @@ class IDListProp(BaseAction0Property):
         return len(self.id_list) * 4 + 1
 
 
+class StringListProp(BaseAction0Property):
+    def __init__(self, prop_num, string_list):
+        self.prop_num = prop_num
+        self.string_list = string_list
+
+    def write(self, file):
+        file.print_bytex(self.prop_num)
+        for i, string_val in enumerate(self.string_list):
+            if i > 0 and i % 5 == 0:
+                file.newline()
+            file.print_string(string_val.value, True, True)
+        file.newline()
+
+    def get_size(self):
+        size = 1
+        for i, string_val in enumerate(self.string_list):
+            size += grfstrings.get_string_size(string_val.value, True, True)
+        return size
+
+
 def get_cargolist_action(cargo_list):
     action0 = Action0(0x08, 0)
     action0.prop_list.append(IDListProp(0x09, cargo_list))
     action0.num_ids = len(cargo_list)
     return [action0]
+
+
+def get_badgelist_action(badge_list):
+    index = 0
+    actions = []
+    while index < len(badge_list):
+        last = min(index + 250, len(badge_list))
+
+        action0 = Action0(0x08, index)
+        action0.prop_list.append(StringListProp(0x18, badge_list[index:last]))
+        action0.num_ids = last - index
+        actions.append(action0)
+
+        index = last
+
+    return actions
 
 
 def get_tracktypelist_action(table_prop_id, cond_tracktype_not_defined, tracktype_list):
@@ -1027,7 +1064,7 @@ def get_basecost_action(basecost):
 
         num_ids = 1  # Number of values that will be written in one go
         values = []
-        # try to capture as much values as possible
+        # try to capture as many values as possible
         while True:
             cost = basecost.costs[i]
             if isinstance(cost.value, expression.ConstantNumeric):

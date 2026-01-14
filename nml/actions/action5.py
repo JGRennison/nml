@@ -86,6 +86,7 @@ action5_table = {
     "OTTD_RECOLOUR": (0x18, 1, Action5BlockType.OFFSET),
     "ROAD_WAYPOINTS" : ("road_waypoints", 4, Action5BlockType.OFFSET), # Mapped to 0x19
     "OVERLAY_ROCKS": (0x1A, 95, Action5BlockType.OFFSET),
+     "BRIDGE_DECKS": (0x1B, 24, Action5BlockType.OFFSET),
     "PROGRAMMABLE_PRE_SIGNAL" : ("programmable_signals", 32, Action5BlockType.OFFSET),
     "NO_ENTRY_SIGNAL" : ("no_entry_signals", 16, Action5BlockType.OFFSET),
     "MISC_GUI" : ("misc_gui", 1, Action5BlockType.OFFSET),
