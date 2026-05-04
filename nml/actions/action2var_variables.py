@@ -167,6 +167,7 @@ varact2vars_vehicles = {
     'vehicle_is_not_powered'           : {'var': 0xFE, 'start':  6, 'size':  1},
     'vehicle_is_reversed'              : {'var': 0xFE, 'start':  8, 'size':  1},
     'built_during_preview'             : {'var': 0xFE, 'start': 10, 'size':  1},
+    'train_is_driving_backwards'       : {'var': 0xFE, 'start': 11, 'size':  1},
 }
 
 # Vehicle-type-specific variables
@@ -255,6 +256,7 @@ varact2vars60x_trains = {
     'tile_supports_railtype' : {'var': 0x63, 'start':  1, 'size': 1, 'param_function':vehicle_railtype},
     'tile_powers_railtype'   : {'var': 0x63, 'start':  2, 'size': 1, 'param_function':vehicle_railtype},
     'tile_is_railtype'       : {'var': 0x63, 'start':  3, 'size': 1, 'param_function':vehicle_railtype},
+    'tile_has_railtype_badge': {'var': 0x65, 'start':  0, 'size': 1, 'param_function':badge_parameter},
 }
 
 varact2vars60x_roadvehs = {
@@ -266,6 +268,8 @@ varact2vars60x_roadvehs = {
     'tile_powers_tramtype'   : {'var': 0x63, 'start':  2, 'size': 1, 'param_function':vehicle_tramtype},
     'tile_is_roadtype'       : {'var': 0x63, 'start':  3, 'size': 1, 'param_function':vehicle_roadtype},
     'tile_is_tramtype'       : {'var': 0x63, 'start':  3, 'size': 1, 'param_function':vehicle_tramtype},
+    'tile_has_roadtype_badge': {'var': 0x65, 'start':  0, 'size': 1, 'param_function':badge_parameter},
+    'tile_has_tramtype_badge': {'var': 0x65, 'start':  0, 'size': 1, 'param_function':badge_parameter},
 }
 
 #
