@@ -202,7 +202,7 @@ used_ids = dict(enumerate([
     BlockAllocation(0, 15, "Bridge", False),
     BlockAllocation(0, 4095, "House"),
     BlockAllocation(0, 0, "Global", False),
-    BlockAllocation(0, 254, "Industry Tile"),
+    BlockAllocation(0, 511, "Industry Tile"),
     BlockAllocation(0, 127, "Industry"),
     BlockAllocation(0, 63, "Cargo"),
     BlockAllocation(0, -1, "Sound"),
